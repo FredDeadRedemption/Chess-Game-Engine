@@ -10,6 +10,13 @@ body {
 }
 */
 
+.main {
+  position: relative;
+  display: inline-block;
+  height: 900px;
+  width: 900px;
+}
+
 .canvas {
   position: absolute;
 }
