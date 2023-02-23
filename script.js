@@ -397,3 +397,15 @@ function animate() {
 }
 
 animate();
+
+const a8 = document.querySelector(".Main");
+
+a8.addEventListener(
+  "click",
+  (e) => {
+    console.log(e.target);
+    pawn_white.position.rank = 0;
+    pawn_white.position.file = squareSize * 4;
+  },
+  { capture: true } //stops event bubbling :> !
+);
