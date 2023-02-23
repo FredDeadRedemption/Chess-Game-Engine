@@ -397,9 +397,3 @@ function animate() {
 }
 
 animate();
-
-const A2square = document.querySelector("#A2square");
-
-A2square.addEventListener("click", () => {
-  console.log("yeehaw");
-});
