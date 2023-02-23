@@ -1,0 +1,87 @@
+body {
+  background-color: #282828;
+}
+
+/*
+.canvas {
+  background-color: grey;
+  padding: 5px;
+  background-clip: padding-box;
+}
+*/
+
+.canvas {
+  position: absolute;
+}
+
+.Afile {
+  position: absolute;
+  display: inline-block;
+  height: 900px;
+  left: 0;
+  width: 112.5px;
+}
+
+.A8square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 0;
+}
+
+.A7square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 12.5%;
+}
+
+.A6square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 25%;
+}
+
+.A5square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 37.5%;
+}
+
+.A4square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 50%;
+}
+
+.A3square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 62.5%;
+}
+
+.A2square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 75%;
+}
+
+.A1square {
+  position: absolute;
+  display: inline-block;
+  height: 12.5%;
+  width: 100%;
+  top: 87.5%;
+}
