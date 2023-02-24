@@ -4,7 +4,7 @@ const c = canvas.getContext("2d");
 //Settings || Standard Settings
 const boardSize = 900; //900x900
 const squareColor1 = "wheat"; //wheat
-const squareColor2 = "darkcyan"; //brown
+const squareColor2 = "brown"; //brown
 
 const squareSize = boardSize / 8; //900 = 112.5 squareSize & pieceSize
 const pieceSize = boardSize / 8;
@@ -543,14 +543,41 @@ function animate() {
 }
 
 animate();
+//skal lige ned og hente icetea i netto
 
-const testsquare = document.querySelector(".Main");
+let currentSquare = undefined;
+let targetSquare = undefined;
 
-testsquare.addEventListener(
+const readClick = document.querySelector(".main");
+
+hasClicked = false;
+
+readClick.addEventListener(
   "click",
-  (e) => {
-    console.log(e.target);
-    pawn_white.position = squares.H3;
+  (event) => {
+    hasClicked ? (hasClicked = false) : (hasClicked = true); //switches between true and false every click
+
+    if (!hasClicked) {
+      currentSquare = event.target.id;
+      console.log(currentSquare);
+    } else if (hasClicked) {
+      targetSquare = event.target.id;
+      console.log(targetSquare);
+    }
+
+    //pawn_white.position = squares.A4;
+    if (targetSquare && currentSquare != undefined) {
+      move(currentSquare, targetSquare);
+    }
+
+    console.log(hasClicked);
   },
   { capture: true } //stops event bubbling :> !
 );
+
+function move(currentSquare, targetSquare) {
+  if ((pawn_white.position = currentSquare)) {
+    pawn_white.position = targetSquare;
+    console.log(targetSquare);
+  }
+}

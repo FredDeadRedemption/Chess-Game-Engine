@@ -1,287 +1,193 @@
+/*
 const rook_black = new Piece({
-  position: {
-    rank: 0,
-    file: 0,
-  },
+  position: squares.A8,
   color: "black",
   imageSrc: "./pieces/rook_black.png",
 });
 
 const knight_black = new Piece({
-  position: {
-    rank: squareSize,
-    file: 0,
-  },
+  position: squares.B8,
   color: "black",
   imageSrc: "./pieces/knight_black.png",
 });
 
 const bishop_black = new Piece({
-  position: {
-    rank: squareSize * 2,
-    file: 0,
-  },
+  position: squares.C8,
   color: "black",
   imageSrc: "./pieces/bishop_black.png",
 });
 
 const queen_black = new Piece({
-  position: {
-    rank: squareSize * 3,
-    file: 0,
-  },
+  position: squares.D8,
   color: "black",
   imageSrc: "./pieces/queen_black.png",
 });
 
 const king_black = new Piece({
-  position: {
-    rank: squareSize * 4,
-    file: 0,
-  },
+  position: squares.E8,
   color: "black",
   imageSrc: "./pieces/king_black.png",
 });
 
 const bishop_black2 = new Piece({
-  position: {
-    rank: squareSize * 5,
-    file: 0,
-  },
+  position: squares.F8,
   color: "black",
   imageSrc: "./pieces/bishop_black.png",
 });
 
 const knight_black2 = new Piece({
-  position: {
-    rank: squareSize * 6,
-    file: 0,
-  },
+  position: squares.G8,
   color: "black",
   imageSrc: "./pieces/knight_black.png",
 });
 
 const rook_black2 = new Piece({
-  position: {
-    rank: squareSize * 7,
-    file: 0,
-  },
+  position: squares.H8,
   color: "black",
   imageSrc: "./pieces/rook_black.png",
 });
 
 const pawn_black = new Piece({
-  position: {
-    rank: 0,
-    file: squareSize,
-  },
+  position: squares.A7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const pawn_black2 = new Piece({
-  position: {
-    rank: squareSize,
-    file: squareSize,
-  },
+  position: squares.B7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const pawn_black3 = new Piece({
-  position: {
-    rank: squareSize * 2,
-    file: squareSize,
-  },
+  position: squares.C7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const pawn_black4 = new Piece({
-  position: {
-    rank: squareSize * 3,
-    file: squareSize,
-  },
+  position: squares.D7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const pawn_black5 = new Piece({
-  position: {
-    rank: squareSize * 4,
-    file: squareSize,
-  },
+  position: squares.E7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const pawn_black6 = new Piece({
-  position: {
-    rank: squareSize * 5,
-    file: squareSize,
-  },
+  position: squares.F7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const pawn_black7 = new Piece({
-  position: {
-    rank: squareSize * 6,
-    file: squareSize,
-  },
+  position: squares.G7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const pawn_black8 = new Piece({
-  position: {
-    rank: squareSize * 7,
-    file: squareSize,
-  },
+  position: squares.H7,
   color: "black",
   imageSrc: "./pieces/pawn_black.png",
 });
 
 const rook_white = new Piece({
-  position: {
-    rank: 0,
-    file: squareSize * 7,
-  },
+  position: squares.A1,
   color: "white",
   imageSrc: "./pieces/rook_white.png",
 });
 
 const knight_white = new Piece({
-  position: {
-    rank: squareSize,
-    file: squareSize * 7,
-  },
+  position: squares.B1,
   color: "white",
   imageSrc: "./pieces/knight_white.png",
 });
 
 const bishop_white = new Piece({
-  position: {
-    rank: squareSize * 2,
-    file: squareSize * 7,
-  },
+  position: squares.C1,
   color: "white",
   imageSrc: "./pieces/bishop_white.png",
 });
 
 const queen_white = new Piece({
-  position: {
-    rank: squareSize * 3,
-    file: squareSize * 7,
-  },
+  position: squares.D1,
   color: "white",
   imageSrc: "./pieces/queen_white.png",
 });
 
 const king_white = new Piece({
-  position: {
-    rank: squareSize * 4,
-    file: squareSize * 7,
-  },
+  position: squares.E1,
   color: "white",
   imageSrc: "./pieces/king_white.png",
 });
 
 const bishop_white2 = new Piece({
-  position: {
-    rank: squareSize * 5,
-    file: squareSize * 7,
-  },
+  position: squares.F1,
   color: "white",
   imageSrc: "./pieces/bishop_white.png",
 });
 
 const knight_white2 = new Piece({
-  position: {
-    rank: squareSize * 6,
-    file: squareSize * 7,
-  },
+  position: squares.G1,
   color: "white",
   imageSrc: "./pieces/knight_white.png",
 });
 
 const rook_white2 = new Piece({
-  position: {
-    rank: squareSize * 7,
-    file: squareSize * 7,
-  },
+  position: squares.H1,
   color: "white",
   imageSrc: "./pieces/rook_white.png",
 });
 
 const pawn_white = new Piece({
-  position: {
-    rank: 0,
-    file: squareSize * 6,
-  },
+  position: squares.A2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
 
 const pawn_white2 = new Piece({
-  position: {
-    rank: squareSize,
-    file: squareSize * 6,
-  },
+  position: squares.B2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
 
 const pawn_white3 = new Piece({
-  position: {
-    rank: squareSize * 2,
-    file: squareSize * 6,
-  },
+  position: squares.C2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
 
 const pawn_white4 = new Piece({
-  position: {
-    rank: squareSize * 3,
-    file: squareSize * 6,
-  },
+  position: squares.D2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
 
 const pawn_white5 = new Piece({
-  position: {
-    rank: squareSize * 4,
-    file: squareSize * 6,
-  },
+  position: squares.E2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
 
 const pawn_white6 = new Piece({
-  position: {
-    rank: squareSize * 5,
-    file: squareSize * 6,
-  },
+  position: squares.F2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
 
 const pawn_white7 = new Piece({
-  position: {
-    rank: squareSize * 6,
-    file: squareSize * 6,
-  },
+  position: squares.G2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
 
 const pawn_white8 = new Piece({
-  position: {
-    rank: squareSize * 7,
-    file: squareSize * 6,
-  },
+  position: squares.H2,
   color: "white",
   imageSrc: "./pieces/pawn_white.png",
 });
+*/

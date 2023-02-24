@@ -2,14 +2,6 @@ body {
   background-color: #282828;
 }
 
-/*
-.canvas {
-  background-color: grey;
-  padding: 5px;
-  background-clip: padding-box;
-}
-*/
-
 .main {
   position: relative;
   display: inline-block;
@@ -91,6 +83,11 @@ body {
   height: 12.5%;
   width: 100%;
   top: 0;
+  color: brown;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
 
 .square7 {
@@ -99,6 +96,11 @@ body {
   height: 12.5%;
   width: 100%;
   top: 12.5%;
+  color: wheat;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
 
 .square6 {
@@ -107,6 +109,11 @@ body {
   height: 12.5%;
   width: 100%;
   top: 25%;
+  color: brown;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
 
 .square5 {
@@ -115,6 +122,11 @@ body {
   height: 12.5%;
   width: 100%;
   top: 37.5%;
+  color: wheat;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
 
 .square4 {
@@ -123,6 +135,11 @@ body {
   height: 12.5%;
   width: 100%;
   top: 50%;
+  color: brown;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
 
 .square3 {
@@ -131,6 +148,11 @@ body {
   height: 12.5%;
   width: 100%;
   top: 62.5%;
+  color: wheat;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
 
 .square2 {
@@ -139,6 +161,11 @@ body {
   height: 12.5%;
   width: 100%;
   top: 75%;
+  color: brown;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
 
 .square1 {
@@ -147,4 +174,9 @@ body {
   height: 12.5%;
   width: 100%;
   top: 87.5%;
+  color: wheat;
+  text-align: left;
+  text-indent: 5%;
+  font-family: sans-serif;
+  font-size: 200%;
 }
