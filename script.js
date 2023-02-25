@@ -32,456 +32,427 @@ class Piece {
   }
 }
 
-const squares = {
-  A1: {
+const arrayOfSquares = [
+  (A1 = {
     rank: 0,
     file: squareSize * 7,
-  },
-  A2: {
-    rank: 0,
-    file: squareSize * 6,
-  },
-  A3: {
-    rank: 0,
-    file: squareSize * 5,
-  },
-  A4: {
-    rank: 0,
-    file: squareSize * 4,
-  },
-  A5: {
-    rank: 0,
-    file: squareSize * 3,
-  },
-  A6: {
-    rank: 0,
-    file: squareSize * 2,
-  },
-  A7: {
-    rank: 0,
-    file: squareSize,
-  },
-  A8: {
-    rank: 0,
-    file: 0,
-  },
-  B1: {
+  }),
+  (B1 = {
     rank: squareSize,
     file: squareSize * 7,
-  },
-  B2: {
-    rank: squareSize,
-    file: squareSize * 6,
-  },
-  B3: {
-    rank: squareSize,
-    file: squareSize * 5,
-  },
-  B4: {
-    rank: squareSize,
-    file: squareSize * 4,
-  },
-  B5: {
-    rank: squareSize,
-    file: squareSize * 3,
-  },
-  B6: {
-    rank: squareSize,
-    file: squareSize * 2,
-  },
-  B7: {
-    rank: squareSize,
-    file: squareSize,
-  },
-  B8: {
-    rank: squareSize,
-    file: 0,
-  },
-  C1: {
+  }),
+  (C1 = {
     rank: squareSize * 2,
     file: squareSize * 7,
-  },
-  C2: {
-    rank: squareSize * 2,
-    file: squareSize * 6,
-  },
-  C3: {
-    rank: squareSize * 2,
-    file: squareSize * 5,
-  },
-  C4: {
-    rank: squareSize * 2,
-    file: squareSize * 4,
-  },
-  C5: {
-    rank: squareSize * 2,
-    file: squareSize * 3,
-  },
-  C6: {
-    rank: squareSize * 2,
-    file: squareSize * 2,
-  },
-  C7: {
-    rank: squareSize * 2,
-    file: squareSize,
-  },
-  C8: {
-    rank: squareSize * 2,
-    file: 0,
-  },
-  D1: {
+  }),
+  (D1 = {
     rank: squareSize * 3,
     file: squareSize * 7,
-  },
-  D2: {
-    rank: squareSize * 3,
-    file: squareSize * 6,
-  },
-  D3: {
-    rank: squareSize * 3,
-    file: squareSize * 5,
-  },
-  D4: {
-    rank: squareSize * 3,
-    file: squareSize * 4,
-  },
-  D5: {
-    rank: squareSize * 3,
-    file: squareSize * 3,
-  },
-  D6: {
-    rank: squareSize * 3,
-    file: squareSize * 2,
-  },
-  D7: {
-    rank: squareSize * 3,
-    file: squareSize,
-  },
-  D8: {
-    rank: squareSize * 3,
-    file: 0,
-  },
-  E1: {
+  }),
+  (E1 = {
     rank: squareSize * 4,
     file: squareSize * 7,
-  },
-  E2: {
-    rank: squareSize * 4,
-    file: squareSize * 6,
-  },
-  E3: {
-    rank: squareSize * 4,
-    file: squareSize * 5,
-  },
-  E4: {
-    rank: squareSize * 4,
-    file: squareSize * 4,
-  },
-  E5: {
-    rank: squareSize * 4,
-    file: squareSize * 3,
-  },
-  E6: {
-    rank: squareSize * 4,
-    file: squareSize * 2,
-  },
-  E7: {
-    rank: squareSize * 4,
-    file: squareSize,
-  },
-  E8: {
-    rank: squareSize * 4,
-    file: 0,
-  },
-  F1: {
+  }),
+  (F1 = {
     rank: squareSize * 5,
     file: squareSize * 7,
-  },
-  F2: {
-    rank: squareSize * 5,
-    file: squareSize * 6,
-  },
-  F3: {
-    rank: squareSize * 5,
-    file: squareSize * 5,
-  },
-  F4: {
-    rank: squareSize * 5,
-    file: squareSize * 4,
-  },
-  F5: {
-    rank: squareSize * 5,
-    file: squareSize * 3,
-  },
-  F6: {
-    rank: squareSize * 5,
-    file: squareSize * 2,
-  },
-  F7: {
-    rank: squareSize * 5,
-    file: squareSize,
-  },
-  F8: {
-    rank: squareSize * 5,
-    file: 0,
-  },
-  G1: {
+  }),
+  (G1 = {
     rank: squareSize * 6,
     file: squareSize * 7,
-  },
-  G2: {
-    rank: squareSize * 6,
-    file: squareSize * 6,
-  },
-  G3: {
-    rank: squareSize * 6,
-    file: squareSize * 5,
-  },
-  G4: {
-    rank: squareSize * 6,
-    file: squareSize * 4,
-  },
-  G5: {
-    rank: squareSize * 6,
-    file: squareSize * 3,
-  },
-  G6: {
-    rank: squareSize * 6,
-    file: squareSize * 2,
-  },
-  G7: {
-    rank: squareSize * 6,
-    file: squareSize,
-  },
-  G8: {
-    rank: squareSize * 6,
-    file: 0,
-  },
-  H1: {
+  }),
+  (H1 = {
     rank: squareSize * 7,
     file: squareSize * 7,
-  },
-  H2: {
+  }),
+  (A2 = {
+    rank: 0,
+    file: squareSize * 6,
+  }),
+  (B2 = {
+    rank: squareSize,
+    file: squareSize * 6,
+  }),
+  (C2 = {
+    rank: squareSize * 2,
+    file: squareSize * 6,
+  }),
+  (D2 = {
+    rank: squareSize * 3,
+    file: squareSize * 6,
+  }),
+  (E2 = {
+    rank: squareSize * 4,
+    file: squareSize * 6,
+  }),
+  (F2 = {
+    rank: squareSize * 5,
+    file: squareSize * 6,
+  }),
+  (G2 = {
+    rank: squareSize * 6,
+    file: squareSize * 6,
+  }),
+  (H2 = {
     rank: squareSize * 7,
     file: squareSize * 6,
-  },
-  H3: {
+  }),
+  (A3 = {
+    rank: 0,
+    file: squareSize * 5,
+  }),
+  (B3 = {
+    rank: squareSize,
+    file: squareSize * 5,
+  }),
+  (C3 = {
+    rank: squareSize * 2,
+    file: squareSize * 5,
+  }),
+  (D3 = {
+    rank: squareSize * 3,
+    file: squareSize * 5,
+  }),
+  (E3 = {
+    rank: squareSize * 4,
+    file: squareSize * 5,
+  }),
+  (F3 = {
+    rank: squareSize * 5,
+    file: squareSize * 5,
+  }),
+  (G3 = {
+    rank: squareSize * 6,
+    file: squareSize * 5,
+  }),
+  (H3 = {
     rank: squareSize * 7,
     file: squareSize * 5,
-  },
-  H4: {
+  }),
+  (A4 = {
+    rank: 0,
+    file: squareSize * 4,
+  }),
+  (B4 = {
+    rank: squareSize,
+    file: squareSize * 4,
+  }),
+  (C4 = {
+    rank: squareSize * 2,
+    file: squareSize * 4,
+  }),
+  (D4 = {
+    rank: squareSize * 3,
+    file: squareSize * 4,
+  }),
+  (E4 = {
+    rank: squareSize * 4,
+    file: squareSize * 4,
+  }),
+  (F4 = {
+    rank: squareSize * 5,
+    file: squareSize * 4,
+  }),
+  (G4 = {
+    rank: squareSize * 6,
+    file: squareSize * 4,
+  }),
+  (H4 = {
     rank: squareSize * 7,
     file: squareSize * 4,
-  },
-  H5: {
+  }),
+  (A5 = {
+    rank: 0,
+    file: squareSize * 3,
+  }),
+  (B5 = {
+    rank: squareSize,
+    file: squareSize * 3,
+  }),
+  (C5 = {
+    rank: squareSize * 2,
+    file: squareSize * 3,
+  }),
+  (D5 = {
+    rank: squareSize * 3,
+    file: squareSize * 3,
+  }),
+  (E5 = {
+    rank: squareSize * 4,
+    file: squareSize * 3,
+  }),
+  (F5 = {
+    rank: squareSize * 5,
+    file: squareSize * 3,
+  }),
+  (G5 = {
+    rank: squareSize * 6,
+    file: squareSize * 3,
+  }),
+  (H5 = {
     rank: squareSize * 7,
     file: squareSize * 3,
-  },
-  H6: {
+  }),
+  (A6 = {
+    rank: 0,
+    file: squareSize * 2,
+  }),
+  (B6 = {
+    rank: squareSize,
+    file: squareSize * 2,
+  }),
+  (C6 = {
+    rank: squareSize * 2,
+    file: squareSize * 2,
+  }),
+  (D6 = {
+    rank: squareSize * 3,
+    file: squareSize * 2,
+  }),
+  (E6 = {
+    rank: squareSize * 4,
+    file: squareSize * 2,
+  }),
+  (F6 = {
+    rank: squareSize * 5,
+    file: squareSize * 2,
+  }),
+  (G6 = {
+    rank: squareSize * 6,
+    file: squareSize * 2,
+  }),
+  (H6 = {
     rank: squareSize * 7,
     file: squareSize * 2,
-  },
-  H7: {
+  }),
+  (A7 = {
+    rank: 0,
+    file: squareSize,
+  }),
+  (B7 = {
+    rank: squareSize,
+    file: squareSize,
+  }),
+  (C7 = {
+    rank: squareSize * 2,
+    file: squareSize,
+  }),
+  (D7 = {
+    rank: squareSize * 3,
+    file: squareSize,
+  }),
+  (E7 = {
+    rank: squareSize * 4,
+    file: squareSize,
+  }),
+  (F7 = {
+    rank: squareSize * 5,
+    file: squareSize,
+  }),
+  (G7 = {
+    rank: squareSize * 6,
+    file: squareSize,
+  }),
+  (H7 = {
     rank: squareSize * 7,
     file: squareSize,
-  },
-  H8: {
+  }),
+  (A8 = {
+    rank: 0,
+    file: 0,
+  }),
+  (B8 = {
+    rank: squareSize,
+    file: 0,
+  }),
+  (C8 = {
+    rank: squareSize * 2,
+    file: 0,
+  }),
+  (D8 = {
+    rank: squareSize * 3,
+    file: 0,
+  }),
+  (E8 = {
+    rank: squareSize * 4,
+    file: 0,
+  }),
+  (F8 = {
+    rank: squareSize * 5,
+    file: 0,
+  }),
+  (G8 = {
+    rank: squareSize * 6,
+    file: 0,
+  }),
+  (H8 = {
     rank: squareSize * 7,
     file: 0,
-  },
-};
+  }),
+]; //64
 
-const rook_black = new Piece({
-  position: squares.A8,
-  color: "black",
-  imageSrc: "./pieces/rook_black.png",
-});
-
-const knight_black = new Piece({
-  position: squares.B8,
-  color: "black",
-  imageSrc: "./pieces/knight_black.png",
-});
-
-const bishop_black = new Piece({
-  position: squares.C8,
-  color: "black",
-  imageSrc: "./pieces/bishop_black.png",
-});
-
-const queen_black = new Piece({
-  position: squares.D8,
-  color: "black",
-  imageSrc: "./pieces/queen_black.png",
-});
-
-const king_black = new Piece({
-  position: squares.E8,
-  color: "black",
-  imageSrc: "./pieces/king_black.png",
-});
-
-const bishop_black2 = new Piece({
-  position: squares.F8,
-  color: "black",
-  imageSrc: "./pieces/bishop_black.png",
-});
-
-const knight_black2 = new Piece({
-  position: squares.G8,
-  color: "black",
-  imageSrc: "./pieces/knight_black.png",
-});
-
-const rook_black2 = new Piece({
-  position: squares.H8,
-  color: "black",
-  imageSrc: "./pieces/rook_black.png",
-});
-
-const pawn_black = new Piece({
-  position: squares.A7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const pawn_black2 = new Piece({
-  position: squares.B7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const pawn_black3 = new Piece({
-  position: squares.C7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const pawn_black4 = new Piece({
-  position: squares.D7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const pawn_black5 = new Piece({
-  position: squares.E7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const pawn_black6 = new Piece({
-  position: squares.F7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const pawn_black7 = new Piece({
-  position: squares.G7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const pawn_black8 = new Piece({
-  position: squares.H7,
-  color: "black",
-  imageSrc: "./pieces/pawn_black.png",
-});
-
-const rook_white = new Piece({
-  position: squares.A1,
-  color: "white",
-  imageSrc: "./pieces/rook_white.png",
-});
-
-const knight_white = new Piece({
-  position: squares.B1,
-  color: "white",
-  imageSrc: "./pieces/knight_white.png",
-});
-
-const bishop_white = new Piece({
-  position: squares.C1,
-  color: "white",
-  imageSrc: "./pieces/bishop_white.png",
-});
-
-const queen_white = new Piece({
-  position: squares.D1,
-  color: "white",
-  imageSrc: "./pieces/queen_white.png",
-});
-
-const king_white = new Piece({
-  position: squares.E1,
-  color: "white",
-  imageSrc: "./pieces/king_white.png",
-});
-
-const bishop_white2 = new Piece({
-  position: squares.F1,
-  color: "white",
-  imageSrc: "./pieces/bishop_white.png",
-});
-
-const knight_white2 = new Piece({
-  position: squares.G1,
-  color: "white",
-  imageSrc: "./pieces/knight_white.png",
-});
-
-const rook_white2 = new Piece({
-  position: squares.H1,
-  color: "white",
-  imageSrc: "./pieces/rook_white.png",
-});
-
-const pawn_white = new Piece({
-  position: squares.A2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
-
-const pawn_white2 = new Piece({
-  position: squares.B2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
-
-const pawn_white3 = new Piece({
-  position: squares.C2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
-
-const pawn_white4 = new Piece({
-  position: squares.D2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
-
-const pawn_white5 = new Piece({
-  position: squares.E2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
-
-const pawn_white6 = new Piece({
-  position: squares.F2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
-
-const pawn_white7 = new Piece({
-  position: squares.G2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
-
-const pawn_white8 = new Piece({
-  position: squares.H2,
-  color: "white",
-  imageSrc: "./pieces/pawn_white.png",
-});
+const arrayOfPieces = [
+  (rook_black = new Piece({
+    position: arrayOfSquares[56],
+    color: "black",
+    imageSrc: "./pieces/rook_black.png",
+  })),
+  (knight_black = new Piece({
+    position: arrayOfSquares[57],
+    color: "black",
+    imageSrc: "./pieces/knight_black.png",
+  })),
+  (bishop_black = new Piece({
+    position: arrayOfSquares[58],
+    color: "black",
+    imageSrc: "./pieces/bishop_black.png",
+  })),
+  (queen_black = new Piece({
+    position: arrayOfSquares[59],
+    color: "black",
+    imageSrc: "./pieces/queen_black.png",
+  })),
+  (king_black = new Piece({
+    position: arrayOfSquares[60],
+    color: "black",
+    imageSrc: "./pieces/king_black.png",
+  })),
+  (bishop_black2 = new Piece({
+    position: arrayOfSquares[61],
+    color: "black",
+    imageSrc: "./pieces/bishop_black.png",
+  })),
+  (knight_black2 = new Piece({
+    position: arrayOfSquares[62],
+    color: "black",
+    imageSrc: "./pieces/knight_black.png",
+  })),
+  (rook_black2 = new Piece({
+    position: arrayOfSquares[63],
+    color: "black",
+    imageSrc: "./pieces/rook_black.png",
+  })),
+  (pawn_black = new Piece({
+    position: arrayOfSquares[48],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (pawn_black2 = new Piece({
+    position: arrayOfSquares[49],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (pawn_black3 = new Piece({
+    position: arrayOfSquares[50],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (pawn_black4 = new Piece({
+    position: arrayOfSquares[51],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (pawn_black5 = new Piece({
+    position: arrayOfSquares[52],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (pawn_black6 = new Piece({
+    position: arrayOfSquares[53],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (pawn_black7 = new Piece({
+    position: arrayOfSquares[54],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (pawn_black8 = new Piece({
+    position: arrayOfSquares[55],
+    color: "black",
+    imageSrc: "./pieces/pawn_black.png",
+  })),
+  (rook_white = new Piece({
+    position: arrayOfSquares[0],
+    color: "white",
+    imageSrc: "./pieces/rook_white.png",
+  })),
+  (knight_white = new Piece({
+    position: arrayOfSquares[1],
+    color: "white",
+    imageSrc: "./pieces/knight_white.png",
+  })),
+  (bishop_white = new Piece({
+    position: arrayOfSquares[2],
+    color: "white",
+    imageSrc: "./pieces/bishop_white.png",
+  })),
+  (queen_white = new Piece({
+    position: arrayOfSquares[3],
+    color: "white",
+    imageSrc: "./pieces/queen_white.png",
+  })),
+  (king_white = new Piece({
+    position: arrayOfSquares[4],
+    color: "white",
+    imageSrc: "./pieces/king_white.png",
+  })),
+  (bishop_white2 = new Piece({
+    position: arrayOfSquares[5],
+    color: "white",
+    imageSrc: "./pieces/bishop_white.png",
+  })),
+  (knight_white2 = new Piece({
+    position: arrayOfSquares[6],
+    color: "white",
+    imageSrc: "./pieces/knight_white.png",
+  })),
+  (rook_white2 = new Piece({
+    position: arrayOfSquares[7],
+    color: "white",
+    imageSrc: "./pieces/rook_white.png",
+  })),
+  (pawn_white = new Piece({
+    position: arrayOfSquares[8],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+  (pawn_white2 = new Piece({
+    position: arrayOfSquares[9],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+  (pawn_white3 = new Piece({
+    position: arrayOfSquares[10],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+  (pawn_white4 = new Piece({
+    position: arrayOfSquares[11],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+  (pawn_white5 = new Piece({
+    position: arrayOfSquares[12],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+  (pawn_white6 = new Piece({
+    position: arrayOfSquares[13],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+  (pawn_white7 = new Piece({
+    position: arrayOfSquares[14],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+  (pawn_white8 = new Piece({
+    position: arrayOfSquares[15],
+    color: "white",
+    imageSrc: "./pieces/pawn_white.png",
+  })),
+]; //32
 
 function drawChessboard() {
   window.requestAnimationFrame(drawChessboard);
@@ -507,43 +478,12 @@ drawChessboard();
 
 function animate() {
   window.requestAnimationFrame(animate);
-  rook_black.update();
-  knight_black.update();
-  bishop_black.update();
-  queen_black.update();
-  king_black.update();
-  bishop_black2.update();
-  knight_black2.update();
-  rook_black2.update();
-  pawn_black.update();
-  pawn_black2.update();
-  pawn_black3.update();
-  pawn_black4.update();
-  pawn_black5.update();
-  pawn_black6.update();
-  pawn_black7.update();
-  pawn_black8.update();
-  //
-  rook_white.update();
-  knight_white.update();
-  bishop_white.update();
-  queen_white.update();
-  king_white.update();
-  bishop_white2.update();
-  knight_white2.update();
-  rook_white2.update();
-  pawn_white.update();
-  pawn_white2.update();
-  pawn_white3.update();
-  pawn_white4.update();
-  pawn_white5.update();
-  pawn_white6.update();
-  pawn_white7.update();
-  pawn_white8.update();
+  for (let i = 0; i < arrayOfPieces.length; i++) {
+    arrayOfPieces[i].update();
+  }
 }
 
-animate();
-//skal lige ned og hente icetea i netto
+animate(); //skal lige ned og hente icetea i netto
 
 let currentSquare = undefined;
 let targetSquare = undefined;
@@ -558,15 +498,14 @@ readClick.addEventListener(
     hasClicked ? (hasClicked = false) : (hasClicked = true); //switches between true and false every click
 
     if (!hasClicked) {
-      currentSquare = event.target.id;
-      console.log(currentSquare);
-    } else if (hasClicked) {
+      hasClicked = false;
       targetSquare = event.target.id;
-      console.log(targetSquare);
+    } else if (hasClicked) {
+      hasClicked = true;
+      currentSquare = event.target.id;
     }
 
-    //pawn_white.position = squares.A4;
-    if (targetSquare && currentSquare != undefined) {
+    if (targetSquare && currentSquare != undefined && targetSquare != currentSquare) {
       move(currentSquare, targetSquare);
     }
 
@@ -576,8 +515,8 @@ readClick.addEventListener(
 );
 
 function move(currentSquare, targetSquare) {
-  if ((pawn_white.position = currentSquare)) {
-    pawn_white.position = targetSquare;
-    console.log(targetSquare);
-  }
+  console.log("currentSquare", currentSquare);
+  console.log("targetSquare", targetSquare);
+  pawn_white.position = arrayOfSquares[targetSquare];
+  console.log("yeehaw");
 }
