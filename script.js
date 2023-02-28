@@ -562,14 +562,14 @@ const readClick = document.querySelector(".main");
 readClick.addEventListener(
   "click",
   (event) => {
-    hasClicked ? (hasClicked = false) : (hasClicked = true); //switches between true and false every click
-
-    if (!hasClicked) {
+    if (hasClicked) {
       hasClicked = false;
       targetSquare = event.target.id;
-    } else if (hasClicked) {
-      hasClicked = true;
+    } else if (!hasClicked) {
       startSquare = event.target.id;
+      if (getPieceIndexFromSquare(startSquare) != undefined) {
+        hasClicked = true;
+      }
     }
 
     if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
