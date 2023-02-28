@@ -598,7 +598,6 @@ readClick.addEventListener(
     if (hasClicked) {
       hasClicked = false;
       targetSquare = event.target.id;
-      document.getElementById(`#${event.target.id}`).style.backgroundColor = "blue";
     } else if (!hasClicked) {
       startSquare = event.target.id;
       if (getPieceIndexFromSquare(startSquare) != undefined) {
