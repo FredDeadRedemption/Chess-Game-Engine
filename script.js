@@ -2,7 +2,7 @@ const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
 //Settings || Standard Settings
-const boardSize = 900; //900x900
+const boardSize = 900; //900x900 // Change in .main(css) aswell
 const squareColor1 = "wheat"; //wheat
 const squareColor2 = "brown"; //brown
 
@@ -454,6 +454,7 @@ const arrayOfPieces = [
   })),
 ]; //32
 
+//Generates dynamic sized chessboard
 function drawChessboard() {
   window.requestAnimationFrame(drawChessboard);
 
@@ -476,6 +477,7 @@ function drawChessboard() {
 
 drawChessboard();
 
+//Updates animation for all pieces
 function animate() {
   window.requestAnimationFrame(animate);
   for (let i = 0; i < arrayOfPieces.length; i++) {
@@ -485,12 +487,11 @@ function animate() {
 
 animate(); //skal lige ned og hente icetea i netto
 
-let currentSquare = undefined;
-let targetSquare = undefined;
+let startSquare = undefined; //first square selected by click
+let targetSquare = undefined; //second square selected by click
+let hasClicked = false;
 
 const readClick = document.querySelector(".main");
-
-hasClicked = false;
 
 readClick.addEventListener(
   "click",
@@ -502,21 +503,35 @@ readClick.addEventListener(
       targetSquare = event.target.id;
     } else if (hasClicked) {
       hasClicked = true;
-      currentSquare = event.target.id;
+      startSquare = event.target.id;
     }
 
-    if (targetSquare && currentSquare != undefined && targetSquare != currentSquare) {
-      move(currentSquare, targetSquare);
+    if (targetSquare && startSquare != undefined && targetSquare != startSquare) {
+      move(startSquare, targetSquare);
+      startSquare = undefined;
+      targetSquare = undefined;
     }
 
     console.log(hasClicked);
   },
-  { capture: true } //stops event bubbling :> !
+  { capture: true } //stops event bubbling :> ! since class is .main
 );
 
-function move(currentSquare, targetSquare) {
-  console.log("currentSquare", currentSquare);
+function getPieceIndexFromSquare(startSquare) {
+  for (i = 0; i < arrayOfPieces.length; i++) {
+    if (arrayOfPieces[i].position == arrayOfSquares[startSquare]) {
+      return i;
+    } //I can be undefined
+  }
+}
+
+function move(startSquare, targetSquare) {
+  let square = startSquare;
+  let i = getPieceIndexFromSquare(square);
+
+  if (i != undefined) {
+    arrayOfPieces[i].position = arrayOfSquares[targetSquare];
+  }
+  console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
-  pawn_white.position = arrayOfSquares[targetSquare];
-  console.log("yeehaw");
 }
