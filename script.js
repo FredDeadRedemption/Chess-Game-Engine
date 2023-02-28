@@ -26,7 +26,13 @@ class Piece {
   }
 
   draw() {
-    c.drawImage(this.image, this.position.rank, this.position.file, pieceSize, pieceSize);
+    c.drawImage(
+      this.image,
+      this.position.rank,
+      this.position.file,
+      pieceSize,
+      pieceSize
+    );
   }
 
   update() {
@@ -524,8 +530,16 @@ const arrayOfPieces = [
 function drawChessboard() {
   window.requestAnimationFrame(drawChessboard);
 
-  for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
-    for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
+  for (
+    let file = 0, fileCount = 0;
+    file < canvas.width, fileCount < 8;
+    file += squareSize, fileCount++
+  ) {
+    for (
+      let rank = 0, rankCount = 0;
+      rank < canvas.width, rankCount < 8;
+      rank += squareSize, rankCount++
+    ) {
       if (fileCount % 2 == 0) {
         if (rankCount % 2 == 0) {
           c.fillStyle = squareColor1;
@@ -572,7 +586,12 @@ readClick.addEventListener(
       }
     }
 
-    if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
+    if (
+      targetSquare &&
+      startSquare != undefined &&
+      targetSquare != startSquare &&
+      !hasClicked
+    ) {
       move(startSquare, targetSquare);
       startSquare = undefined;
       targetSquare = undefined;
@@ -595,9 +614,53 @@ function move(startSquare, targetSquare) {
   let square = startSquare;
   let i = getPieceIndexFromSquare(square);
 
-  if (i != undefined) {
+  if (i != undefined && checkLegalMove(i, targetSquare) == true) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
   }
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
+}
+
+function checkLegalMove(i, targetSquare) {
+  let legalSquare;
+
+  switch (arrayOfPieces[i].type) {
+    case "P":
+    case "p":
+      legalSquare = legalPawnMoves();
+      break;
+  }
+
+  console.log(legalSquare);
+
+  if (legalSquare == targetSquare) {
+    console.log("jaerjaer");
+    return true;
+  } else {
+    console.log("nejnej");
+    return false;
+  }
+}
+
+function legalPawnMoves() {
+  let legalSquare;
+  let offset = 8;
+  let hasMoved = false;
+
+  if (arrayOfPieces[i].position == arrayOfSquares[startSquare]) {
+    hasMoved = false;
+  } else {
+    hasMoved = true;
+  }
+
+  switch (arrayOfPieces[i].type) {
+    case "P":
+      offset = offset * -1;
+    case "p":
+      legalSquare = startSquare - offset;
+      ha; //sMoved = true;
+      break;
+  }
+
+  return legalSquare;
 }
