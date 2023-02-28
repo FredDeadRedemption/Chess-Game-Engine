@@ -12,7 +12,7 @@ canvas.width = boardSize;
 canvas.height = boardSize;
 
 class Piece {
-  constructor({ position, color, type, worth, imageSrc }) {
+  constructor({ position, color, type, worth, imageSrc, hasMoved }) {
     this.position = position;
     position = {
       rank: this.position.rank,
@@ -23,6 +23,7 @@ class Piece {
     this.worth = worth; //Value of piece
     this.image = new Image();
     this.image.src = imageSrc;
+    this.hasMoved = hasMoved;
   }
 
   draw() {
@@ -300,6 +301,7 @@ const arrayOfPieces = [
     type: "r",
     worth: 5,
     imageSrc: "./pieces/rook_black.png",
+    hasMoved: false,
   })),
   (knight_black = new Piece({
     position: arrayOfSquares[57],
@@ -307,6 +309,7 @@ const arrayOfPieces = [
     type: "n",
     worth: 3,
     imageSrc: "./pieces/knight_black.png",
+    hasMoved: false,
   })),
   (bishop_black = new Piece({
     position: arrayOfSquares[58],
@@ -314,6 +317,7 @@ const arrayOfPieces = [
     type: "b",
     worth: 3,
     imageSrc: "./pieces/bishop_black.png",
+    hasMoved: false,
   })),
   (queen_black = new Piece({
     position: arrayOfSquares[59],
@@ -321,6 +325,7 @@ const arrayOfPieces = [
     type: "q",
     worth: 9,
     imageSrc: "./pieces/queen_black.png",
+    hasMoved: false,
   })),
   (king_black = new Piece({
     position: arrayOfSquares[60],
@@ -328,6 +333,7 @@ const arrayOfPieces = [
     type: "k",
     worth: 0,
     imageSrc: "./pieces/king_black.png",
+    hasMoved: false,
   })),
   (bishop_black2 = new Piece({
     position: arrayOfSquares[61],
@@ -335,6 +341,7 @@ const arrayOfPieces = [
     type: "b",
     worth: 3,
     imageSrc: "./pieces/bishop_black.png",
+    hasMoved: false,
   })),
   (knight_black2 = new Piece({
     position: arrayOfSquares[62],
@@ -342,6 +349,7 @@ const arrayOfPieces = [
     type: "n",
     worth: 3,
     imageSrc: "./pieces/knight_black.png",
+    hasMoved: false,
   })),
   (rook_black2 = new Piece({
     position: arrayOfSquares[63],
@@ -349,6 +357,7 @@ const arrayOfPieces = [
     type: "r",
     worth: 5,
     imageSrc: "./pieces/rook_black.png",
+    hasMoved: false,
   })),
   (pawn_black = new Piece({
     position: arrayOfSquares[48],
@@ -356,6 +365,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (pawn_black2 = new Piece({
     position: arrayOfSquares[49],
@@ -363,6 +373,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (pawn_black3 = new Piece({
     position: arrayOfSquares[50],
@@ -370,6 +381,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (pawn_black4 = new Piece({
     position: arrayOfSquares[51],
@@ -377,6 +389,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (pawn_black5 = new Piece({
     position: arrayOfSquares[52],
@@ -384,6 +397,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (pawn_black6 = new Piece({
     position: arrayOfSquares[53],
@@ -391,6 +405,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (pawn_black7 = new Piece({
     position: arrayOfSquares[54],
@@ -398,6 +413,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (pawn_black8 = new Piece({
     position: arrayOfSquares[55],
@@ -405,6 +421,7 @@ const arrayOfPieces = [
     type: "p",
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
+    hasMoved: false,
   })),
   (rook_white = new Piece({
     position: arrayOfSquares[0],
@@ -412,6 +429,7 @@ const arrayOfPieces = [
     type: "R",
     worth: 5,
     imageSrc: "./pieces/rook_white.png",
+    hasMoved: false,
   })),
   (knight_white = new Piece({
     position: arrayOfSquares[1],
@@ -419,6 +437,7 @@ const arrayOfPieces = [
     type: "N",
     worth: 3,
     imageSrc: "./pieces/knight_white.png",
+    hasMoved: false,
   })),
   (bishop_white = new Piece({
     position: arrayOfSquares[2],
@@ -426,6 +445,7 @@ const arrayOfPieces = [
     type: "B",
     worth: 3,
     imageSrc: "./pieces/bishop_white.png",
+    hasMoved: false,
   })),
   (queen_white = new Piece({
     position: arrayOfSquares[3],
@@ -433,6 +453,7 @@ const arrayOfPieces = [
     type: "Q",
     worth: 9,
     imageSrc: "./pieces/queen_white.png",
+    hasMoved: false,
   })),
   (king_white = new Piece({
     position: arrayOfSquares[4],
@@ -440,6 +461,7 @@ const arrayOfPieces = [
     type: "K",
     worth: 0,
     imageSrc: "./pieces/king_white.png",
+    hasMoved: false,
   })),
   (bishop_white2 = new Piece({
     position: arrayOfSquares[5],
@@ -447,6 +469,7 @@ const arrayOfPieces = [
     type: "B",
     worth: 3,
     imageSrc: "./pieces/bishop_white.png",
+    hasMoved: false,
   })),
   (knight_white2 = new Piece({
     position: arrayOfSquares[6],
@@ -454,6 +477,7 @@ const arrayOfPieces = [
     type: "N",
     worth: 3,
     imageSrc: "./pieces/knight_white.png",
+    hasMoved: false,
   })),
   (rook_white2 = new Piece({
     position: arrayOfSquares[7],
@@ -461,6 +485,7 @@ const arrayOfPieces = [
     type: "R",
     worth: 5,
     imageSrc: "./pieces/rook_white.png",
+    hasMoved: false,
   })),
   (pawn_white = new Piece({
     position: arrayOfSquares[8],
@@ -468,6 +493,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
   (pawn_white2 = new Piece({
     position: arrayOfSquares[9],
@@ -475,6 +501,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
   (pawn_white3 = new Piece({
     position: arrayOfSquares[10],
@@ -482,6 +509,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
   (pawn_white4 = new Piece({
     position: arrayOfSquares[11],
@@ -489,6 +517,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
   (pawn_white5 = new Piece({
     position: arrayOfSquares[12],
@@ -496,6 +525,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
   (pawn_white6 = new Piece({
     position: arrayOfSquares[13],
@@ -503,6 +533,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
   (pawn_white7 = new Piece({
     position: arrayOfSquares[14],
@@ -510,6 +541,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
   (pawn_white8 = new Piece({
     position: arrayOfSquares[15],
@@ -517,6 +549,7 @@ const arrayOfPieces = [
     type: "P",
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
+    hasMoved: false,
   })),
 ]; //32
 
@@ -565,6 +598,7 @@ readClick.addEventListener(
     if (hasClicked) {
       hasClicked = false;
       targetSquare = event.target.id;
+      document.getElementById(`#${event.target.id}`).style.backgroundColor = "blue";
     } else if (!hasClicked) {
       startSquare = event.target.id;
       if (getPieceIndexFromSquare(startSquare) != undefined) {
@@ -601,3 +635,7 @@ function move(startSquare, targetSquare) {
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
 }
+
+//Check for turn
+//Check for check
+//Check legal move
