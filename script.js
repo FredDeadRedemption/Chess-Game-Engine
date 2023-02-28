@@ -668,12 +668,11 @@ function checkLegalMove(i, targetSquare) {
 
   //console.log(legalSquare);
   for(let i = 0; i < legalSquare.length; i++) {
+    console.log(legalSquare[i]);
     if (legalSquare[i] == targetSquare) {
-      console.log("jaerjaer");
       return true;
     }     
   }
-  console.log("nejnej");
   return false;
 }
 
