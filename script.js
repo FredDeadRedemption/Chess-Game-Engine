@@ -27,7 +27,13 @@ class Piece {
   }
 
   draw() {
-    c.drawImage(this.image, this.position.rank, this.position.file, pieceSize, pieceSize);
+    c.drawImage(
+      this.image,
+      this.position.rank,
+      this.position.file,
+      pieceSize,
+      pieceSize
+    );
   }
 
   update() {
@@ -557,8 +563,16 @@ const arrayOfPieces = [
 function drawChessboard() {
   window.requestAnimationFrame(drawChessboard);
 
-  for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
-    for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
+  for (
+    let file = 0, fileCount = 0;
+    file < canvas.width, fileCount < 8;
+    file += squareSize, fileCount++
+  ) {
+    for (
+      let rank = 0, rankCount = 0;
+      rank < canvas.width, rankCount < 8;
+      rank += squareSize, rankCount++
+    ) {
       if (fileCount % 2 == 0) {
         if (rankCount % 2 == 0) {
           c.fillStyle = squareColor1;
@@ -598,7 +612,7 @@ readClick.addEventListener(
     if (hasClicked) {
       hasClicked = false;
       targetSquare = event.target.id;
-      document.getElementById(`#${event.target.id}`).style.backgroundColor = "blue";
+      //document.getElementById(`#${event.target.id}`).style.backgroundColor = "blue";
     } else if (!hasClicked) {
       startSquare = event.target.id;
       if (getPieceIndexFromSquare(startSquare) != undefined) {
@@ -606,7 +620,12 @@ readClick.addEventListener(
       }
     }
 
-    if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
+    if (
+      targetSquare &&
+      startSquare != undefined &&
+      targetSquare != startSquare &&
+      !hasClicked
+    ) {
       move(startSquare, targetSquare);
       startSquare = undefined;
       targetSquare = undefined;
@@ -631,6 +650,7 @@ function move(startSquare, targetSquare) {
 
   if (i != undefined && checkLegalMove(i, targetSquare) == true) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
+    arrayOfPieces[i].hasMoved = true;// For at pawn kan rykkes 2 første gang
   }
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
@@ -646,36 +666,36 @@ function checkLegalMove(i, targetSquare) {
       break;
   }
 
-  console.log(legalSquare);
-
-  if (legalSquare == targetSquare) {
-    console.log("jaerjaer");
-    return true;
-  } else {
-    console.log("nejnej");
-    return false;
+  //console.log(legalSquare);
+  for(let i = 0; i < legalSquare.length; i++) {
+    if (legalSquare[i] == targetSquare) {
+      console.log("jaerjaer");
+      return true;
+    }     
   }
+  console.log("nejnej");
+  return false;
 }
 
 function legalPawnMoves() {
-  let legalSquare;
+  let legalSquare = [];
   let offset = 8;
-  let hasMoved = false;
-
-  if (arrayOfPieces[i].position == arrayOfSquares[startSquare]) {
-    hasMoved = false;
-  } else {
-    hasMoved = true;
-  }
+  
 
   switch (arrayOfPieces[i].type) {
     case "P":
       offset = offset * -1;
     case "p":
-      legalSquare = startSquare - offset;
-      hasMoved = true;
+      legalSquare[0] = startSquare - offset;
+      if (arrayOfPieces[i].hasMoved == false) {
+        legalSquare[1] = startSquare - (offset*2);
+        
+      }
       break;
   }
 
   return legalSquare;
 }
+//Check for turn
+//Check for check
+//Check legal move
