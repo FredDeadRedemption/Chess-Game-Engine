@@ -631,6 +631,7 @@ function move(startSquare, targetSquare) {
     arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
     whiteToMove = !whiteToMove; //Turn switch whenever a legal move has been made
   }
+  console.log(startSquare);
 }
 
 function checkLegalMove() {
@@ -725,19 +726,30 @@ function legalBishopMoves() {
   }
 
   for (let i = 0; i < 7; i++) {
-    legalSquares[i] = startSquare += 7;
+    if (startSquare % 8 == i) break;
+    legalSquares[i] = startSquare + 7 * (i + 1);
+    if (arrayOfSquares[legalSquares[i]].Piece != undefined) {
+      console.log(arrayOfSquares[legalSquares[i]]);
+      break;
+    }
   }
-  startSquare = j;
+  //startSquare = j;
   for (let i = 7; i < 14; i++) {
-    legalSquares[i] = startSquare += 9;
+    if (7 - (startSquare % 8) == i % 7) break;
+    legalSquares[i] = startSquare + 9 * ((i % 7) + 1);
+    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
-  startSquare = j;
+  //startSquare = j;
   for (let i = 14; i < 21; i++) {
-    legalSquares[i] = startSquare -= 7;
+    if (7 - (startSquare % 8) == i % 7) break;
+    legalSquares[i] = startSquare - 7 * ((i % 7) + 1);
+    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
-  startSquare = j;
+  //startSquare = j;
   for (let i = 21; i < 28; i++) {
-    legalSquares[i] = startSquare -= 9;
+    if (startSquare % 8 == i % 7) break;
+    legalSquares[i] = startSquare - 9 * ((i % 7) + 1);
+    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
 
   return legalSquares;
@@ -750,23 +762,23 @@ function legalRookMoves() {
 
   for (let i = 0; i < 7; i++) {
     legalSquares[i] = startSquare - offsetRank * (i + 1);
-    if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    if (getPieceIndexFromSquare[legalSquares[i]] != undefined) break;
   }
 
   for (let i = 7; i < 14; i++) {
     legalSquares[i] = startSquare - -offsetRank * ((i % 7) + 1);
-    if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
   for (let i = 14; i < 21; i++) {
     if (startSquare % 8 == i % 7) break;
     legalSquares[i] = startSquare - offsetFile * ((i % 7) + 1);
-    if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
 
   for (let i = 21; i < 29; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
     legalSquares[i] = startSquare - -offsetFile * ((i % 7) + 1);
-    if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
 
   return legalSquares;
