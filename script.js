@@ -691,7 +691,6 @@ function legalPawnMoves() {
 
 function legalBishopMoves() {
   let legalSquares = [];
-  console.log(x);
   let j;
 
   for (j = 0; j < arrayOfSquares.length; j++) {
