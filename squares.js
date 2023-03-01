@@ -256,5 +256,5 @@ const arrayOfSquares = [
     rank: squareSize * 7,
     file: 0,
   }),
-];
+]; //64
 */
