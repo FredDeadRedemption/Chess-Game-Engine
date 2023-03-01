@@ -27,13 +27,7 @@ class Piece {
   }
 
   draw() {
-    c.drawImage(
-      this.image,
-      this.position.rank,
-      this.position.file,
-      pieceSize,
-      pieceSize
-    );
+    c.drawImage(this.image, this.position.rank, this.position.file, pieceSize, pieceSize);
   }
 
   update() {
@@ -563,16 +557,8 @@ const arrayOfPieces = [
 function drawChessboard() {
   window.requestAnimationFrame(drawChessboard);
 
-  for (
-    let file = 0, fileCount = 0;
-    file < canvas.width, fileCount < 8;
-    file += squareSize, fileCount++
-  ) {
-    for (
-      let rank = 0, rankCount = 0;
-      rank < canvas.width, rankCount < 8;
-      rank += squareSize, rankCount++
-    ) {
+  for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
+    for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
       if (fileCount % 2 == 0) {
         if (rankCount % 2 == 0) {
           c.fillStyle = squareColor1;
@@ -620,12 +606,7 @@ readClick.addEventListener(
       }
     }
 
-    if (
-      targetSquare &&
-      startSquare != undefined &&
-      targetSquare != startSquare &&
-      !hasClicked
-    ) {
+    if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
       move(startSquare, targetSquare);
       startSquare = undefined;
       targetSquare = undefined;
@@ -648,9 +629,9 @@ function move(startSquare, targetSquare) {
   let square = startSquare;
   let i = getPieceIndexFromSquare(square);
 
-  if (i != undefined && checkLegalMove(i, targetSquare) == true) {
+  if (i != undefined && checkLegalMove(i, targetSquare)) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
-    arrayOfPieces[i].hasMoved = true;// For at pawn kan rykkes 2 første gang
+    arrayOfPieces[i].hasMoved = true; // For at pawn kan rykkes 2 første gang
   }
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
@@ -664,14 +645,18 @@ function checkLegalMove(i, targetSquare) {
     case "p":
       legalSquare = legalPawnMoves();
       break;
+    case "B":
+    case "b":
+      legalSquare = legalBishopMoves(i);
+      break;
   }
 
   //console.log(legalSquare);
-  for(let i = 0; i < legalSquare.length; i++) {
-    console.log(legalSquare[i]);
+  for (let i = 0; i < legalSquare.length; i++) {
+    console.log("Legal squares:", legalSquare[i]);
     if (legalSquare[i] == targetSquare) {
       return true;
-    }     
+    }
   }
   return false;
 }
@@ -679,7 +664,6 @@ function checkLegalMove(i, targetSquare) {
 function legalPawnMoves() {
   let legalSquare = [];
   let offset = 8;
-  
 
   switch (arrayOfPieces[i].type) {
     case "P":
@@ -687,10 +671,39 @@ function legalPawnMoves() {
     case "p":
       legalSquare[0] = startSquare - offset;
       if (arrayOfPieces[i].hasMoved == false) {
-        legalSquare[1] = startSquare - (offset*2);
-        
+        legalSquare[1] = startSquare - offset * 2;
       }
       break;
+  }
+
+  return legalSquare;
+}
+
+function legalBishopMoves(x) {
+  let legalSquare = [];
+  console.log(x);
+  let j;
+
+  for (j = 0; j < arrayOfSquares.length; j++) {
+    if (arrayOfPieces[x].position == arrayOfSquares[j]) {
+      startSquare = j;
+    }
+  }
+
+  for (let i = 0; i < 7; i++) {
+    legalSquare[i] = startSquare += 7;
+  }
+  startSquare = j;
+  for (let i = 7; i < 14; i++) {
+    legalSquare[i] = startSquare += 9;
+  }
+  startSquare = j;
+  for (let i = 14; i < 21; i++) {
+    legalSquare[i] = startSquare -= 9;
+  }
+  startSquare = j;
+  for (let i = 21; i < 28; i++) {
+    legalSquare[i] = startSquare -= 9;
   }
 
   return legalSquare;
