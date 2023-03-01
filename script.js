@@ -615,8 +615,10 @@ readClick.addEventListener(
       //document.getElementById(`#${event.target.id}`).style.backgroundColor = "blue";
     } else if (!hasClicked) {
       startSquare = event.target.id;
+
       if (getPieceIndexFromSquare(startSquare) != undefined) {
         hasClicked = true;
+        
       }
     }
 
@@ -648,7 +650,7 @@ function move(startSquare, targetSquare) {
   let square = startSquare;
   let i = getPieceIndexFromSquare(square);
 
-  if (i != undefined && checkLegalMove(i, targetSquare) == true) {
+  if (i != undefined && checkLegalMove() == true) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
     arrayOfPieces[i].hasMoved = true;// For at pawn kan rykkes 2 første gang
   }
@@ -656,20 +658,23 @@ function move(startSquare, targetSquare) {
   console.log("targetSquare", targetSquare);
 }
 
-function checkLegalMove(i, targetSquare) {
-  let legalSquare;
+function checkLegalMove() {
+  let legalSquares;
 
   switch (arrayOfPieces[i].type) {
+    case "R":
+    case "r":
+      legalSquares = legalRookMoves();
+      break;
     case "P":
     case "p":
-      legalSquare = legalPawnMoves();
+      legalSquares = legalPawnMoves();
       break;
   }
 
-  //console.log(legalSquare);
-  for(let i = 0; i < legalSquare.length; i++) {
-    console.log(legalSquare[i]);
-    if (legalSquare[i] == targetSquare) {
+  console.log(legalSquares);
+  for(let i = 0; i < legalSquares.length; i++) {
+    if (legalSquares[i] == targetSquare) {
       return true;
     }     
   }
@@ -677,24 +682,60 @@ function checkLegalMove(i, targetSquare) {
 }
 
 function legalPawnMoves() {
-  let legalSquare = [];
+  let legalSquares = [];
   let offset = 8;
   
-
   switch (arrayOfPieces[i].type) {
     case "P":
       offset = offset * -1;
     case "p":
-      legalSquare[0] = startSquare - offset;
+      legalSquares[0] = startSquare - offset;
       if (arrayOfPieces[i].hasMoved == false) {
-        legalSquare[1] = startSquare - (offset*2);
+        legalSquares[1] = startSquare - (offset*2);
         
       }
       break;
   }
 
-  return legalSquare;
+  return legalSquares;
 }
+
+function legalRookMoves() {
+  let legalSquares = [];
+  let offsetRank = 8;
+  let offsetFile = 1;
+  let count = 0;
+  
+  for(let j = 0; j < 4; j++) {
+    for(let i = 0; i < 8; i++) {
+      if(j < 2) {
+        legalSquares[count] = startSquare - (offsetRank * (i+1));
+        
+        
+      } else {
+        if (j == 2) {
+          if (startSquare%8 == i)
+            break;
+        } else {
+          if (7-(startSquare%8) == i) 
+            break;
+        }
+        
+        legalSquares[count] = startSquare - (offsetFile * (i+1));
+        console.log(startSquare%i);
+        
+      }
+      
+      count++;
+    }
+    offsetRank = offsetRank*-1;
+      offsetFile = offsetFile*-1;
+  }
+
+  return legalSquares;
+}
+
+
 //Check for turn
 //Check for check
 //Check legal move
