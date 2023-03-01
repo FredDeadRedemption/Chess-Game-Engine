@@ -754,7 +754,7 @@ function legalRookMoves() {
   }
 
   for (let i = 7; i < 14; i++) {
-    legalSquares[i] = startSquare - (-offsetRank * ((i % 7) + 1));
+    legalSquares[i] = startSquare - -offsetRank * ((i % 7) + 1);
     if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
   for (let i = 14; i < 21; i++) {
@@ -765,7 +765,7 @@ function legalRookMoves() {
 
   for (let i = 21; i < 29; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare - (-offsetFile * ((i % 7) + 1));
+    legalSquares[i] = startSquare - -offsetFile * ((i % 7) + 1);
     if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
 
