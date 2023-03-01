@@ -724,7 +724,7 @@ function legalBishopMoves() {
   }
   startSquare = j;
   for (let i = 14; i < 21; i++) {
-    legalSquares[i] = startSquare -= 9;
+    legalSquares[i] = startSquare -= 7;
   }
   startSquare = j;
   for (let i = 21; i < 28; i++) {
@@ -740,6 +740,7 @@ function legalRookMoves() {
   let offsetFile = 1;
   let count = 0;
 
+  /*
   for (let j = 0; j < 4; j++) {
     for (let i = 0; i < 8; i++) {
       if (j < 2) {
@@ -753,12 +754,49 @@ function legalRookMoves() {
 
         legalSquares[count] = startSquare - offsetFile * (i + 1);
         console.log(startSquare % i);
+        
+        legalSquares[count] = startSquare - (offsetFile * (i+1));
+        
+        
       }
 
       count++;
     }
     offsetRank = offsetRank * -1;
     offsetFile = offsetFile * -1;
+    offsetRank = offsetRank*-1;
+      offsetFile = offsetFile*-1;
+  }
+  */
+
+  for (let i = 0; i < 8; i++) {
+    legalSquares[i] = startSquare - offsetRank * (i + 1);
+  }
+
+  for (let i = 8; i < 16; i++) {
+    legalSquares[i] = startSquare - -offsetRank * ((i % 8) + 1);
+  }
+  for (let i = 16; i < 24; i++) {
+    if (startSquare % 8 == i % 8) break;
+    legalSquares[i] = startSquare - offsetFile * ((i % 8) + 1);
+  }
+
+  for (let i = 24; i < 32; i++) {
+    if (7 - (startSquare % 8) == i % 8) break;
+    legalSquares[i] = startSquare - -offsetFile * ((i % 8) + 1);
+  }
+
+  for (let i = 8; i < 16; i++) {
+    legalSquares[i] = startSquare - -offsetRank * ((i % 8) + 1);
+  }
+  for (let i = 16; i < 24; i++) {
+    if (startSquare % 8 == i % 8) break;
+    legalSquares[i] = startSquare - offsetFile * ((i % 8) + 1);
+  }
+
+  for (let i = 24; i < 32; i++) {
+    if (7 - (startSquare % 8) == i % 8) break;
+    legalSquares[i] = startSquare - -offsetFile * ((i % 8) + 1);
   }
 
   return legalSquares;
