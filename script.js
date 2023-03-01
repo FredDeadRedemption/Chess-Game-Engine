@@ -626,10 +626,10 @@ function getPieceIndexFromSquare(startSquare) {
 function move(startSquare, targetSquare) {
   let i = getPieceIndexFromSquare(startSquare);
 
-  if (i != undefined && checkLegalMove() && checkTurn() && !friendlyOccupance()) {
+  if (i != undefined && checkLegalMove() && checkTurn() && !hasFriendlyOccupance()) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
     arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
-    whiteToMove = !whiteToMove;
+    whiteToMove = !whiteToMove; //Turn switch whenever a legal move has been made
   }
 }
 
@@ -651,6 +651,7 @@ function checkLegalMove() {
       break;
   }
 
+  console.log(arrayOfPieces[i].color == "white"); //true
   console.log(legalSquares);
 
   for (let i = 0; i < legalSquares.length; i++) {
@@ -669,8 +670,16 @@ function checkTurn() {
   } else return false;
 }
 
-function friendlyOccupance() {
-  return false;
+function hasFriendlyOccupance() {
+  let i = getPieceIndexFromSquare(targetSquare);
+
+  if (i != undefined) {
+    if (arrayOfPieces[i].color == "white" && whiteToMove) {
+      return true;
+    } else if (arrayOfPieces[i].color == "black" && !whiteToMove) {
+      return true;
+    } else return false;
+  }
 }
 
 /*
