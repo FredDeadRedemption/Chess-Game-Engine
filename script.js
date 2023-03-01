@@ -588,6 +588,7 @@ animatePieces(); //skal lige ned og hente icetea i netto
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
 let hasClicked = false;
+let whiteToMove = true;
 
 const readClick = document.querySelector(".main");
 
@@ -602,7 +603,6 @@ readClick.addEventListener(
 
       if (getPieceIndexFromSquare(startSquare) != undefined) {
         hasClicked = true;
-        
       }
     }
 
@@ -626,12 +626,11 @@ function getPieceIndexFromSquare(startSquare) {
 function move(startSquare, targetSquare) {
   let i = getPieceIndexFromSquare(startSquare);
 
-  if (i != undefined && checkLegalMove()) {
+  if (i != undefined && checkLegalMove() && checkTurn() && !friendlyOccupance()) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
     arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
+    whiteToMove = !whiteToMove;
   }
-  console.log("startSquare", startSquare);
-  console.log("targetSquare", targetSquare);
 }
 
 function checkLegalMove() {
@@ -662,6 +661,18 @@ function checkLegalMove() {
   return false;
 }
 
+function checkTurn() {
+  if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
+    return true;
+  } else if (arrayOfPieces[i].color == "black" && whiteToMove == false) {
+    return true;
+  } else return false;
+}
+
+function friendlyOccupance() {
+  return false;
+}
+
 /*
 function animateLegalMoves(legalSquares) {
   window.requestAnimationFrame(animateLegalMoves);
@@ -686,7 +697,7 @@ function legalPawnMoves() {
       legalSquares[0] = startSquare - offset;
       if (arrayOfPieces[i].hasMoved == false) {
         //Makes sure a pawn can move 2 squares
-        legalSquares[1] = startSquare - (offset * 2);
+        legalSquares[1] = startSquare - offset * 2;
       }
       break;
   }
@@ -728,37 +739,27 @@ function legalRookMoves() {
   let offsetRank = 8;
   let offsetFile = 1;
   let count = 0;
-  
-  for(let j = 0; j < 4; j++) {
-    for(let i = 0; i < 8; i++) {
-      if(j < 2) {
-        legalSquares[count] = startSquare - (offsetRank * (i+1));
-        
-        
+
+  for (let j = 0; j < 4; j++) {
+    for (let i = 0; i < 8; i++) {
+      if (j < 2) {
+        legalSquares[count] = startSquare - offsetRank * (i + 1);
       } else {
         if (j == 2) {
-          if (startSquare%8 == i)
-            break;
+          if (startSquare % 8 == i) break;
         } else {
-          if (7-(startSquare%8) == i) 
-            break;
+          if (7 - (startSquare % 8) == i) break;
         }
-        
-        legalSquares[count] = startSquare - (offsetFile * (i+1));
-        console.log(startSquare%i);
-        
+
+        legalSquares[count] = startSquare - offsetFile * (i + 1);
+        console.log(startSquare % i);
       }
-      
+
       count++;
     }
-    offsetRank = offsetRank*-1;
-      offsetFile = offsetFile*-1;
+    offsetRank = offsetRank * -1;
+    offsetFile = offsetFile * -1;
   }
 
   return legalSquares;
 }
-
-
-//Check for turn
-//Check for check
-//Check legal move
