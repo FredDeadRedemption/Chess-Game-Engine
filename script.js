@@ -738,65 +738,26 @@ function legalRookMoves() {
   let legalSquares = [];
   let offsetRank = 8;
   let offsetFile = 1;
-  let count = 0;
 
-  /*
-  for (let j = 0; j < 4; j++) {
-    for (let i = 0; i < 8; i++) {
-      if (j < 2) {
-        legalSquares[count] = startSquare - offsetRank * (i + 1);
-      } else {
-        if (j == 2) {
-          if (startSquare % 8 == i) break;
-        } else {
-          if (7 - (startSquare % 8) == i) break;
-        }
-
-        legalSquares[count] = startSquare - offsetFile * (i + 1);
-        console.log(startSquare % i);
-        
-        legalSquares[count] = startSquare - (offsetFile * (i+1));
-        
-        
-      }
-
-      count++;
-    }
-    offsetRank = offsetRank * -1;
-    offsetFile = offsetFile * -1;
-    offsetRank = offsetRank*-1;
-      offsetFile = offsetFile*-1;
-  }
-  */
-
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 7; i++) {
     legalSquares[i] = startSquare - offsetRank * (i + 1);
+    if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
 
-  for (let i = 8; i < 16; i++) {
-    legalSquares[i] = startSquare - -offsetRank * ((i % 8) + 1);
+  for (let i = 7; i < 14; i++) {
+    legalSquares[i] = startSquare - (-offsetRank * ((i % 7) + 1));
+    if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
-  for (let i = 16; i < 24; i++) {
-    if (startSquare % 8 == i % 8) break;
-    legalSquares[i] = startSquare - offsetFile * ((i % 8) + 1);
-  }
-
-  for (let i = 24; i < 32; i++) {
-    if (7 - (startSquare % 8) == i % 8) break;
-    legalSquares[i] = startSquare - -offsetFile * ((i % 8) + 1);
+  for (let i = 14; i < 21; i++) {
+    if (startSquare % 8 == i % 7) break;
+    legalSquares[i] = startSquare - offsetFile * ((i % 7) + 1);
+    if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
 
-  for (let i = 8; i < 16; i++) {
-    legalSquares[i] = startSquare - -offsetRank * ((i % 8) + 1);
-  }
-  for (let i = 16; i < 24; i++) {
-    if (startSquare % 8 == i % 8) break;
-    legalSquares[i] = startSquare - offsetFile * ((i % 8) + 1);
-  }
-
-  for (let i = 24; i < 32; i++) {
-    if (7 - (startSquare % 8) == i % 8) break;
-    legalSquares[i] = startSquare - -offsetFile * ((i % 8) + 1);
+  for (let i = 21; i < 29; i++) {
+    if (7 - (startSquare % 8) == i % 7) break;
+    legalSquares[i] = startSquare - (-offsetFile * ((i % 7) + 1));
+    if (arrayOfSquares[legalSquares[i]] != undefined) break;
   }
 
   return legalSquares;
