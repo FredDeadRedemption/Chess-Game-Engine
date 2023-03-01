@@ -6,7 +6,7 @@ const boardSize = 900; //900x900 // Change in .main(css) aswell
 const squareColor1 = "wheat"; //wheat
 const squareColor2 = "brown"; //brown
 
-const squareSize = boardSize / 8; //900 = 112.5 squareSize & pieceSize
+const squareSize = boardSize / 8; //900x900 = 112.5 squareSize & pieceSize
 const pieceSize = boardSize / 8;
 canvas.width = boardSize;
 canvas.height = boardSize;
@@ -23,7 +23,7 @@ class Piece {
     this.worth = worth; //Value of piece
     this.image = new Image();
     this.image.src = imageSrc;
-    this.hasMoved = hasMoved;
+    this.hasMoved = hasMoved; //Used for King, Rook, and Pawns
   }
 
   draw() {
@@ -554,9 +554,8 @@ const arrayOfPieces = [
 ]; //32
 
 //Generates dynamic sized chessboard
-function drawChessboard() {
-  window.requestAnimationFrame(drawChessboard);
-
+function animateChessboard() {
+  window.requestAnimationFrame(animateChessboard);
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
     for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
       if (fileCount % 2 == 0) {
@@ -574,17 +573,17 @@ function drawChessboard() {
   }
 }
 
-drawChessboard();
+animateChessboard();
 
 //Updates animation for all pieces
-function animate() {
-  window.requestAnimationFrame(animate);
+function animatePieces() {
+  window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
     arrayOfPieces[i].update();
   }
 }
 
-animate(); //skal lige ned og hente icetea i netto
+animatePieces(); //skal lige ned og hente icetea i netto
 
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
@@ -598,7 +597,6 @@ readClick.addEventListener(
     if (hasClicked) {
       hasClicked = false;
       targetSquare = event.target.id;
-      //document.getElementById(`#${event.target.id}`).style.backgroundColor = "blue";
     } else if (!hasClicked) {
       startSquare = event.target.id;
       if (getPieceIndexFromSquare(startSquare) != undefined) {
@@ -611,8 +609,6 @@ readClick.addEventListener(
       startSquare = undefined;
       targetSquare = undefined;
     }
-
-    console.log(hasClicked);
   },
   { capture: true } //stops event bubbling :> ! since class is .main
 );
@@ -626,87 +622,101 @@ function getPieceIndexFromSquare(startSquare) {
 }
 
 function move(startSquare, targetSquare) {
-  let square = startSquare;
-  let i = getPieceIndexFromSquare(square);
+  let i = getPieceIndexFromSquare(startSquare);
 
-  if (i != undefined && checkLegalMove(i, targetSquare)) {
+  if (i != undefined && checkLegalMove()) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
-    arrayOfPieces[i].hasMoved = true; // For at pawn kan rykkes 2 første gang
+    arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
   }
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
 }
 
-function checkLegalMove(i, targetSquare) {
-  let legalSquare;
+function checkLegalMove() {
+  let legalSquares;
 
   switch (arrayOfPieces[i].type) {
     case "P":
     case "p":
-      legalSquare = legalPawnMoves();
+      legalSquares = legalPawnMoves();
       break;
     case "B":
     case "b":
-      legalSquare = legalBishopMoves(i);
+      legalSquares = legalBishopMoves();
       break;
   }
 
-  //console.log(legalSquare);
-  for (let i = 0; i < legalSquare.length; i++) {
-    console.log("Legal squares:", legalSquare[i]);
-    if (legalSquare[i] == targetSquare) {
+  console.log(legalSquares);
+
+  for (let i = 0; i < legalSquares.length; i++) {
+    if (legalSquares[i] == targetSquare) {
       return true;
     }
   }
   return false;
 }
 
+/*
+function animateLegalMoves(legalSquares) {
+  window.requestAnimationFrame(animateLegalMoves);
+  squareToAnimate = {
+    rank: undefined,
+    file: undefined,
+  };
+  for (i = 0; i < legalSquares.length; i++) {
+    squareToAnimate = arrayOfSquares[legalSquares];
+  }
+  c.fillRect(squareToAnimate.rank, squareToAnimate.file, squareSize, squareSize);
+}
+*/
+
 function legalPawnMoves() {
-  let legalSquare = [];
+  let legalSquares = [];
   let offset = 8;
 
   switch (arrayOfPieces[i].type) {
     case "P":
       offset = offset * -1;
     case "p":
-      legalSquare[0] = startSquare - offset;
+      legalSquares[0] = startSquare - offset;
       if (arrayOfPieces[i].hasMoved == false) {
-        legalSquare[1] = startSquare - offset * 2;
+        //Makes sure a pawn can move 2 squares
+        legalSquares[1] = startSquare - offset * 2;
       }
       break;
   }
 
-  return legalSquare;
+  return legalSquares;
 }
 
-function legalBishopMoves(x) {
-  let legalSquare = [];
+function legalBishopMoves() {
+  let legalSquares = [];
   console.log(x);
   let j;
 
   for (j = 0; j < arrayOfSquares.length; j++) {
-    if (arrayOfPieces[x].position == arrayOfSquares[j]) {
+    if (arrayOfPieces[i].position == arrayOfSquares[j]) {
       startSquare = j;
     }
   }
 
   for (let i = 0; i < 7; i++) {
-    legalSquare[i] = startSquare += 7;
+    legalSquares[i] = startSquare += 7;
   }
   startSquare = j;
   for (let i = 7; i < 14; i++) {
-    legalSquare[i] = startSquare += 9;
+    legalSquares[i] = startSquare += 9;
   }
   startSquare = j;
   for (let i = 14; i < 21; i++) {
-    legalSquare[i] = startSquare -= 9;
+    legalSquares[i] = startSquare -= 9;
   }
   startSquare = j;
   for (let i = 21; i < 28; i++) {
-    legalSquare[i] = startSquare -= 9;
+    legalSquares[i] = startSquare -= 9;
   }
 
-  return legalSquare;
+  return legalSquares;
 }
 //Check for turn
 //Check for check
