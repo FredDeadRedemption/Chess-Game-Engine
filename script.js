@@ -12,7 +12,7 @@ canvas.width = boardSize;
 canvas.height = boardSize;
 
 class Piece {
-  constructor({ position, color, type, worth, imageSrc, hasMoved }) {
+  constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured }) {
     this.position = position;
     position = {
       rank: this.position.rank,
@@ -24,6 +24,7 @@ class Piece {
     this.image = new Image();
     this.image.src = imageSrc;
     this.hasMoved = hasMoved; //Used for King, Rook, and Pawns
+    this.hasBeenCaptured = hasBeenCaptured; //rip
   }
 
   draw() {
@@ -302,6 +303,7 @@ const arrayOfPieces = [
     worth: 5,
     imageSrc: "./pieces/rook_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (knight_black = new Piece({
     position: arrayOfSquares[57],
@@ -310,6 +312,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/knight_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (bishop_black = new Piece({
     position: arrayOfSquares[58],
@@ -318,6 +321,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/bishop_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (queen_black = new Piece({
     position: arrayOfSquares[59],
@@ -326,14 +330,16 @@ const arrayOfPieces = [
     worth: 9,
     imageSrc: "./pieces/queen_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (king_black = new Piece({
     position: arrayOfSquares[60],
     color: "black",
     type: "k",
-    worth: 0,
+    worth: 99,
     imageSrc: "./pieces/king_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (bishop_black2 = new Piece({
     position: arrayOfSquares[61],
@@ -342,6 +348,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/bishop_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (knight_black2 = new Piece({
     position: arrayOfSquares[62],
@@ -350,6 +357,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/knight_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (rook_black2 = new Piece({
     position: arrayOfSquares[63],
@@ -358,6 +366,7 @@ const arrayOfPieces = [
     worth: 5,
     imageSrc: "./pieces/rook_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black = new Piece({
     position: arrayOfSquares[48],
@@ -366,6 +375,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black2 = new Piece({
     position: arrayOfSquares[49],
@@ -374,6 +384,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black3 = new Piece({
     position: arrayOfSquares[50],
@@ -382,6 +393,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black4 = new Piece({
     position: arrayOfSquares[51],
@@ -390,6 +402,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black5 = new Piece({
     position: arrayOfSquares[52],
@@ -398,6 +411,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black6 = new Piece({
     position: arrayOfSquares[53],
@@ -406,6 +420,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black7 = new Piece({
     position: arrayOfSquares[54],
@@ -414,6 +429,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_black8 = new Piece({
     position: arrayOfSquares[55],
@@ -422,6 +438,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_black.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (rook_white = new Piece({
     position: arrayOfSquares[0],
@@ -430,6 +447,7 @@ const arrayOfPieces = [
     worth: 5,
     imageSrc: "./pieces/rook_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (knight_white = new Piece({
     position: arrayOfSquares[1],
@@ -438,6 +456,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/knight_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (bishop_white = new Piece({
     position: arrayOfSquares[2],
@@ -446,6 +465,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/bishop_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (queen_white = new Piece({
     position: arrayOfSquares[3],
@@ -454,14 +474,16 @@ const arrayOfPieces = [
     worth: 9,
     imageSrc: "./pieces/queen_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (king_white = new Piece({
     position: arrayOfSquares[4],
     color: "white",
     type: "K",
-    worth: 0,
+    worth: 99,
     imageSrc: "./pieces/king_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (bishop_white2 = new Piece({
     position: arrayOfSquares[5],
@@ -470,6 +492,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/bishop_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (knight_white2 = new Piece({
     position: arrayOfSquares[6],
@@ -478,6 +501,7 @@ const arrayOfPieces = [
     worth: 3,
     imageSrc: "./pieces/knight_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (rook_white2 = new Piece({
     position: arrayOfSquares[7],
@@ -486,6 +510,7 @@ const arrayOfPieces = [
     worth: 5,
     imageSrc: "./pieces/rook_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white = new Piece({
     position: arrayOfSquares[8],
@@ -494,6 +519,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white2 = new Piece({
     position: arrayOfSquares[9],
@@ -502,6 +528,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white3 = new Piece({
     position: arrayOfSquares[10],
@@ -510,6 +537,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white4 = new Piece({
     position: arrayOfSquares[11],
@@ -518,6 +546,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white5 = new Piece({
     position: arrayOfSquares[12],
@@ -526,6 +555,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white6 = new Piece({
     position: arrayOfSquares[13],
@@ -534,6 +564,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white7 = new Piece({
     position: arrayOfSquares[14],
@@ -542,6 +573,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
   (pawn_white8 = new Piece({
     position: arrayOfSquares[15],
@@ -550,6 +582,7 @@ const arrayOfPieces = [
     worth: 1,
     imageSrc: "./pieces/pawn_white.png",
     hasMoved: false,
+    hasBeenCaptured: false,
   })),
 ]; //32
 
@@ -579,11 +612,37 @@ animateChessboard();
 function animatePieces() {
   window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
-    arrayOfPieces[i].update();
+    if (arrayOfPieces[i].hasBeenCaptured == false) {
+      arrayOfPieces[i].update();
+    }
   }
 }
 
 animatePieces(); //skal lige ned og hente icetea i netto
+
+/*
+function animateLegalSquare(legalSquares) {
+  window.requestAnimationFrame();
+  let rank;
+  let file;
+  let array = [
+    {
+      rank,
+      file,
+    },
+  ];
+  for (i = 0; i <= legalSquares.length; i++) {
+    array[i] = arrayOfSquares[legalSquares[i]];
+
+    rank = array.rank;
+    file = array.file;
+
+    c.fillStyle = "yellow";
+    c.fillRect(rank, file, squareSize, squareSize);
+  }
+  console.log(array);
+}
+*/
 
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
@@ -625,9 +684,9 @@ function getPieceIndexFromSquare(startSquare) {
 }
 
 function move(startSquare, targetSquare) {
-  let i = getPieceIndexFromSquare(startSquare);
+  let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
-  if (i != undefined && checkLegalMove() /*&& checkTurn(i) */&& !hasFriendlyOccupance()) {
+  if (i != undefined && checkLegalMove() /*&& checkTurn(i) */ && !hasFriendlyOccupance()) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
     arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
     whiteToMove = !whiteToMove; //Turn switch whenever a legal move has been made
@@ -660,7 +719,7 @@ function checkLegalMove() {
       legalSquares = legalKnightMoves();
       break;
   }
-
+  //animateLegalSquare(legalSquares);
   //console.log(arrayOfPieces[i].color == "white"); //true
   console.log(legalSquares);
 
@@ -692,6 +751,18 @@ function hasFriendlyOccupance() {
   }
 }
 
+function hasEvilOccupance() {
+  let i = getPieceIndexFromSquare(targetSquare);
+
+  if (i != undefined) {
+    if (arrayOfPieces[i].color == "black" && whiteToMove) {
+      return true;
+    } else if (arrayOfPieces[i].color == "white" && !whiteToMove) {
+      return true;
+    } else return false;
+  }
+}
+
 /*
 function animateLegalMoves(legalSquares) {
   window.requestAnimationFrame(animateLegalMoves);
@@ -717,6 +788,11 @@ function legalPawnMoves() {
       if (arrayOfPieces[i].hasMoved == false) {
         //Makes sure a pawn can move 2 squares
         legalSquares[1] = startSquare - offset * 2;
+      }
+      if (hasEvilOccupance(targetSquare) && targetSquare == startSquare + 7) {
+        legalSquares[2] = startSquare + 7;
+      } else if (hasEvilOccupance(targetSquare) && targetSquare == startSquare + 9) {
+        legalSquares[3] = startSquare + 9;
       }
       break;
   }
@@ -843,15 +919,11 @@ function legalKnightMoves() {
   return legalSquares;
 }
 
-
 function removeIllegalMoves(legalSquares) {
-
-  for(let i = legalSquares.length - 1; i >= 0; i--) {
-    if ((legalSquares[i] < 0) || (legalSquares[i] > 63) || typeof legalSquares[i] != "number") {
-      
+  for (let i = legalSquares.length - 1; i >= 0; i--) {
+    if (legalSquares[i] < 0 || legalSquares[i] > 63 || typeof legalSquares[i] != "number") {
       legalSquares.splice(i, 1);
     }
-
   }
 }
 knight_black = undefined;
