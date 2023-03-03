@@ -627,7 +627,7 @@ function getPieceIndexFromSquare(startSquare) {
 function move(startSquare, targetSquare) {
   let i = getPieceIndexFromSquare(startSquare);
 
-  if (i != undefined && checkLegalMove() && checkTurn() && !hasFriendlyOccupance()) {
+  if (i != undefined && checkLegalMove() /*&& checkTurn(i)*/ && !hasFriendlyOccupance()) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
     arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
     whiteToMove = !whiteToMove; //Turn switch whenever a legal move has been made
@@ -651,9 +651,17 @@ function checkLegalMove() {
     case "b":
       legalSquares = legalBishopMoves();
       break;
+    case "Q":
+    case "q":
+      legalSquares = legalQueenMoves();
+      break;
+    case "N":
+    case "n":
+      legalSquares = legalKnightMoves();
+      break;
   }
 
-  console.log(arrayOfPieces[i].color == "white"); //true
+  //console.log(arrayOfPieces[i].color == "white"); //true
   console.log(legalSquares);
 
   for (let i = 0; i < legalSquares.length; i++) {
@@ -664,7 +672,9 @@ function checkLegalMove() {
   return false;
 }
 
-function checkTurn() {
+function checkTurn(i) {
+
+
   if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
     return true;
   } else if (arrayOfPieces[i].color == "black" && whiteToMove == false) {
@@ -718,36 +728,37 @@ function legalPawnMoves() {
 
 function legalBishopMoves() {
   let legalSquares = [];
-  let j;
-
-  for (j = 0; j < arrayOfSquares.length; j++) {
-    if (arrayOfPieces[i].position == arrayOfSquares[j]) {
-      startSquare = j;
-    }
-  }
 
   for (let i = 0; i < 7; i++) {
     if (startSquare % 8 == i) break; 
-    legalSquares[i] = startSquare + (7*(i+1));
-    if (arrayOfSquares[legalSquares[i]].Piece != undefined){ console.log(arrayOfSquares[legalSquares[i]]);break;}
+    legalSquares[i] = startSquare - (-7*(i+1));
+    
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
   }
-  //startSquare = j;
+  
   for (let i = 7; i < 14; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare + (9*((i%7)+1));
-    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    legalSquares[i] = startSquare - (-9*((i%7)+1));
+    
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
   }
-  //startSquare = j;
+  
   for (let i = 14; i < 21; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
     legalSquares[i] = startSquare - (7*((i%7)+1));
-    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
   }
-  //startSquare = j;
+  
   for (let i = 21; i < 28; i++) {
     if (startSquare % 8 == i % 7) break; 
     legalSquares[i] = startSquare - (9*((i%7)+1));
-    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
   }
 
   return legalSquares;
@@ -761,23 +772,64 @@ function legalRookMoves() {
 
   for (let i = 0; i < 7; i++) {
     legalSquares[i] = startSquare - offsetRank * (i + 1);
-    if (getPieceIndexFromSquare[legalSquares[i]] != undefined) break;
+
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
   }
 
   for (let i = 7; i < 14; i++) {
     legalSquares[i] = startSquare - (-offsetRank * ((i % 7) + 1));
-    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
+
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
   }
   for (let i = 14; i < 21; i++) {
     if (startSquare % 8 == i % 7) break;
     legalSquares[i] = startSquare - offsetFile * ((i % 7) + 1);
-    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
+    
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
   }
 
   for (let i = 21; i < 29; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
     legalSquares[i] = startSquare - (-offsetFile * ((i % 7) + 1));
-    //if (arrayOfSquares[legalSquares[i]] != undefined) break;
+
+    let j = getPieceIndexFromSquare(legalSquares[i]);
+    if (j != undefined) break;
+  }
+
+  return legalSquares;
+}
+
+function legalQueenMoves() {
+  let legalBishopSquares = [];
+  let legalRookSquares = [];
+  let legalSquares = [];
+
+  legalBishopSquares = legalBishopMoves();
+  legalRookSquares = legalRookMoves();
+
+  legalSquares = legalBishopSquares.concat(legalRookSquares);
+
+  return legalSquares;
+}
+
+
+function legalKnightMoves() {
+  let legalSquares = [];
+  let factor = 1;
+  let index = startSquare%8;
+
+  for(let i = 0; i < 2; i++) {
+    if ((index <= 2 || index >= 6))
+      legalSquares[i] = startSquare - (6*factor);
+    if ((index <= 1 || index >= 6))
+      legalSquares[i+2] = startSquare - (10*factor);
+    legalSquares[i+4] = startSquare - (15*factor);
+    legalSquares[i+6] = startSquare - (17*factor);
+
+    factor = factor * -1;
   }
 
   return legalSquares;
