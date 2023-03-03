@@ -626,7 +626,7 @@ function getPieceIndexFromSquare(startSquare) {
 function move(startSquare, targetSquare) {
   let i = getPieceIndexFromSquare(startSquare);
 
-  if (i != undefined && checkLegalMove() /*&& checkTurn(i)*/ && !hasFriendlyOccupance()) {
+  if (i != undefined && checkLegalMove() /*&& checkTurn(i) */&& !hasFriendlyOccupance()) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
     arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
     whiteToMove = !whiteToMove; //Turn switch whenever a legal move has been made
@@ -722,6 +722,7 @@ function legalPawnMoves() {
       break;
   }
 
+  removeIllegalMoves(legalSquares);
   return legalSquares;
 }
 
@@ -760,6 +761,7 @@ function legalBishopMoves() {
     if (j != undefined) break;
   }
 
+  removeIllegalMoves(legalSquares);
   return legalSquares;
 }
 
@@ -797,6 +799,7 @@ function legalRookMoves() {
     if (j != undefined) break;
   }
 
+  removeIllegalMoves(legalSquares);
   return legalSquares;
 }
 
@@ -809,6 +812,8 @@ function legalQueenMoves() {
   legalRookSquares = legalRookMoves();
 
   legalSquares = legalBishopSquares.concat(legalRookSquares);
+
+  removeIllegalMoves(legalSquares);
 
   return legalSquares;
 }
@@ -831,4 +836,16 @@ function legalKnightMoves() {
   }
 
   return legalSquares;
+}
+
+
+function removeIllegalMoves(legalSquares) {
+
+  for(let i = legalSquares.length - 1; i >= 0; i--) {
+    if ((legalSquares[i] < 0) || (legalSquares[i] > 63) || typeof legalSquares[i] != "number") {
+      
+      legalSquares.splice(i, 1);
+    }
+
+  }
 }
