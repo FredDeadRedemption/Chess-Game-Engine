@@ -573,7 +573,6 @@ function animateChessboard() {
   }
 }
 
-
 animateChessboard();
 
 //Updates animation for all pieces
@@ -768,7 +767,6 @@ function legalRookMoves() {
   let legalSquares = [];
   let offsetRank = 8;
   let offsetFile = 1;
-  
 
   for (let i = 0; i < 7; i++) {
     legalSquares[i] = startSquare - offsetRank * (i + 1);
