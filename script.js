@@ -823,12 +823,21 @@ function legalKnightMoves() {
   let index = startSquare % 8;
 
   for (let i = 0; i < 2; i++) {
-    if (index <= 2 || index >= 6) legalSquares[i] = startSquare - 6 * factor;
-    if (index <= 1 || index >= 6) legalSquares[i + 2] = startSquare - 10 * factor;
+    legalSquares[i] = startSquare - 6 * factor;
+    legalSquares[i + 2] = startSquare - 10 * factor;
     legalSquares[i + 4] = startSquare - 15 * factor;
     legalSquares[i + 6] = startSquare - 17 * factor;
 
     factor = factor * -1;
+  }
+  removeIllegalMoves(legalSquares);
+  //console.log(legalSquares);
+
+
+  for(let i = legalSquares.length - 1; i >= 0; i--) {
+    if ((index < 2 && legalSquares[i]%8 > index+2) || (index > 5 && legalSquares[i]%8 < index-2)) {
+      legalSquares.splice(i, 1);
+    }
   }
 
   return legalSquares;
