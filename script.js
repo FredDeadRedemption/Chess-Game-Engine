@@ -608,6 +608,7 @@ readClick.addEventListener(
 
     if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
       move(startSquare, targetSquare);
+
       startSquare = undefined;
       targetSquare = undefined;
     }
@@ -672,8 +673,6 @@ function checkLegalMove() {
 }
 
 function checkTurn(i) {
-
-
   if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
     return true;
   } else if (arrayOfPieces[i].color == "black" && whiteToMove == false) {
@@ -730,33 +729,33 @@ function legalBishopMoves() {
   let legalSquares = [];
 
   for (let i = 0; i < 7; i++) {
-    if (startSquare % 8 == i) break; 
-    legalSquares[i] = startSquare - (-7*(i+1));
-    
+    if (startSquare % 8 == i) break;
+    legalSquares[i] = startSquare - -7 * (i + 1);
+
     let j = getPieceIndexFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
-  
+
   for (let i = 7; i < 14; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare - (-9*((i%7)+1));
-    
+    legalSquares[i] = startSquare - -9 * ((i % 7) + 1);
+
     let j = getPieceIndexFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
-  
+
   for (let i = 14; i < 21; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare - (7*((i%7)+1));
-    
+    legalSquares[i] = startSquare - 7 * ((i % 7) + 1);
+
     let j = getPieceIndexFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
-  
+
   for (let i = 21; i < 28; i++) {
-    if (startSquare % 8 == i % 7) break; 
-    legalSquares[i] = startSquare - (9*((i%7)+1));
-    
+    if (startSquare % 8 == i % 7) break;
+    legalSquares[i] = startSquare - 9 * ((i % 7) + 1);
+
     let j = getPieceIndexFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
@@ -778,7 +777,7 @@ function legalRookMoves() {
   }
 
   for (let i = 7; i < 14; i++) {
-    legalSquares[i] = startSquare - (-offsetRank * ((i % 7) + 1));
+    legalSquares[i] = startSquare - -offsetRank * ((i % 7) + 1);
 
     let j = getPieceIndexFromSquare(legalSquares[i]);
     if (j != undefined) break;
@@ -786,14 +785,14 @@ function legalRookMoves() {
   for (let i = 14; i < 21; i++) {
     if (startSquare % 8 == i % 7) break;
     legalSquares[i] = startSquare - offsetFile * ((i % 7) + 1);
-    
+
     let j = getPieceIndexFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
   for (let i = 21; i < 29; i++) {
     if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare - (-offsetFile * ((i % 7) + 1));
+    legalSquares[i] = startSquare - -offsetFile * ((i % 7) + 1);
 
     let j = getPieceIndexFromSquare(legalSquares[i]);
     if (j != undefined) break;
@@ -818,19 +817,16 @@ function legalQueenMoves() {
   return legalSquares;
 }
 
-
 function legalKnightMoves() {
   let legalSquares = [];
   let factor = 1;
-  let index = startSquare%8;
+  let index = startSquare % 8;
 
-  for(let i = 0; i < 2; i++) {
-    if ((index <= 2 || index >= 6))
-      legalSquares[i] = startSquare - (6*factor);
-    if ((index <= 1 || index >= 6))
-      legalSquares[i+2] = startSquare - (10*factor);
-    legalSquares[i+4] = startSquare - (15*factor);
-    legalSquares[i+6] = startSquare - (17*factor);
+  for (let i = 0; i < 2; i++) {
+    if (index <= 2 || index >= 6) legalSquares[i] = startSquare - 6 * factor;
+    if (index <= 1 || index >= 6) legalSquares[i + 2] = startSquare - 10 * factor;
+    legalSquares[i + 4] = startSquare - 15 * factor;
+    legalSquares[i + 6] = startSquare - 17 * factor;
 
     factor = factor * -1;
   }
@@ -849,3 +845,6 @@ function removeIllegalMoves(legalSquares) {
 
   }
 }
+knight_black = undefined;
+
+console.log(knight_black);
