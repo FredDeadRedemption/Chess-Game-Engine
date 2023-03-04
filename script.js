@@ -656,9 +656,9 @@ readClick.addEventListener(
   (event) => {
     if (hasClicked) {
       hasClicked = false;
-      targetSquare = event.target.id;
+      targetSquare = parseInt(event.target.id); //fuck javasript
     } else if (!hasClicked) {
-      startSquare = event.target.id;
+      startSquare = parseInt(event.target.id);
 
       if (getPieceIndexFromSquare(startSquare) != undefined) {
         hasClicked = true;
@@ -686,12 +686,13 @@ function getPieceIndexFromSquare(startSquare) {
 function move(startSquare, targetSquare) {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
-  if (i != undefined && checkLegalMove() /*&& checkTurn(i) */ && !hasFriendlyOccupance()) {
+  if (i != undefined && checkLegalMove() && checkTurn(i) && !hasFriendlyOccupance()) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare];
     arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
     whiteToMove = !whiteToMove; //Turn switch whenever a legal move has been made
   }
-  console.log(startSquare);
+  console.log("startSquare", startSquare);
+  console.log("targetSquare", targetSquare);
 }
 
 function checkLegalMove() {
@@ -717,6 +718,10 @@ function checkLegalMove() {
     case "N":
     case "n":
       legalSquares = legalKnightMoves();
+      break;
+    case "K":
+    case "k":
+      legalSquares = legalKingMoves();
       break;
   }
   //animateLegalSquare(legalSquares);
@@ -791,11 +796,18 @@ function legalPawnMoves() {
       }
       if (hasEvilOccupance(targetSquare) && targetSquare == startSquare + 7) {
         legalSquares[2] = startSquare + 7;
+        console.log(legalSquares[2]);
       } else if (hasEvilOccupance(targetSquare) && targetSquare == startSquare + 9) {
         legalSquares[3] = startSquare + 9;
       }
       break;
   }
+  /*
+  console.log(hasEvilOccupance(targetSquare));
+  console.log(startSquare + 7);
+  console.log(targetSquare == startSquare + 7);
+  console.log(legalSquares[2]);
+*/
 
   removeIllegalMoves(legalSquares);
   return legalSquares;
@@ -909,14 +921,17 @@ function legalKnightMoves() {
   removeIllegalMoves(legalSquares);
   //console.log(legalSquares);
 
-
-  for(let i = legalSquares.length - 1; i >= 0; i--) {
-    if ((index < 2 && legalSquares[i]%8 > index+2) || (index > 5 && legalSquares[i]%8 < index-2)) {
+  for (let i = legalSquares.length - 1; i >= 0; i--) {
+    if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2)) {
       legalSquares.splice(i, 1);
     }
   }
 
   return legalSquares;
+}
+
+function legalKingMoves() {
+  let legalsquares = [];
 }
 
 function removeIllegalMoves(legalSquares) {
@@ -926,6 +941,3 @@ function removeIllegalMoves(legalSquares) {
     }
   }
 }
-knight_black = undefined;
-
-console.log(knight_black);
