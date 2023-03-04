@@ -1,8 +1,8 @@
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
-//Settings || Standard Settings
-const boardSize = 900; //900x900 // Change in .main(css) aswell
+//Settings////////////////////////// Standard Settings
+const boardSize = 900; //900x900 // !change in .main css class aswell
 const squareColor1 = "wheat"; //wheat
 const squareColor2 = "brown"; //brown
 
@@ -10,6 +10,18 @@ const squareSize = boardSize / 8; //900x900 = 112.5 squareSize & pieceSize
 const pieceSize = boardSize / 8;
 canvas.width = boardSize;
 canvas.height = boardSize;
+
+//*********BitBoard********//
+// // // // // // // // // //
+// 56 57 58 59 60 61 62 63 //
+// 48 49 50 51 52 53 54 55 //
+// 40 41 42 43 44 45 46 47 //
+// 32 33 34 35 36 37 38 39 //
+// 24 25 26 27 28 29 30 31 //
+// 16 17 18 19 20 21 22 23 //
+// 8  9  10 11 12 13 14 15 //
+// 0  1  2  3  4  5  6  7  //
+// // // // // // // // // //
 
 class Piece {
   constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured }) {
@@ -608,7 +620,7 @@ function animateChessboard() {
 
 animateChessboard();
 
-//Updates animation for all pieces
+//Updates animation for all pieces not captured
 function animatePieces() {
   window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
@@ -931,7 +943,20 @@ function legalKnightMoves() {
 }
 
 function legalKingMoves() {
-  let legalsquares = [];
+  let legalSquares = [];
+
+  legalSquares[0] = startSquare - 1;
+  legalSquares[1] = startSquare + 1;
+  legalSquares[2] = startSquare - 7;
+  legalSquares[3] = startSquare - 8;
+  legalSquares[4] = startSquare - 9;
+  legalSquares[5] = startSquare + 7;
+  legalSquares[6] = startSquare + 8;
+  legalSquares[7] = startSquare + 9;
+
+  removeIllegalMoves(legalSquares);
+
+  return legalSquares;
 }
 
 function removeIllegalMoves(legalSquares) {
