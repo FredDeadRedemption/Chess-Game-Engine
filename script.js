@@ -38,7 +38,11 @@ function getRandomColor() {
   } else if (number > 0.995) {
     color = "deeppink";
   }
-  console.log(number);
+  //update css colors
+  document.getElementById("56").style.color = color;
+  document.getElementById("40").style.color = color;
+  document.getElementById("24").style.color = color;
+  document.getElementById("8").style.color = color;
   return color;
 }
 
