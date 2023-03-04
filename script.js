@@ -4,7 +4,7 @@ const c = canvas.getContext("2d");
 //Settings////////////////////////// Standard Settings
 const boardSize = 900; //900x900 // !change in .main css class aswell
 const squareColor1 = "wheat"; //wheat
-const squareColor2 = "brown"; //brown
+const squareColor2 = getRandomColor(); //brown
 
 const squareSize = boardSize / 8; //900x900 = 112.5 squareSize & pieceSize
 const pieceSize = boardSize / 8;
@@ -22,6 +22,25 @@ canvas.height = boardSize;
 // 8  9  10 11 12 13 14 15 //
 // 0  1  2  3  4  5  6  7  //
 // // // // // // // // // //
+
+function getRandomColor() {
+  const number = Math.random();
+  let color;
+
+  if (number <= 0.25) {
+    color = "brown";
+  } else if (number > 0.25 && number <= 0.5) {
+    color = "darkslategrey";
+  } else if (number > 0.5 && number <= 0.75) {
+    color = "rosybrown";
+  } else if (number > 0.75 && number <= 0.995) {
+    color = "seagreen";
+  } else if (number > 0.995) {
+    color = "deeppink";
+  }
+  console.log(number);
+  return color;
+}
 
 class Piece {
   constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured }) {
@@ -658,8 +677,8 @@ function animateLegalSquare(legalSquares) {
 
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
-let hasClicked = false;
-let whiteToMove = true;
+let hasClicked = false; //flips onclick
+let whiteToMove = true; //flips on move
 
 const readClick = document.querySelector(".main");
 
