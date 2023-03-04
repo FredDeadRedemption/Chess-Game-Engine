@@ -1,10 +1,10 @@
-const canvas = document.querySelector("canvas");
+const canvas = document.querySelector("canvas"); //yeehaw
 const c = canvas.getContext("2d");
 
-//Settings////////////////////////// Standard Settings
-const boardSize = 900; //900x900 // !change in .main css class aswell
-const squareColor1 = "wheat"; //wheat
-const squareColor2 = getRandomColor(); //brown
+//Settings
+const boardSize = 900; //900x900 standard // !change in .main css class aswell!
+const squareColor1 = "wheat";
+const squareColor2 = getRandomColor();
 
 const squareSize = boardSize / 8; //900x900 = 112.5 squareSize & pieceSize
 const pieceSize = boardSize / 8;
@@ -621,7 +621,7 @@ const arrayOfPieces = [
   })),
 ]; //32
 
-//Generates dynamic sized chessboard
+//generate dynamic size chessboard
 function animateChessboard() {
   window.requestAnimationFrame(animateChessboard);
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
@@ -643,7 +643,7 @@ function animateChessboard() {
 
 animateChessboard();
 
-//Updates animation for all pieces not captured
+//update animation for all pieces not captured
 function animatePieces() {
   window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
@@ -686,6 +686,7 @@ let whiteToMove = true; //flips on move
 
 const readClick = document.querySelector(".main");
 
+//click handler
 readClick.addEventListener(
   "click",
   (event) => {
@@ -694,25 +695,25 @@ readClick.addEventListener(
       targetSquare = parseInt(event.target.id); //fuck javasript
     } else if (!hasClicked) {
       startSquare = parseInt(event.target.id);
-
       if (getPieceIndexFromSquare(startSquare) != undefined) {
         hasClicked = true;
       }
     }
 
     if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
-      move(startSquare, targetSquare);
+      move(startSquare, targetSquare); //request move
 
       startSquare = undefined;
       targetSquare = undefined;
     }
   },
-  { capture: true } //stops event bubbling :> ! since class is .main
+  { capture: true } //stops event bubbling to .main
 );
 
-function getPieceIndexFromSquare(startSquare) {
+//fetches index for piece on given square
+function getPieceIndexFromSquare(inputSquare) {
   for (i = 0; i < arrayOfPieces.length; i++) {
-    if (arrayOfPieces[i].position == arrayOfSquares[startSquare]) {
+    if (arrayOfPieces[i].position == arrayOfSquares[inputSquare]) {
       return i;
     } //I can be undefined
   }
@@ -722,12 +723,22 @@ function move(startSquare, targetSquare) {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
   if (i != undefined && checkLegalMove() && checkTurn(i) && !hasFriendlyOccupance()) {
-    arrayOfPieces[i].position = arrayOfSquares[targetSquare];
-    arrayOfPieces[i].hasMoved = true; //To prevent king from castling, rook from castling, pawn from moving twice
-    whiteToMove = !whiteToMove; //Turn switch whenever a legal move has been made
+    if (hasEvilOccupance(targetSquare)) {
+      capture();
+    }
+
+    arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
+    arrayOfPieces[i].hasMoved = true;
+    whiteToMove = !whiteToMove; //Turn switch
   }
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
+}
+
+function capture() {
+  let i = getPieceIndexFromSquare(targetSquare);
+  arrayOfPieces[i].hasBeenCaptured = true;
+  arrayOfPieces[i].position = null;
 }
 
 function checkLegalMove() {
@@ -829,10 +840,11 @@ function legalPawnMoves() {
         //Makes sure a pawn can move 2 squares
         legalSquares[1] = startSquare - offset * 2;
       }
-      if (hasEvilOccupance(targetSquare) && targetSquare == startSquare + 7) {
+      if (hasEvilOccupance(startSquare + 7)) {
         legalSquares[2] = startSquare + 7;
         console.log(legalSquares[2]);
-      } else if (hasEvilOccupance(targetSquare) && targetSquare == startSquare + 9) {
+      }
+      if (hasEvilOccupance(startSquare + 9)) {
         legalSquares[3] = startSquare + 9;
       }
       break;
