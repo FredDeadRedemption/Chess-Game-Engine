@@ -23,6 +23,8 @@ canvas.height = boardSize;
 // 0  1  2  3  4  5  6  7  //
 // // // // // // // // // //
 
+//TO DO: promotion virker men billede opdateres ikke :(
+
 function getRandomColor() {
   const number = Math.random();
   let color;
@@ -729,8 +731,10 @@ function move(startSquare, targetSquare) {
 
     arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
     arrayOfPieces[i].hasMoved = true;
-    whiteToMove = !whiteToMove; //Turn switch
+    whiteToMove = !whiteToMove; //Turn switch¨
+    arrayOfPieces[i].type == "p" || "P" ? checkForPromotion(i) : "dette er ik en pawn";
   }
+  console.log(arrayOfPieces[i].position);
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
 }
@@ -741,41 +745,54 @@ function capture() {
   arrayOfPieces[i].position = null;
 }
 
+function checkForPromotion(piece) {
+  if (targetSquare > 55 && arrayOfPieces[piece].color == "white") {
+    arrayOfPieces[piece].type = "Q";
+    arrayOfPieces[piece].worth = 9;
+    arrayOfPieces[piece].image = new Image();
+    arrayOfPieces[piece].imageSrc = "./pieces/queen_white.png";
+    arrayOfPieces[piece].hasMoved = false;
+
+    //yeehaw
+    arrayOfPieces[piece].image.src = arrayOfPieces[piece].imageSrc;
+    console.log("PROMOTION!!!!!!!!!!");
+  }
+}
+
 function checkLegalMove() {
   let legalSquares;
 
   switch (arrayOfPieces[i].type) {
     case "R":
     case "r":
-      legalSquares = legalRookMoves();
+      legalSquares = GenerateLegalRookMoves();
       break;
     case "P":
     case "p":
-      legalSquares = legalPawnMoves();
+      legalSquares = GenerateLegalPawnMoves();
       break;
     case "B":
     case "b":
-      legalSquares = legalBishopMoves();
+      legalSquares = GenerateLegalBishopMoves();
       break;
     case "Q":
     case "q":
-      legalSquares = legalQueenMoves();
+      legalSquares = GenerateLegalQueenMoves();
       break;
     case "N":
     case "n":
-      legalSquares = legalKnightMoves();
+      legalSquares = GenerateLegalKnightMoves();
       break;
     case "K":
     case "k":
-      legalSquares = legalKingMoves();
+      legalSquares = GenerateLegalKingMoves();
       break;
   }
-  //animateLegalSquare(legalSquares);
-  //console.log(arrayOfPieces[i].color == "white"); //true
+
   console.log(legalSquares);
 
   for (let i = 0; i < legalSquares.length; i++) {
-    if (legalSquares[i] == targetSquare) {
+    if (targetSquare == legalSquares[i]) {
       return true;
     }
   }
@@ -828,39 +845,48 @@ function animateLegalMoves(legalSquares) {
 }
 */
 
-function legalPawnMoves() {
+function GenerateLegalPawnMoves() {
   let legalSquares = [];
-  let offset = 8;
+  let pawnAttackLeft;
+  let pawnAttackRight;
+  let pawnMoveFoward;
+
   switch (arrayOfPieces[i].type) {
-    case "P":
-      offset = offset * -1;
-    case "p":
-      legalSquares[0] = startSquare - offset;
-      if (arrayOfPieces[i].hasMoved == false) {
-        //Makes sure a pawn can move 2 squares
-        legalSquares[1] = startSquare - offset * 2;
-      }
-      if (hasEvilOccupance(startSquare + 7)) {
-        legalSquares[2] = startSquare + 7;
-        console.log(legalSquares[2]);
-      }
-      if (hasEvilOccupance(startSquare + 9)) {
-        legalSquares[3] = startSquare + 9;
-      }
+    case "P": //white offsets
+      pawnAttackLeft = 7;
+      pawnAttackRight = 9;
+      pawnMoveFoward = 8;
+      break;
+    case "p": //black offsets
+      pawnAttackLeft = -7;
+      pawnAttackRight = -9;
+      pawnMoveFoward = -8;
       break;
   }
-  /*
-  console.log(hasEvilOccupance(targetSquare));
-  console.log(startSquare + 7);
-  console.log(targetSquare == startSquare + 7);
-  console.log(legalSquares[2]);
-*/
+  console.log(arrayOfPieces[i].hasMoved);
 
-  removeIllegalMoves(legalSquares);
+  //Moving foward twice
+  if (arrayOfPieces[i].hasMoved == false && !hasFriendlyOccupance(startSquare + pawnMoveFoward * 2) && !hasEvilOccupance(startSquare + pawnMoveFoward * 2)) {
+    legalSquares[0] = startSquare + pawnMoveFoward * 2;
+  }
+  //Moving foward
+  if (!hasFriendlyOccupance(startSquare + pawnMoveFoward) && !hasEvilOccupance(startSquare + pawnMoveFoward)) {
+    legalSquares[1] = startSquare + pawnMoveFoward;
+  }
+  //Moving (attacking) left
+  if (hasEvilOccupance(startSquare + pawnAttackLeft)) {
+    legalSquares[2] = startSquare + pawnAttackLeft;
+    console.log(legalSquares[2]);
+  }
+  //Moving (attacking) right
+  if (hasEvilOccupance(startSquare + pawnAttackRight)) {
+    legalSquares[3] = startSquare + pawnAttackRight;
+  }
+  removeIllegalMoves(legalSquares); //might be useless
   return legalSquares;
 }
 
-function legalBishopMoves() {
+function GenerateLegalBishopMoves() {
   let legalSquares = [];
 
   for (let i = 0; i < 7; i++) {
@@ -899,7 +925,7 @@ function legalBishopMoves() {
   return legalSquares;
 }
 
-function legalRookMoves() {
+function GenerateLegalRookMoves() {
   let legalSquares = [];
   let offsetRank = 8;
   let offsetFile = 1;
@@ -937,13 +963,13 @@ function legalRookMoves() {
   return legalSquares;
 }
 
-function legalQueenMoves() {
+function GenerateLegalQueenMoves() {
   let legalBishopSquares = [];
   let legalRookSquares = [];
   let legalSquares = [];
 
-  legalBishopSquares = legalBishopMoves();
-  legalRookSquares = legalRookMoves();
+  legalBishopSquares = GenerateLegalBishopMoves();
+  legalRookSquares = GenerateLegalRookMoves();
 
   legalSquares = legalBishopSquares.concat(legalRookSquares);
 
@@ -952,7 +978,7 @@ function legalQueenMoves() {
   return legalSquares;
 }
 
-function legalKnightMoves() {
+function GenerateLegalKnightMoves() {
   let legalSquares = [];
   let factor = 1;
   let index = startSquare % 8;
@@ -977,7 +1003,7 @@ function legalKnightMoves() {
   return legalSquares;
 }
 
-function legalKingMoves() {
+function GenerateLegalKingMoves() {
   let legalSquares = [];
 
   legalSquares[0] = startSquare - 1;
@@ -996,7 +1022,7 @@ function legalKingMoves() {
 
 function removeIllegalMoves(legalSquares) {
   for (let i = legalSquares.length - 1; i >= 0; i--) {
-    if (legalSquares[i] < 0 || legalSquares[i] > 63 || typeof legalSquares[i] != "number") {
+    if (legalSquares[i] < 0 || legalSquares[i] > 63 /*|| typeof legalSquares[i] != "number"*/) {
       legalSquares.splice(i, 1);
     }
   }
