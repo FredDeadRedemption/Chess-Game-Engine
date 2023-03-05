@@ -23,8 +23,6 @@ canvas.height = boardSize;
 // 0  1  2  3  4  5  6  7  //
 // // // // // // // // // //
 
-//TO DO: promotion virker men billede opdateres ikke :(
-
 function getRandomColor() {
   const number = Math.random();
   let color;
@@ -746,6 +744,7 @@ function capture() {
 }
 
 function checkForPromotion(piece) {
+  //Promotion white
   if (targetSquare > 55 && arrayOfPieces[piece].color == "white") {
     arrayOfPieces[piece].type = "Q";
     arrayOfPieces[piece].worth = 9;
@@ -753,9 +752,17 @@ function checkForPromotion(piece) {
     arrayOfPieces[piece].imageSrc = "./pieces/queen_white.png";
     arrayOfPieces[piece].hasMoved = false;
 
-    //yeehaw
     arrayOfPieces[piece].image.src = arrayOfPieces[piece].imageSrc;
-    console.log("PROMOTION!!!!!!!!!!");
+  }
+  //Promotion White
+  if (targetSquare < 8 && arrayOfPieces[piece].color == "black") {
+    arrayOfPieces[piece].type = "Q";
+    arrayOfPieces[piece].worth = 9;
+    arrayOfPieces[piece].image = new Image();
+    arrayOfPieces[piece].imageSrc = "./pieces/queen_black.png";
+    arrayOfPieces[piece].hasMoved = false;
+
+    arrayOfPieces[piece].image.src = arrayOfPieces[piece].imageSrc;
   }
 }
 
