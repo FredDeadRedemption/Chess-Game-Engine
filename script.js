@@ -4,7 +4,7 @@ const c = canvas.getContext("2d");
 //Settings
 const boardSize = 900; //900x900 standard // !change in .main css class aswell!
 const squareColor1 = "wheat";
-const squareColor2 = getRandomColor();
+const squareColor2 = randomColor();
 
 const squareSize = boardSize / 8; //900x900 = 112.5 squareSize & pieceSize
 const pieceSize = boardSize / 8;
@@ -23,7 +23,7 @@ canvas.height = boardSize;
 // 0  1  2  3  4  5  6  7  //
 // // // // // // // // // //
 
-function getRandomColor() {
+function randomColor() {
   const number = Math.random();
   let color;
 
@@ -54,12 +54,12 @@ class Piece {
       file: this.position.file,
     };
     this.color = color; //"black" | "white"
-    this.type = type; //King = "k" Queen = "q" Knight = "n" Rook = "r" Bishop = "bishop" Pawn = "p"
-    this.worth = worth; //Value of piece
+    this.type = type; //King = "k" Queen = "q" Knight = "n" Rook = "r" Bishop = "b" Pawn = "p"
+    this.worth = worth; //King = 99 Queen = 9 Knight = 3 Rook = 4 Bishop = 3 Pawn = 1
     this.image = new Image();
     this.image.src = imageSrc;
-    this.hasMoved = hasMoved; //Used for King, Rook, and Pawns
-    this.hasBeenCaptured = hasBeenCaptured; //rip
+    this.hasMoved = hasMoved; //Used for castle() and pawn moving twice
+    this.hasBeenCaptured = hasBeenCaptured; //stops rendering
   }
 
   draw() {
@@ -749,26 +749,26 @@ function capture() {
   arrayOfPieces[i].position = null;
 }
 
-function promote(piece) {
+function promote(i) {
   //Promotion white
-  if (targetSquare > 55 && arrayOfPieces[piece].color == "white") {
-    arrayOfPieces[piece].type = "Q";
-    arrayOfPieces[piece].worth = 9;
-    arrayOfPieces[piece].image = new Image();
-    arrayOfPieces[piece].imageSrc = "./pieces/queen_white.png";
-    arrayOfPieces[piece].hasMoved = false;
+  if (targetSquare > 55 && arrayOfPieces[i].color == "white") {
+    arrayOfPieces[i].type = "Q";
+    arrayOfPieces[i].worth = 9;
+    arrayOfPieces[i].image = new Image();
+    arrayOfPieces[i].imageSrc = "./pieces/queen_white.png";
+    arrayOfPieces[i].hasMoved = false;
 
-    arrayOfPieces[piece].image.src = arrayOfPieces[piece].imageSrc;
+    arrayOfPieces[i].image.src = arrayOfPieces[i].imageSrc;
   }
   //Promotion Black
-  if (targetSquare < 8 && arrayOfPieces[piece].color == "black") {
-    arrayOfPieces[piece].type = "Q";
-    arrayOfPieces[piece].worth = 9;
-    arrayOfPieces[piece].image = new Image();
-    arrayOfPieces[piece].imageSrc = "./pieces/queen_black.png";
-    arrayOfPieces[piece].hasMoved = false;
+  if (targetSquare < 8 && arrayOfPieces[i].color == "black") {
+    arrayOfPieces[i].type = "Q";
+    arrayOfPieces[i].worth = 9;
+    arrayOfPieces[i].image = new Image();
+    arrayOfPieces[i].imageSrc = "./pieces/queen_black.png";
+    arrayOfPieces[i].hasMoved = false;
 
-    arrayOfPieces[piece].image.src = arrayOfPieces[piece].imageSrc;
+    arrayOfPieces[i].image.src = arrayOfPieces[i].imageSrc;
   }
 }
 
@@ -1042,6 +1042,7 @@ function GenerateLegalKingMoves() {
   legalSquares[6] = startSquare + 8;
   legalSquares[7] = startSquare + 9;
 
+  //castle
   if (!king_white.hasMoved && !rook_white2.hasMoved && hasNoOccupance(5) && hasNoOccupance(6)) {
     legalSquares[8] = startSquare + 2;
   }
@@ -1058,3 +1059,9 @@ function removeIllegalMoves(legalSquares) {
     }
   }
 }
+
+/*
+if (hasNoOccupance(arrayOfSquares[arrayOfPieces[i].position - 2])) {
+  ("fuck");
+}
+*/
