@@ -730,10 +730,15 @@ function move(startSquare, targetSquare) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
     arrayOfPieces[i].hasMoved = true;
     whiteToMove = !whiteToMove; //Turn switch¨
-    if (arrayOfPieces[i].type == "p" || "P") promotion(i);
-    if (arrayOfPieces[i].type == "k" || "K") castling();
+
+    if (arrayOfPieces[i].type == "p" || "P") {
+      promote(i);
+    }
+    if (arrayOfPieces[i].type == "k" || "K") {
+      castle();
+    }
   }
-  console.log(arrayOfPieces[i].position);
+  console.log(arrayOfPieces[i].type);
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
 }
@@ -744,7 +749,7 @@ function capture() {
   arrayOfPieces[i].position = null;
 }
 
-function promotion(piece) {
+function promote(piece) {
   //Promotion white
   if (targetSquare > 55 && arrayOfPieces[piece].color == "white") {
     arrayOfPieces[piece].type = "Q";
@@ -767,9 +772,11 @@ function promotion(piece) {
   }
 }
 
-function castling() {
-  if (targetSquare == 6) rook_white2.position = arrayOfSquares[5];
-} //mangler function SquareIsEmpty til square 5 & 6!!!
+function castle() {
+  if (targetSquare == 6) {
+    rook_white2.position = arrayOfSquares[5];
+  }
+}
 
 function checkLegalMove() {
   let legalSquares = [];
@@ -841,6 +848,14 @@ function hasEvilOccupance() {
       return true;
     } else return false;
   }
+}
+
+function hasNoOccupance(square) {
+  let i = getPieceIndexFromSquare(square);
+
+  if (i == undefined) {
+    return true;
+  } else return false;
 }
 
 /*
@@ -1027,7 +1042,9 @@ function GenerateLegalKingMoves() {
   legalSquares[6] = startSquare + 8;
   legalSquares[7] = startSquare + 9;
 
-  if (!king_white.hasMoved || !rook_white2.hasMoved) legalSquares[8] = startSquare + 2;
+  if (!king_white.hasMoved && !rook_white2.hasMoved && hasNoOccupance(5) && hasNoOccupance(6)) {
+    legalSquares[8] = startSquare + 2;
+  }
 
   removeIllegalMoves(legalSquares);
 
