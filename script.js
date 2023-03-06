@@ -730,7 +730,8 @@ function move(startSquare, targetSquare) {
     arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
     arrayOfPieces[i].hasMoved = true;
     whiteToMove = !whiteToMove; //Turn switch¨
-    arrayOfPieces[i].type == "p" || "P" ? checkForPromotion(i) : "dette er ik en pawn";
+    if (arrayOfPieces[i].type == "p" || "P") promotion(i);
+    if (arrayOfPieces[i].type == "k" || "K") castling();
   }
   console.log(arrayOfPieces[i].position);
   console.log("startSquare", startSquare);
@@ -743,7 +744,7 @@ function capture() {
   arrayOfPieces[i].position = null;
 }
 
-function checkForPromotion(piece) {
+function promotion(piece) {
   //Promotion white
   if (targetSquare > 55 && arrayOfPieces[piece].color == "white") {
     arrayOfPieces[piece].type = "Q";
@@ -754,7 +755,7 @@ function checkForPromotion(piece) {
 
     arrayOfPieces[piece].image.src = arrayOfPieces[piece].imageSrc;
   }
-  //Promotion White
+  //Promotion Black
   if (targetSquare < 8 && arrayOfPieces[piece].color == "black") {
     arrayOfPieces[piece].type = "Q";
     arrayOfPieces[piece].worth = 9;
@@ -766,8 +767,12 @@ function checkForPromotion(piece) {
   }
 }
 
+function castling() {
+  if (targetSquare == 6) rook_white2.position = arrayOfSquares[5];
+} //mangler function SquareIsEmpty til square 5 & 6!!!
+
 function checkLegalMove() {
-  let legalSquares;
+  let legalSquares = [];
 
   switch (arrayOfPieces[i].type) {
     case "R":
@@ -1021,6 +1026,8 @@ function GenerateLegalKingMoves() {
   legalSquares[5] = startSquare + 7;
   legalSquares[6] = startSquare + 8;
   legalSquares[7] = startSquare + 9;
+
+  if (!king_white.hasMoved || !rook_white2.hasMoved) legalSquares[8] = startSquare + 2;
 
   removeIllegalMoves(legalSquares);
 
