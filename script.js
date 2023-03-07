@@ -640,7 +640,7 @@ function animateChessboard() {
   }
 }
 
-window.requestAnimationFrame(animateChessboard);
+//window.requestAnimationFrame(animateChessboard);
 
 //update animation for all pieces not captured
 
@@ -651,7 +651,7 @@ function animatePieces() {
     }
   }
 }
-
+animateChessboard();
 window.requestAnimationFrame(animatePieces);
 
 //window.requestAnimationFrame(animatePieces);
@@ -789,6 +789,7 @@ function castle() {
 function generateLegalMoves(i) {
   let legalSquares = [];
 
+  
   switch (arrayOfPieces[i].type) {
     case "R":
     case "r":
@@ -815,6 +816,7 @@ function generateLegalMoves(i) {
       legalSquares = GenerateKingMoves();
       break;
   }
+  
 
   console.log(`%cLegal moves for ${arrayOfPieces[i].type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
 
