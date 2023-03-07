@@ -47,7 +47,7 @@ function randomColor() {
 }
 
 class Piece {
-  constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured, moves }) {
+  constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured }) {
     this.position = position;
     position = {
       rank: this.position.rank,
@@ -60,7 +60,6 @@ class Piece {
     this.image.src = imageSrc;
     this.hasMoved = hasMoved; //Used for castle() and pawn moving twice
     this.hasBeenCaptured = hasBeenCaptured; //stops rendering
-    this.moves = moves;
   }
 
   draw() {
@@ -340,7 +339,6 @@ const arrayOfPieces = [
     imageSrc: "./pieces/rook_black.png",
     hasMoved: false,
     hasBeenCaptured: false,
-    // moves: GenerateRookMoves(),
   })),
   (knight_black = new Piece({
     position: arrayOfSquares[57],
@@ -350,7 +348,6 @@ const arrayOfPieces = [
     imageSrc: "./pieces/knight_black.png",
     hasMoved: false,
     hasBeenCaptured: false,
-    // moves: GenerateKnightMoves(),
   })),
   (bishop_black = new Piece({
     position: arrayOfSquares[58],
@@ -650,7 +647,7 @@ animateChessboard();
 function animatePieces() {
   window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
-    if (arrayOfPieces[i].hasBeenCaptured == false) {
+    if (!arrayOfPieces[i].hasBeenCaptured) {
       arrayOfPieces[i].update();
     }
   }
@@ -725,14 +722,11 @@ function getPieceIndexFromSquare(inputSquare) {
 function move(startSquare, targetSquare) {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
-  if (i != undefined && checkLegalMove() && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
+  if (i != undefined && moveIsLegal(i) && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
     if (hasEvilOccupance(targetSquare)) {
       capture();
     }
     let i = getPieceIndexFromSquare(startSquare);
-
-    console.log(i);
-    console.log(arrayOfPieces[i].type);
 
     arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
     arrayOfPieces[i].hasMoved = true;
@@ -744,7 +738,6 @@ function move(startSquare, targetSquare) {
     if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
       castle();
     }
-    console.log(arrayOfPieces[i].type);
   }
   console.log(arrayOfPieces[i].type);
   console.log("startSquare", startSquare);
@@ -787,7 +780,7 @@ function castle() {
   }
 }
 
-function checkLegalMove() {
+function moveIsLegal(i) {
   let legalSquares = [];
 
   switch (arrayOfPieces[i].type) {
@@ -817,7 +810,7 @@ function checkLegalMove() {
       break;
   }
 
-  console.log(legalSquares);
+  console.log(`%cLegal moves for ${arrayOfPieces[i].type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
 
   for (let i = 0; i < legalSquares.length; i++) {
     if (targetSquare == legalSquares[i]) {
@@ -923,8 +916,9 @@ function GeneratePawnMoves() {
   if (hasEvilOccupance(startSquare + pawnAttackRight)) {
     legalSquares[3] = startSquare + pawnAttackRight;
   }
-  removeIllegalMoves(legalSquares); //might be useless
-  return legalSquares;
+
+  filtered = legalSquares.filter(Boolean);
+  return filtered;
 }
 
 function GenerateBishopMoves() {
@@ -963,7 +957,9 @@ function GenerateBishopMoves() {
   }
 
   removeIllegalMoves(legalSquares);
-  return legalSquares;
+
+  filtered = legalSquares.filter(Boolean);
+  return filtered;
 }
 
 function GenerateRookMoves() {
@@ -1001,7 +997,8 @@ function GenerateRookMoves() {
   }
 
   removeIllegalMoves(legalSquares);
-  return legalSquares;
+  filtered = legalSquares.filter(Boolean);
+  return filtered;
 }
 
 function GenerateQueenMoves() {
@@ -1016,7 +1013,8 @@ function GenerateQueenMoves() {
 
   removeIllegalMoves(legalSquares);
 
-  return legalSquares;
+  filtered = legalSquares.filter(Boolean);
+  return filtered;
 }
 
 function GenerateKnightMoves() {
@@ -1041,7 +1039,8 @@ function GenerateKnightMoves() {
     }
   }
 
-  return legalSquares;
+  filtered = legalSquares.filter(Boolean);
+  return filtered;
 }
 
 function GenerateKingMoves() {
@@ -1063,7 +1062,8 @@ function GenerateKingMoves() {
 
   removeIllegalMoves(legalSquares);
 
-  return legalSquares;
+  filtered = legalSquares.filter(Boolean);
+  return filtered;
 }
 
 function removeIllegalMoves(legalSquares) {
@@ -1073,9 +1073,3 @@ function removeIllegalMoves(legalSquares) {
     }
   }
 }
-
-/*
-if (hasNoOccupance(arrayOfSquares[arrayOfPieces[i].position - 2])) {
-  ("fuck");
-}
-*/
