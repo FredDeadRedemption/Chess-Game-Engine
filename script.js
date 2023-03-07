@@ -1038,8 +1038,6 @@ function GenerateKnightMoves() {
     }
   }
 
-  
-
   filtered = legalSquares.filter(Boolean);
   return filtered;
 }
