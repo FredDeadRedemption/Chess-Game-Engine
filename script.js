@@ -1042,13 +1042,14 @@ function GenerateKnightMoves() {
     factor = factor * -1;
   }
   removeIllegalMoves(legalSquares);
-  //console.log(legalSquares);
 
   for (let i = legalSquares.length - 1; i >= 0; i--) {
-    if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2)) {
+    if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2) || hasEvilOccupance(legalSquares[i]) || hasFriendlyOccupance(legalSquares[i])) {
       legalSquares.splice(i, 1);
     }
   }
+
+  
 
   filtered = legalSquares.filter(Boolean);
   return filtered;
