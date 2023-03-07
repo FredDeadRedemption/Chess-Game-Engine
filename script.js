@@ -679,6 +679,7 @@ function animateLegalSquare(legalSquares) {
 }
 */
 
+let legalSquares = [];
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
 let hasClicked = false; //flips onclick
@@ -695,13 +696,15 @@ readClick.addEventListener(
       targetSquare = parseInt(event.target.id); //fuck javasript
     } else if (!hasClicked) {
       startSquare = parseInt(event.target.id);
-      if (getPieceIndexFromSquare(startSquare) != undefined) {
+      let i = getPieceIndexFromSquare(startSquare);
+      legalSquares = generateLegalMoves(i);
+      if (i != undefined) {
         hasClicked = true;
       }
     }
 
     if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
-      move(startSquare, targetSquare); //request move
+      move(startSquare, targetSquare, legalSquares); //request move
 
       startSquare = undefined;
       targetSquare = undefined;
@@ -719,24 +722,30 @@ function getPieceIndexFromSquare(inputSquare) {
   }
 }
 
-function move(startSquare, targetSquare) {
+function move(startSquare, targetSquare, legalSquares) {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
-  if (i != undefined && moveIsLegal(i) && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
-    if (hasEvilOccupance(targetSquare)) {
-      capture();
-    }
-    let i = getPieceIndexFromSquare(startSquare);
+  for (let index = 0; index < legalSquares.length; index++) {
+    if (targetSquare == legalSquares[index]) {
+      //
+      if (i != undefined && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
+        if (hasEvilOccupance(targetSquare)) {
+          capture();
+        }
+        let i = getPieceIndexFromSquare(startSquare);
 
-    arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
-    arrayOfPieces[i].hasMoved = true;
-    whiteToMove = !whiteToMove; //Turn switch¨
+        arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
+        arrayOfPieces[i].hasMoved = true;
+        whiteToMove = !whiteToMove; //Turn switch¨
 
-    if (arrayOfPieces[i].type == "p" || arrayOfPieces[i].type == "P") {
-      promote();
-    }
-    if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
-      castle();
+        if (arrayOfPieces[i].type == "p" || arrayOfPieces[i].type == "P") {
+          promote();
+        }
+        if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
+          castle();
+        }
+      }
+      break;
     }
   }
   console.log(arrayOfPieces[i].type);
@@ -780,7 +789,7 @@ function castle() {
   }
 }
 
-function moveIsLegal(i) {
+function generateLegalMoves(i) {
   let legalSquares = [];
 
   switch (arrayOfPieces[i].type) {
@@ -812,12 +821,14 @@ function moveIsLegal(i) {
 
   console.log(`%cLegal moves for ${arrayOfPieces[i].type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
 
+  /*
   for (let i = 0; i < legalSquares.length; i++) {
     if (targetSquare == legalSquares[i]) {
       return true;
     }
   }
-  return false;
+  return false;*/
+  return legalSquares;
 }
 
 function checkTurn(i) {
@@ -1068,7 +1079,7 @@ function GenerateKingMoves() {
 
 function removeIllegalMoves(legalSquares) {
   for (let i = legalSquares.length - 1; i >= 0; i--) {
-    if (legalSquares[i] < 0 || legalSquares[i] > 63 /*|| typeof legalSquares[i] != "number"*/) {
+    if (legalSquares[i] < 0 || legalSquares[i] > 63) {
       legalSquares.splice(i, 1);
     }
   }
