@@ -949,7 +949,7 @@ function GeneratePawnMoves() {
 }
 
 function GenerateBishopMoves() {
-  let legalSquares = [];
+    let legalSquares = [];
 
   for (let i = 0; i < 7; i++) {
     if (startSquare % 8 == i) break;
@@ -1060,7 +1060,7 @@ function GenerateKnightMoves() {
   removeIllegalMoves(legalSquares);
 
   for (let i = legalSquares.length - 1; i >= 0; i--) {
-    if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2) || hasEvilOccupance(legalSquares[i]) || hasFriendlyOccupance(legalSquares[i])) {
+    if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2)) {
       legalSquares.splice(i, 1);
     }
   }
@@ -1094,7 +1094,7 @@ function GenerateKingMoves() {
 
 function removeIllegalMoves(legalSquares) {
   for (let i = legalSquares.length - 1; i >= 0; i--) {
-    if (legalSquares[i] < 0 || legalSquares[i] > 63) {
+    if (legalSquares[i] < 0 || legalSquares[i] > 63 || hasFriendlyOccupance(legalSquares[i])) {
       legalSquares.splice(i, 1);
     }
   }
