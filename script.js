@@ -1044,7 +1044,7 @@ function GenerateKnightMoves() {
   removeIllegalMoves(legalSquares);
 
   for (let i = legalSquares.length - 1; i >= 0; i--) {
-    if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2) || hasEvilOccupance(legalSquares[i]) || hasFriendlyOccupance(legalSquares[i])) {
+    if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2) || hasFriendlyOccupance(legalSquares[i])) {
       legalSquares.splice(i, 1);
     }
   }
