@@ -623,7 +623,6 @@ const arrayOfPieces = [
 
 //generate dynamic size chessboard
 function animateChessboard() {
-  window.requestAnimationFrame(animateChessboard);
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
     for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
       if (fileCount % 2 == 0) {
@@ -641,11 +640,10 @@ function animateChessboard() {
   }
 }
 
-animateChessboard();
+window.requestAnimationFrame(animateChessboard);
 
 //update animation for all pieces not captured
 function animatePieces() {
-  window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
     if (!arrayOfPieces[i].hasBeenCaptured) {
       arrayOfPieces[i].update();
@@ -653,7 +651,18 @@ function animatePieces() {
   }
 }
 
+window.requestAnimationFrame(animatePieces);
+
 animatePieces(); //skal lige ned og hente icetea i netto
+
+function animateLegalSquares(legalSquares) {
+  c.fillStyle = "rgba(255, 140, 0, 0.5)";
+  for (i = 0; i < legalSquares.length; i++) {
+    rank = arrayOfSquares[legalSquares[i]].rank;
+    file = arrayOfSquares[legalSquares[i]].file;
+    c.fillRect(rank, file, squareSize, squareSize);
+  }
+}
 
 /*
 function animateLegalSquare(legalSquares) {
@@ -692,12 +701,17 @@ readClick.addEventListener(
   "click",
   (event) => {
     if (hasClicked) {
+      //target
       hasClicked = false;
       targetSquare = parseInt(event.target.id); //fuck javasript
+      window.requestAnimationFrame(animateChessboard);
+      window.requestAnimationFrame(animatePieces);
     } else if (!hasClicked) {
+      //start
       startSquare = parseInt(event.target.id);
       let i = getPieceIndexFromSquare(startSquare);
       legalSquares = generateLegalMoves(i);
+      animateLegalSquares(legalSquares);
       if (i != undefined) {
         hasClicked = true;
       }
@@ -744,6 +758,8 @@ function move(startSquare, targetSquare, legalSquares) {
         if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
           castle();
         }
+        window.requestAnimationFrame(animateChessboard);
+        window.requestAnimationFrame(animatePieces);
       }
       break;
     }
@@ -1048,8 +1064,6 @@ function GenerateKnightMoves() {
       legalSquares.splice(i, 1);
     }
   }
-
-  
 
   filtered = legalSquares.filter(Boolean);
   return filtered;
