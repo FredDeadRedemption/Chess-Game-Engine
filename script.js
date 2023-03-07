@@ -1069,6 +1069,7 @@ function GenerateKnightMoves() {
   return filtered;
 }
 
+
 function GenerateKingMoves() {
   let legalSquares = [];
 
