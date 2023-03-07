@@ -827,13 +827,6 @@ function generateLegalMoves(i) {
 
   console.log(`%cLegal moves for ${arrayOfPieces[i].type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
 
-  /*
-  for (let i = 0; i < legalSquares.length; i++) {
-    if (targetSquare == legalSquares[i]) {
-      return true;
-    }
-  }
-  return false;*/
   return legalSquares;
 }
 
@@ -876,20 +869,6 @@ function hasNoOccupance(square) {
     return true;
   } else return false;
 }
-
-/*
-function animateLegalMoves(legalSquares) {
-  window.requestAnimationFrame(animateLegalMoves);
-  squareToAnimate = {
-    rank: undefined,
-    file: undefined,
-  };
-  for (i = 0; i < legalSquares.length; i++) {
-    squareToAnimate = arrayOfSquares[legalSquares];
-  }
-  c.fillRect(squareToAnimate.rank, squareToAnimate.file, squareSize, squareSize);
-}
-*/
 
 function GeneratePawnMoves() {
   let legalSquares = [];
@@ -973,7 +952,7 @@ function GenerateBishopMoves() {
     if (j != undefined) break;
   }
 
-  removeIllegalMoves(legalSquares);
+  filterLegalSquares(legalSquares);
 
   filtered = legalSquares.filter(Boolean);
   return filtered;
@@ -1013,7 +992,7 @@ function GenerateRookMoves() {
     if (j != undefined) break;
   }
 
-  removeIllegalMoves(legalSquares);
+  filterLegalSquares(legalSquares);
   filtered = legalSquares.filter(Boolean);
   return filtered;
 }
@@ -1028,7 +1007,7 @@ function GenerateQueenMoves() {
 
   legalSquares = legalBishopSquares.concat(legalRookSquares);
 
-  removeIllegalMoves(legalSquares);
+  filterLegalSquares(legalSquares);
 
   filtered = legalSquares.filter(Boolean);
   return filtered;
@@ -1047,7 +1026,7 @@ function GenerateKnightMoves() {
 
     factor = factor * -1;
   }
-  removeIllegalMoves(legalSquares);
+  filterLegalSquares(legalSquares);
 
   for (let i = legalSquares.length - 1; i >= 0; i--) {
     if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2)) {
@@ -1076,13 +1055,13 @@ function GenerateKingMoves() {
     legalSquares[8] = startSquare + 2;
   }
 
-  removeIllegalMoves(legalSquares);
+  filterLegalSquares(legalSquares);
 
   filtered = legalSquares.filter(Boolean);
   return filtered;
 }
 
-function removeIllegalMoves(legalSquares) {
+function filterLegalSquares(legalSquares) {
   for (let i = legalSquares.length - 1; i >= 0; i--) {
     if (legalSquares[i] < 0 || legalSquares[i] > 63 || hasFriendlyOccupance(legalSquares[i])) {
       legalSquares.splice(i, 1);
