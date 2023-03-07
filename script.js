@@ -28,7 +28,7 @@ function randomColor() {
   let color;
 
   if (number <= 0.25) {
-    color = "brown";
+    color = "teal";
   } else if (number > 0.25 && number <= 0.5) {
     color = "darkslategrey";
   } else if (number > 0.5 && number <= 0.75) {
@@ -621,6 +621,12 @@ const arrayOfPieces = [
   })),
 ]; //32
 
+let legalSquares = [];
+let startSquare = undefined; //first square selected by click
+let targetSquare = undefined; //second square selected by click
+let hasClicked = false; //flips onclick
+let whiteToMove = true; //flips on move
+
 //generate dynamic size chessboard
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
@@ -640,11 +646,12 @@ function animateChessboard() {
   }
 }
 
-window.requestAnimationFrame(animateChessboard);
+animateChessboard();
 
 //update animation for all pieces not captured
 
 function animatePieces() {
+  window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
     if (!arrayOfPieces[i].hasBeenCaptured) {
       arrayOfPieces[i].update();
@@ -652,28 +659,30 @@ function animatePieces() {
   }
 }
 
-window.requestAnimationFrame(animatePieces);
+animatePieces();
 
 //window.requestAnimationFrame(animatePieces);
 
 //skal lige ned og hente icetea i netto
 
 function animateLegalSquares(legalSquares) {
+  let rank, file;
   c.fillStyle = "rgba(255, 140, 0, 0.5)";
-  for (i = 0; i < legalSquares.length; i++) {
-    rank = arrayOfSquares[legalSquares[i]].rank;
-    file = arrayOfSquares[legalSquares[i]].file;
-    c.fillRect(rank, file, squareSize, squareSize);
+  for (let i = 0; i < legalSquares.length; i++) {
+    if (hasEvilOccupance(legalSquares[i])) {
+      c.fillStyle = "rgba(255, 0, 0, 0.5)";
+    }
+
+    c.fillRect(arrayOfSquares[legalSquares[i]].rank, arrayOfSquares[legalSquares[i]].file, squareSize, squareSize);
+    c.fillStyle = "rgba(255, 140, 0, 0.5)";
+  }
+  if (startSquare != undefined) {
+    c.fillStyle = "rgba(255, 0, 0, 0.5)";
+    c.fillRect(arrayOfSquares[startSquare].rank, arrayOfSquares[startSquare].file, squareSize, squareSize);
   }
 }
 
 window.requestAnimationFrame(animateLegalSquares);
-
-let legalSquares = [];
-let startSquare = undefined; //first square selected by click
-let targetSquare = undefined; //second square selected by click
-let hasClicked = false; //flips onclick
-let whiteToMove = true; //flips on move
 
 const readClick = document.querySelector(".main");
 
@@ -691,8 +700,8 @@ readClick.addEventListener(
       //start
       startSquare = parseInt(event.target.id);
       let i = getPieceIndexFromSquare(startSquare);
-      legalSquares = generateLegalMoves(i);
-      animateLegalSquares(legalSquares);
+      if (checkTurn(i)) legalSquares = generateLegalMoves(i);
+      if (checkTurn(i)) animateLegalSquares(legalSquares);
       if (i != undefined) {
         hasClicked = true;
       }
@@ -1049,7 +1058,6 @@ function GenerateKnightMoves() {
   filtered = legalSquares.filter(Boolean);
   return filtered;
 }
-
 
 function GenerateKingMoves() {
   let legalSquares = [];
