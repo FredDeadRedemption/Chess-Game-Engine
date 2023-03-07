@@ -643,6 +643,7 @@ function animateChessboard() {
 window.requestAnimationFrame(animateChessboard);
 
 //update animation for all pieces not captured
+
 function animatePieces() {
   for (let i = 0; i < arrayOfPieces.length; i++) {
     if (!arrayOfPieces[i].hasBeenCaptured) {
@@ -653,7 +654,9 @@ function animatePieces() {
 
 window.requestAnimationFrame(animatePieces);
 
-animatePieces(); //skal lige ned og hente icetea i netto
+//window.requestAnimationFrame(animatePieces);
+
+//skal lige ned og hente icetea i netto
 
 function animateLegalSquares(legalSquares) {
   c.fillStyle = "rgba(255, 140, 0, 0.5)";
@@ -664,29 +667,7 @@ function animateLegalSquares(legalSquares) {
   }
 }
 
-/*
-function animateLegalSquare(legalSquares) {
-  window.requestAnimationFrame();
-  let rank;
-  let file;
-  let array = [
-    {
-      rank,
-      file,
-    },
-  ];
-  for (i = 0; i <= legalSquares.length; i++) {
-    array[i] = arrayOfSquares[legalSquares[i]];
-
-    rank = array.rank;
-    file = array.file;
-
-    c.fillStyle = "yellow";
-    c.fillRect(rank, file, squareSize, squareSize);
-  }
-  console.log(array);
-}
-*/
+window.requestAnimationFrame(animateLegalSquares);
 
 let legalSquares = [];
 let startSquare = undefined; //first square selected by click
@@ -704,8 +685,8 @@ readClick.addEventListener(
       //target
       hasClicked = false;
       targetSquare = parseInt(event.target.id); //fuck javasript
-      window.requestAnimationFrame(animateChessboard);
-      window.requestAnimationFrame(animatePieces);
+      animateChessboard();
+      animatePieces();
     } else if (!hasClicked) {
       //start
       startSquare = parseInt(event.target.id);
@@ -758,8 +739,8 @@ function move(startSquare, targetSquare, legalSquares) {
         if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
           castle();
         }
-        window.requestAnimationFrame(animateChessboard);
-        window.requestAnimationFrame(animatePieces);
+        animateChessboard();
+        animatePieces();
       }
       break;
     }
@@ -949,7 +930,7 @@ function GeneratePawnMoves() {
 }
 
 function GenerateBishopMoves() {
-    let legalSquares = [];
+  let legalSquares = [];
 
   for (let i = 0; i < 7; i++) {
     if (startSquare % 8 == i) break;
