@@ -23,6 +23,14 @@ canvas.height = boardSize;
 // 0  1  2  3  4  5  6  7  //
 // // // // // // // // // //
 
+//TO DO / BUGS
+
+//legalsquares skal måske ikke være global
+
+//promote() on square 63 er broken!!!
+
+//Border patrol til pawns --- de kan flyve fra den ene side af boardet til den anden :(
+
 function randomColor() {
   const number = Math.random();
   let color;
@@ -621,13 +629,13 @@ const arrayOfPieces = [
   })),
 ]; //32
 
-let legalSquares = [];
+let legalSquares = []; //legal moves for current piece
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
 let hasClicked = false; //flips onclick
-let whiteToMove = true; //flips on move
+let whiteToMove = true; //flips on legal move
 
-//generate dynamic size chessboard
+//generate / render board
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
     for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
@@ -648,8 +656,7 @@ function animateChessboard() {
 
 animateChessboard();
 
-//update animation for all pieces not captured
-
+//render pieces
 function animatePieces() {
   window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
@@ -661,27 +668,30 @@ function animatePieces() {
 
 animatePieces();
 
-//window.requestAnimationFrame(animatePieces);
-
 //skal lige ned og hente icetea i netto
 
 function animateLegalSquares(legalSquares) {
   let rank, file;
+  //initial fillstyle
   c.fillStyle = "rgba(255, 140, 0, 0.5)";
   for (let i = 0; i < legalSquares.length; i++) {
+    //highligths enemies red
     if (hasEvilOccupance(legalSquares[i])) {
       c.fillStyle = "rgba(255, 0, 0, 0.5)";
     }
 
+    //highlights legal moves orange
     c.fillRect(arrayOfSquares[legalSquares[i]].rank, arrayOfSquares[legalSquares[i]].file, squareSize, squareSize);
     c.fillStyle = "rgba(255, 140, 0, 0.5)";
   }
+  //highlights selected square red
   if (startSquare != undefined) {
     c.fillStyle = "rgba(255, 0, 0, 0.5)";
     c.fillRect(arrayOfSquares[startSquare].rank, arrayOfSquares[startSquare].file, squareSize, squareSize);
   }
 }
 
+//let the DOM know whats good homie
 window.requestAnimationFrame(animateLegalSquares);
 
 const readClick = document.querySelector(".main");
@@ -691,17 +701,19 @@ readClick.addEventListener(
   "click",
   (event) => {
     if (hasClicked) {
-      //target
+      //target square
       hasClicked = false;
-      targetSquare = parseInt(event.target.id); //fuck javasript
+      targetSquare = parseInt(event.target.id);
       animateChessboard();
       animatePieces();
     } else if (!hasClicked) {
-      //start
+      //start square
       startSquare = parseInt(event.target.id);
       let i = getPieceIndexFromSquare(startSquare);
-      if (checkTurn(i)) legalSquares = generateLegalMoves(i);
-      if (checkTurn(i)) animateLegalSquares(legalSquares);
+      if (checkTurn(i)) {
+        legalSquares = generateLegalMoves(i);
+        animateLegalSquares(legalSquares);
+      }
       if (i != undefined) {
         hasClicked = true;
       }
@@ -729,7 +741,7 @@ function getPieceIndexFromSquare(inputSquare) {
 function move(startSquare, targetSquare, legalSquares) {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
-  for (let index = 0; index < legalSquares.length; index++) {
+  for (let index = 0; index < legalSquares.length + 1; index++) {
     if (targetSquare == legalSquares[index]) {
       //
       if (i != undefined && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
@@ -789,9 +801,31 @@ function promote() {
 }
 
 function castle() {
-  if (targetSquare == 6) {
-    rook_white2.position = arrayOfSquares[5];
-    king_white.hasMoved = true;
+  //castle white
+  if (!king_white.hasMoved) {
+    //castle short
+    if (targetSquare == 6 && !rook_white2.hasMoved) {
+      rook_white2.position = arrayOfSquares[5];
+      king_white.hasMoved = true;
+    }
+    //castle long
+    if (targetSquare == 2 && !rook_white.hasMoved) {
+      rook_white.position = arrayOfSquares[3];
+      king_white.hasMoved = true;
+    }
+  }
+  //castle black
+  if (!king_black.hasMoved) {
+    //castle short
+    if (targetSquare == 52 && !rook_black2.hasMoved) {
+      rook_black2.position = arrayOfSquares[61];
+      king_black.hasMoved = true;
+    }
+    //castle long
+    if (targetSquare == 58 && !rook_black.hasMoved) {
+      rook_black.position = arrayOfSquares[59];
+      king_black.hasMoved = true;
+    }
   }
 }
 
@@ -801,27 +835,27 @@ function generateLegalMoves(i) {
   switch (arrayOfPieces[i].type) {
     case "R":
     case "r":
-      legalSquares = GenerateRookMoves();
+      legalSquares = generateRookMoves();
       break;
     case "P":
     case "p":
-      legalSquares = GeneratePawnMoves();
+      legalSquares = generatePawnMoves();
       break;
     case "B":
     case "b":
-      legalSquares = GenerateBishopMoves();
+      legalSquares = generateBishopMoves();
       break;
     case "Q":
     case "q":
-      legalSquares = GenerateQueenMoves();
+      legalSquares = generateQueenMoves();
       break;
     case "N":
     case "n":
-      legalSquares = GenerateKnightMoves();
+      legalSquares = generateKnightMoves();
       break;
     case "K":
     case "k":
-      legalSquares = GenerateKingMoves();
+      legalSquares = generateKingMoves();
       break;
   }
 
@@ -870,26 +904,28 @@ function hasNoOccupance(square) {
   } else return false;
 }
 
-function GeneratePawnMoves() {
+function generatePawnMoves() {
   let legalSquares = [];
   let pawnAttackLeft;
   let pawnAttackRight;
   let pawnMoveFoward;
 
   switch (arrayOfPieces[i].type) {
-    case "P": //white offsets
+    //white pawn offsets
+    case "P":
       pawnAttackLeft = 7;
       pawnAttackRight = 9;
       pawnMoveFoward = 8;
       break;
-    case "p": //black offsets
+    //black pawn offsets
+    case "p":
       pawnAttackLeft = -7;
       pawnAttackRight = -9;
       pawnMoveFoward = -8;
       break;
   }
 
-  //Moving foward twice
+  //moving foward twice
   if (
     arrayOfPieces[i].hasMoved == false &&
     !hasFriendlyOccupance(startSquare + pawnMoveFoward * 2) &&
@@ -899,16 +935,16 @@ function GeneratePawnMoves() {
   ) {
     legalSquares[0] = startSquare + pawnMoveFoward * 2;
   }
-  //Moving foward
+  //moving foward once
   if (!hasFriendlyOccupance(startSquare + pawnMoveFoward) && !hasEvilOccupance(startSquare + pawnMoveFoward)) {
     legalSquares[1] = startSquare + pawnMoveFoward;
   }
-  //Moving (attacking) left
+  //moving (attacking) left
   if (hasEvilOccupance(startSquare + pawnAttackLeft)) {
     legalSquares[2] = startSquare + pawnAttackLeft;
     console.log(legalSquares[2]);
   }
-  //Moving (attacking) right
+  //moving (attacking) right
   if (hasEvilOccupance(startSquare + pawnAttackRight)) {
     legalSquares[3] = startSquare + pawnAttackRight;
   }
@@ -917,7 +953,7 @@ function GeneratePawnMoves() {
   return filtered;
 }
 
-function GenerateBishopMoves() {
+function generateBishopMoves() {
   let legalSquares = [];
 
   for (let i = 0; i < 7; i++) {
@@ -958,7 +994,7 @@ function GenerateBishopMoves() {
   return filtered;
 }
 
-function GenerateRookMoves() {
+function generateRookMoves() {
   let legalSquares = [];
   let offsetRank = 8;
   let offsetFile = 1;
@@ -997,13 +1033,13 @@ function GenerateRookMoves() {
   return filtered;
 }
 
-function GenerateQueenMoves() {
+function generateQueenMoves() {
+  let legalSquares = [];
   let legalBishopSquares = [];
   let legalRookSquares = [];
-  let legalSquares = [];
 
-  legalBishopSquares = GenerateBishopMoves();
-  legalRookSquares = GenerateRookMoves();
+  legalBishopSquares = generateBishopMoves();
+  legalRookSquares = generateRookMoves();
 
   legalSquares = legalBishopSquares.concat(legalRookSquares);
 
@@ -1013,7 +1049,7 @@ function GenerateQueenMoves() {
   return filtered;
 }
 
-function GenerateKnightMoves() {
+function generateKnightMoves() {
   let legalSquares = [];
   let factor = 1;
   let index = startSquare % 8;
@@ -1038,9 +1074,10 @@ function GenerateKnightMoves() {
   return filtered;
 }
 
-function GenerateKingMoves() {
+function generateKingMoves() {
   let legalSquares = [];
 
+  //Initial offsets :D
   legalSquares[0] = startSquare - 1;
   legalSquares[1] = startSquare + 1;
   legalSquares[2] = startSquare - 7;
@@ -1050,9 +1087,21 @@ function GenerateKingMoves() {
   legalSquares[6] = startSquare + 8;
   legalSquares[7] = startSquare + 9;
 
-  //castle white right
+  //castle short white
   if (!king_white.hasMoved && !rook_white2.hasMoved && hasNoOccupance(5) && hasNoOccupance(6)) {
     legalSquares[8] = startSquare + 2;
+  }
+  //castle long white
+  if (!king_white.hasMoved && !rook_white.hasMoved && hasNoOccupance(1) && hasNoOccupance(2) && hasNoOccupance(3)) {
+    legalSquares[9] = startSquare - 2;
+  }
+  //castle short black
+  if (!king_black.hasMoved && !rook_black2.hasMoved && hasNoOccupance(61) && hasNoOccupance(62)) {
+    legalSquares[10] = startSquare + 2;
+  }
+  //castle long black
+  if (!king_black.hasMoved && !rook_black.hasMoved && hasNoOccupance(57) && hasNoOccupance(58) && hasNoOccupance(59)) {
+    legalSquares[11] = startSquare - 2;
   }
 
   filterLegalSquares(legalSquares);
