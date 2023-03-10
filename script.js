@@ -25,11 +25,9 @@ canvas.height = boardSize;
 
 //TO DO
 
-//promote() square 63
-
 //Border patrol pawns
 
-//man skal kunne vælge nyt piece uden at trykke 2 gange
+//square 0 er broken
 
 function randomColor() {
   const number = Math.random();
@@ -698,17 +696,37 @@ const readClick = document.querySelector(".main");
 readClick.addEventListener(
   "click",
   (event) => {
+    //select target square
     if (hasClicked) {
-      //target square
       targetSquare = parseInt(event.target.id);
 
-      animateChessboard();
-      animatePieces();
+      if (hasFriendlyOccupance(targetSquare)) {
+        startSquare = targetSquare;
+        targetSquare = undefined;
 
-      hasClicked = false;
-    } else if (!hasClicked) {
-      //start square
+        let i = getPieceIndexFromSquare(startSquare);
+
+        if (checkTurn(i)) {
+          legalSquares = generateLegalMoves(i);
+          animateChessboard();
+          animateLegalSquares(legalSquares);
+          hasClicked = true;
+          console.log("yeehaw");
+        }
+
+        hasClicked = true;
+      } else if (!targetIsLegal(targetSquare, legalSquares)) {
+        animateChessboard();
+        hasClicked = false;
+      } else hasClicked = false;
+      console.log("target", targetSquare);
+
+      // animatePieces();
+    }
+    //select start square
+    else if (!hasClicked) {
       startSquare = parseInt(event.target.id);
+      console.log("start", startSquare);
 
       let i = getPieceIndexFromSquare(startSquare);
 
@@ -741,31 +759,44 @@ function getPieceIndexFromSquare(inputSquare) {
   }
 }
 
+function targetIsLegal(targetSquare, legalSquares) {
+  for (let j = 0; j < legalSquares.length + 1; j++) {
+    if (targetSquare == legalSquares[j]) {
+      return true;
+    } else return false;
+  }
+}
+
 function move(startSquare, targetSquare, legalSquares) {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
-  for (let j = 0; j < legalSquares.length + 1; j++) {
+  //check legality of move
+  for (let j = 0; j < legalSquares.length; j++) {
     if (targetSquare == legalSquares[j]) {
       console.log("yeehaw");
-      //
+      //check extra conditions
       if (i != undefined && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
+        //Capture
         if (hasEvilOccupance(targetSquare)) {
           capture();
         }
+
         let i = getPieceIndexFromSquare(startSquare);
 
+        //move execution
         arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
         arrayOfPieces[i].hasMoved = true;
         whiteToMove = !whiteToMove; //Turn switch
 
+        //promote
         if (arrayOfPieces[i].type == "p" || arrayOfPieces[i].type == "P") {
           promote();
         }
+        //castle
         if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
           castle();
         }
         animateChessboard();
-        animatePieces();
       }
       break;
     }
@@ -946,13 +977,13 @@ function generatePawnMoves() {
   //moving (attacking) left
   if (hasEvilOccupance(startSquare + pawnAttackLeft)) {
     legalSquares[2] = startSquare + pawnAttackLeft;
-    console.log(legalSquares[2]);
   }
   //moving (attacking) right
   if (hasEvilOccupance(startSquare + pawnAttackRight)) {
     legalSquares[3] = startSquare + pawnAttackRight;
   }
 
+  filterLegalSquares(legalSquares);
   filtered = legalSquares.filter(filterEmpty);
   return filtered;
 }
@@ -1122,5 +1153,5 @@ function filterLegalSquares(legalSquares) {
 }
 
 function filterEmpty(element) {
-  return element != null && element !== false && element !== "";
+  return element !== "";
 }
