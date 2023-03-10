@@ -29,6 +29,10 @@ canvas.height = boardSize;
 
 //square 0 er broken
 
+//lav enPessant()
+
+//lav isInCheck()
+
 function randomColor() {
   const number = Math.random();
   let color;
@@ -785,7 +789,6 @@ function move(startSquare, targetSquare, legalSquares) {
 
         //move execution
         arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
-        arrayOfPieces[i].hasMoved = true;
         whiteToMove = !whiteToMove; //Turn switch
 
         //promote
@@ -796,6 +799,8 @@ function move(startSquare, targetSquare, legalSquares) {
         if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
           castle();
         }
+        //update board
+        arrayOfPieces[i].hasMoved = true;
         animateChessboard();
       }
       break;
@@ -841,25 +846,21 @@ function castle() {
     //castle short
     if (targetSquare == 6 && !rook_white2.hasMoved) {
       rook_white2.position = arrayOfSquares[5];
-      king_white.hasMoved = true;
     }
     //castle long
     if (targetSquare == 2 && !rook_white.hasMoved) {
       rook_white.position = arrayOfSquares[3];
-      king_white.hasMoved = true;
     }
   }
   //castle black
   if (!king_black.hasMoved) {
     //castle short
-    if (targetSquare == 52 && !rook_black2.hasMoved) {
+    if (targetSquare == 62 && !rook_black2.hasMoved) {
       rook_black2.position = arrayOfSquares[61];
-      king_black.hasMoved = true;
     }
     //castle long
     if (targetSquare == 58 && !rook_black.hasMoved) {
       rook_black.position = arrayOfSquares[59];
-      king_black.hasMoved = true;
     }
   }
 }
