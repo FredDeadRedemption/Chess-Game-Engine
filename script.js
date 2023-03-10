@@ -23,13 +23,13 @@ canvas.height = boardSize;
 // 0  1  2  3  4  5  6  7  //
 // // // // // // // // // //
 
-//TO DO / BUGS
+//TO DO
 
-//legalsquares skal måske ikke være global
+//promote() square 63
 
-//promote() on square 63 er broken!!!
+//Border patrol pawns
 
-//Border patrol til pawns --- de kan flyve fra den ene side af boardet til den anden :(
+//man skal kunne vælge nyt piece uden at trykke 2 gange
 
 function randomColor() {
   const number = Math.random();
@@ -671,7 +671,6 @@ animatePieces();
 //skal lige ned og hente icetea i netto
 
 function animateLegalSquares(legalSquares) {
-  let rank, file;
   //initial fillstyle
   c.fillStyle = "rgba(255, 140, 0, 0.5)";
   for (let i = 0; i < legalSquares.length; i++) {
@@ -691,7 +690,6 @@ function animateLegalSquares(legalSquares) {
   }
 }
 
-//let the DOM know whats good homie
 window.requestAnimationFrame(animateLegalSquares);
 
 const readClick = document.querySelector(".main");
@@ -702,31 +700,36 @@ readClick.addEventListener(
   (event) => {
     if (hasClicked) {
       //target square
-      hasClicked = false;
       targetSquare = parseInt(event.target.id);
+
       animateChessboard();
       animatePieces();
+
+      hasClicked = false;
     } else if (!hasClicked) {
       //start square
       startSquare = parseInt(event.target.id);
+
       let i = getPieceIndexFromSquare(startSquare);
-      if (checkTurn(i)) {
-        legalSquares = generateLegalMoves(i);
-        animateLegalSquares(legalSquares);
-      }
+
       if (i != undefined) {
-        hasClicked = true;
+        if (checkTurn(i)) {
+          legalSquares = generateLegalMoves(i);
+          animateLegalSquares(legalSquares);
+          hasClicked = true;
+        }
       }
     }
 
+    //request move
     if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
-      move(startSquare, targetSquare, legalSquares); //request move
+      move(startSquare, targetSquare, legalSquares);
 
       startSquare = undefined;
       targetSquare = undefined;
     }
   },
-  { capture: true } //stops event bubbling to .main
+  { capture: true } //stop event bubbling
 );
 
 //fetches index for piece on given square
@@ -741,8 +744,9 @@ function getPieceIndexFromSquare(inputSquare) {
 function move(startSquare, targetSquare, legalSquares) {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
-  for (let index = 0; index < legalSquares.length + 1; index++) {
-    if (targetSquare == legalSquares[index]) {
+  for (let j = 0; j < legalSquares.length + 1; j++) {
+    if (targetSquare == legalSquares[j]) {
+      console.log("yeehaw");
       //
       if (i != undefined && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
         if (hasEvilOccupance(targetSquare)) {
@@ -752,7 +756,7 @@ function move(startSquare, targetSquare, legalSquares) {
 
         arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
         arrayOfPieces[i].hasMoved = true;
-        whiteToMove = !whiteToMove; //Turn switch¨
+        whiteToMove = !whiteToMove; //Turn switch
 
         if (arrayOfPieces[i].type == "p" || arrayOfPieces[i].type == "P") {
           promote();
@@ -790,7 +794,7 @@ function promote() {
   }
   //Promotion Black
   if (targetSquare < 8 && arrayOfPieces[i].color == "black") {
-    arrayOfPieces[i].type = "Q";
+    arrayOfPieces[i].type = "q";
     arrayOfPieces[i].worth = 9;
     arrayOfPieces[i].image = new Image();
     arrayOfPieces[i].imageSrc = "./pieces/queen_black.png";
@@ -949,7 +953,7 @@ function generatePawnMoves() {
     legalSquares[3] = startSquare + pawnAttackRight;
   }
 
-  filtered = legalSquares.filter(Boolean);
+  filtered = legalSquares.filter(filterEmpty);
   return filtered;
 }
 
@@ -990,7 +994,7 @@ function generateBishopMoves() {
 
   filterLegalSquares(legalSquares);
 
-  filtered = legalSquares.filter(Boolean);
+  filtered = legalSquares.filter(filterEmpty);
   return filtered;
 }
 
@@ -1029,7 +1033,7 @@ function generateRookMoves() {
   }
 
   filterLegalSquares(legalSquares);
-  filtered = legalSquares.filter(Boolean);
+  filtered = legalSquares.filter(filterEmpty);
   return filtered;
 }
 
@@ -1045,7 +1049,7 @@ function generateQueenMoves() {
 
   filterLegalSquares(legalSquares);
 
-  filtered = legalSquares.filter(Boolean);
+  filtered = legalSquares.filter(filterEmpty);
   return filtered;
 }
 
@@ -1062,7 +1066,6 @@ function generateKnightMoves() {
 
     factor = factor * -1;
   }
-  filterLegalSquares(legalSquares);
 
   for (let i = legalSquares.length - 1; i >= 0; i--) {
     if ((index < 2 && legalSquares[i] % 8 > index + 2) || (index > 5 && legalSquares[i] % 8 < index - 2)) {
@@ -1070,7 +1073,7 @@ function generateKnightMoves() {
     }
   }
 
-  filtered = legalSquares.filter(Boolean);
+  filtered = filterLegalSquares(legalSquares);
   return filtered;
 }
 
@@ -1104,9 +1107,7 @@ function generateKingMoves() {
     legalSquares[11] = startSquare - 2;
   }
 
-  filterLegalSquares(legalSquares);
-
-  filtered = legalSquares.filter(Boolean);
+  filtered = filterLegalSquares(legalSquares);
   return filtered;
 }
 
@@ -1116,4 +1117,10 @@ function filterLegalSquares(legalSquares) {
       legalSquares.splice(i, 1);
     }
   }
+  filtered = legalSquares.filter(filterEmpty);
+  return filtered;
+}
+
+function filterEmpty(element) {
+  return element != null && element !== false && element !== "";
 }
