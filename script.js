@@ -961,7 +961,7 @@ function generatePawnMoves() {
       pawnAttackLeft = 7;
       pawnAttackRight = 9;
       pawnMoveFoward = 8;
-      fileLeft = 1;
+      fileLeft = 0;
       fileRight = 7;
       break;
     //black pawn offsets
@@ -970,7 +970,7 @@ function generatePawnMoves() {
       pawnAttackRight = -9;
       pawnMoveFoward = -8;
       fileLeft = 7;
-      fileRight = 1;
+      fileRight = 0;
       break;
   }
 
@@ -1121,14 +1121,21 @@ function generateKingMoves() {
   let legalSquares = [];
 
   //Initial offsets :D
-  legalSquares[0] = startSquare - 1;
-  legalSquares[1] = startSquare + 1;
-  legalSquares[2] = startSquare - 7;
-  legalSquares[3] = startSquare - 8;
-  legalSquares[4] = startSquare - 9;
-  legalSquares[5] = startSquare + 7;
-  legalSquares[6] = startSquare + 8;
-  legalSquares[7] = startSquare + 9;
+  // Right
+  if (startSquare % 8 != 7) {
+    legalSquares[7] = startSquare + 9;
+    legalSquares[1] = startSquare + 1;
+    legalSquares[2] = startSquare - 7;
+  }
+
+  if (startSquare % 8 != 0) {
+    legalSquares[5] = startSquare + 7;
+    legalSquares[0] = startSquare - 1;
+    legalSquares[4] = startSquare - 9;
+  }
+
+  legalSquares[3] = startSquare - 8; //down
+  legalSquares[6] = startSquare + 8; //up
 
   //castle short white
   if (!king_white.hasMoved && !rook_white2.hasMoved && hasNoOccupance(5) && hasNoOccupance(6)) {
