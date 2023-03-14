@@ -25,7 +25,7 @@ canvas.height = boardSize;
 
 //TO DO
 
-//Border patrol pawns
+//Border patrol til pawns og kings
 
 //square 0 er broken
 
@@ -38,13 +38,13 @@ function randomColor() {
   let color;
 
   if (number <= 0.25) {
-    color = "teal";
+    color = "rgb(166, 188, 143)"; //"teal";
   } else if (number > 0.25 && number <= 0.5) {
-    color = "darkslategrey";
+    color = "rgb(143, 188, 147)"; //"darkslategrey";
   } else if (number > 0.5 && number <= 0.75) {
-    color = "rosybrown";
+    color = "rgb(188, 143, 143)"; //"rosybrown";
   } else if (number > 0.75 && number <= 0.995) {
-    color = "seagreen";
+    color = "rgb(143, 188, 188)"; //"seagreen";
   } else if (number > 0.995) {
     color = "deeppink";
   }
@@ -637,7 +637,6 @@ let targetSquare = undefined; //second square selected by click
 let hasClicked = false; //flips onclick
 let whiteToMove = true; //flips on legal move
 
-//generate / render board
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
     for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
@@ -658,7 +657,6 @@ function animateChessboard() {
 
 animateChessboard();
 
-//render pieces
 function animatePieces() {
   window.requestAnimationFrame(animatePieces);
   for (let i = 0; i < arrayOfPieces.length; i++) {
@@ -715,22 +713,19 @@ readClick.addEventListener(
           animateChessboard();
           animateLegalSquares(legalSquares);
           hasClicked = true;
-          console.log("yeehaw");
         }
 
         hasClicked = true;
-      } else if (!targetIsLegal(targetSquare, legalSquares)) {
+      } else if (!targetIsLegal()) {
         animateChessboard();
         hasClicked = false;
       } else hasClicked = false;
-      console.log("target", targetSquare);
 
       // animatePieces();
     }
     //select start square
     else if (!hasClicked) {
       startSquare = parseInt(event.target.id);
-      console.log("start", startSquare);
 
       let i = getPieceIndexFromSquare(startSquare);
 
@@ -745,7 +740,7 @@ readClick.addEventListener(
 
     //request move
     if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
-      move(startSquare, targetSquare, legalSquares);
+      requestMove();
 
       startSquare = undefined;
       targetSquare = undefined;
@@ -754,7 +749,7 @@ readClick.addEventListener(
   { capture: true } //stop event bubbling
 );
 
-//fetches index for piece on given square
+//fetches index for piece on given square index
 function getPieceIndexFromSquare(inputSquare) {
   for (i = 0; i < arrayOfPieces.length; i++) {
     if (arrayOfPieces[i].position == arrayOfSquares[inputSquare]) {
@@ -763,21 +758,31 @@ function getPieceIndexFromSquare(inputSquare) {
   }
 }
 
-function targetIsLegal(targetSquare, legalSquares) {
-  for (let j = 0; j < legalSquares.length + 1; j++) {
-    if (targetSquare == legalSquares[j]) {
+//fetches index for square for given piece index
+function getSquareIndexFromPiece(piece) {
+  for (i = 0; i < arrayOfSquares.length; i++) {
+    if (arrayOfPieces[piece].position == arrayOfSquares[i]) {
+      return i;
+    }
+  }
+}
+
+function targetIsLegal() {
+  let i = getPieceIndexFromSquare(startSquare);
+
+  for (let j = 0; j < legalSquares.length; j++) {
+    if (targetSquare == legalSquares[j] && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
       return true;
     } else return false;
   }
 }
 
-function move(startSquare, targetSquare, legalSquares) {
+function requestMove() {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
   //check legality of move
   for (let j = 0; j < legalSquares.length; j++) {
     if (targetSquare == legalSquares[j]) {
-      console.log("yeehaw");
       //check extra conditions
       if (i != undefined && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
         //Capture
@@ -802,11 +807,13 @@ function move(startSquare, targetSquare, legalSquares) {
         //update board
         arrayOfPieces[i].hasMoved = true;
         animateChessboard();
+
+        let pos = getSquareIndexFromPiece(1);
+        console.log(pos);
       }
       break;
     }
   }
-  console.log(arrayOfPieces[i].type);
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
 }
