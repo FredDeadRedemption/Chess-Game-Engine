@@ -991,8 +991,7 @@ function generatePawnMoves() {
     legalSquares[3] = startSquare + pawnAttackRight;
   }
 
-  filterLegalSquares(legalSquares);
-  filtered = legalSquares.filter(filterEmpty);
+  filtered = filterLegalSquares(legalSquares);
   return filtered;
 }
 
@@ -1031,9 +1030,7 @@ function generateBishopMoves() {
     if (j != undefined) break;
   }
 
-  filterLegalSquares(legalSquares);
-
-  filtered = legalSquares.filter(filterEmpty);
+  filtered = filterLegalSquares(legalSquares);
   return filtered;
 }
 
@@ -1071,8 +1068,7 @@ function generateRookMoves() {
     if (j != undefined) break;
   }
 
-  filterLegalSquares(legalSquares);
-  filtered = legalSquares.filter(filterEmpty);
+  filtered = filterLegalSquares(legalSquares);
   return filtered;
 }
 
@@ -1086,9 +1082,8 @@ function generateQueenMoves() {
 
   legalSquares = legalBishopSquares.concat(legalRookSquares);
 
-  filterLegalSquares(legalSquares);
+  filtered = filterLegalSquares(legalSquares);
 
-  filtered = legalSquares.filter(filterEmpty);
   return filtered;
 }
 
