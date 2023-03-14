@@ -952,12 +952,16 @@ function generatePawnMoves() {
       pawnAttackLeft = 7;
       pawnAttackRight = 9;
       pawnMoveFoward = 8;
+      fileLeft = 1;
+      fileRight = 7;
       break;
     //black pawn offsets
     case "p":
       pawnAttackLeft = -7;
       pawnAttackRight = -9;
       pawnMoveFoward = -8;
+      fileLeft = 7;
+      fileRight = 1;
       break;
   }
 
@@ -976,11 +980,11 @@ function generatePawnMoves() {
     legalSquares[1] = startSquare + pawnMoveFoward;
   }
   //moving (attacking) left
-  if (hasEvilOccupance(startSquare + pawnAttackLeft)) {
+  if (hasEvilOccupance(startSquare + pawnAttackLeft) && (startSquare % 8 != fileLeft)) {
     legalSquares[2] = startSquare + pawnAttackLeft;
   }
   //moving (attacking) right
-  if (hasEvilOccupance(startSquare + pawnAttackRight)) {
+  if (hasEvilOccupance(startSquare + pawnAttackRight) && (startSquare % 8 != fileRight)) {
     legalSquares[3] = startSquare + pawnAttackRight;
   }
 
