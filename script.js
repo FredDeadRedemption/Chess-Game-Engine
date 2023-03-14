@@ -701,6 +701,7 @@ readClick.addEventListener(
     //select target square
     if (hasClicked) {
       targetSquare = parseInt(event.target.id);
+      console.log(typeof targetSquare);
 
       if (hasFriendlyOccupance(targetSquare)) {
         startSquare = targetSquare;
@@ -726,6 +727,7 @@ readClick.addEventListener(
     //select start square
     else if (!hasClicked) {
       startSquare = parseInt(event.target.id);
+      console.log(typeof startSquare);
 
       let i = getPieceIndexFromSquare(startSquare);
 
@@ -739,7 +741,7 @@ readClick.addEventListener(
     }
 
     //request move
-    if (targetSquare && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
+    if (targetSquare != undefined && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
       requestMove();
 
       startSquare = undefined;
@@ -987,11 +989,11 @@ function generatePawnMoves() {
     legalSquares[1] = startSquare + pawnMoveFoward;
   }
   //moving (attacking) left
-  if (hasEvilOccupance(startSquare + pawnAttackLeft) && (startSquare % 8 != fileLeft)) {
+  if (hasEvilOccupance(startSquare + pawnAttackLeft) && startSquare % 8 != fileLeft) {
     legalSquares[2] = startSquare + pawnAttackLeft;
   }
   //moving (attacking) right
-  if (hasEvilOccupance(startSquare + pawnAttackRight) && (startSquare % 8 != fileRight)) {
+  if (hasEvilOccupance(startSquare + pawnAttackRight) && startSquare % 8 != fileRight) {
     legalSquares[3] = startSquare + pawnAttackRight;
   }
 
