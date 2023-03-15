@@ -880,34 +880,54 @@ function generateLegalMoves(i) {
   switch (arrayOfPieces[i].type) {
     case "R":
     case "r":
-      legalSquares = generateRookMoves();
+      legalSquares = generateRookMoves(i);
       break;
     case "P":
     case "p":
-      legalSquares = generatePawnMoves();
+      legalSquares = generatePawnMoves(i);
       break;
     case "B":
     case "b":
-      legalSquares = generateBishopMoves();
+      legalSquares = generateBishopMoves(i);
       break;
     case "Q":
     case "q":
-      legalSquares = generateQueenMoves();
+      legalSquares = generateQueenMoves(i);
       break;
     case "N":
     case "n":
-      legalSquares = generateKnightMoves();
+      legalSquares = generateKnightMoves(i);
       break;
     case "K":
     case "k":
-      legalSquares = generateKingMoves();
+      legalSquares = generateKingMoves(i);
       break;
   }
 
-  console.log(`%cLegal moves for ${arrayOfPieces[i].type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
+  //console.log(`%cLegal moves for ${arrayOfPieces[i].type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
 
   return legalSquares;
 }
+
+function generateAllLegalMoves(color) {
+  let allLegalMoves = [];
+  switch (color) {
+    case "white":
+      for (let i = 0; i <= 15; i++) {
+        startSquare = parseInt(getSquareIndexFromPiece(i));
+        allLegalMoves += [generateLegalMoves(i)];
+      }
+      break;
+    case "black":
+      break;
+  }
+  return allLegalMoves;
+}
+
+//let yeehaw = [];
+//yeehaw = generateAllLegalMoves("white");
+
+//console.table(yeehaw);
 
 function checkTurn(i) {
   if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
