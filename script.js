@@ -1,4 +1,4 @@
-const canvas = document.querySelector("canvas"); //yeehaw
+const canvas = document.querySelector("canvas"); //allWhiteMoves
 const c = canvas.getContext("2d");
 
 //Settings
@@ -631,7 +631,7 @@ const arrayOfPieces = [
   })),
 ]; //32
 
-let legalSquares = []; //legal moves for current piece
+let moveCounter = 0;
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
 let hasClicked = false; //flips onclick
@@ -701,7 +701,6 @@ readClick.addEventListener(
     //select target square
     if (hasClicked) {
       targetSquare = parseInt(event.target.id);
-      console.log(typeof targetSquare);
 
       if (hasFriendlyOccupance(targetSquare)) {
         startSquare = targetSquare;
@@ -727,7 +726,6 @@ readClick.addEventListener(
     //select start square
     else if (!hasClicked) {
       startSquare = parseInt(event.target.id);
-      console.log(typeof startSquare);
 
       let i = getPieceIndexFromSquare(startSquare);
 
@@ -779,6 +777,9 @@ function targetIsLegal() {
   }
 }
 
+let fx_move = new Audio("./fx/fx_move.mp3");
+let fx_capture = new Audio("./fx/fx_capture.mp3");
+
 function requestMove() {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
@@ -809,9 +810,8 @@ function requestMove() {
         //update board
         arrayOfPieces[i].hasMoved = true;
         animateChessboard();
-
-        let pos = getSquareIndexFromPiece(1);
-        console.log(pos);
+        fx_move.play();
+        moveCounter++;
       }
       break;
     }
@@ -824,6 +824,7 @@ function capture() {
   let i = getPieceIndexFromSquare(targetSquare);
   arrayOfPieces[i].hasBeenCaptured = true;
   arrayOfPieces[i].position = null;
+  fx_capture.play();
 }
 
 function promote() {
@@ -909,25 +910,33 @@ function generateLegalMoves(i) {
   return legalSquares;
 }
 
-function generateAllLegalMoves(color) {
+function generateAllLegalMovesFor(color) {
   let allLegalMoves = [];
   switch (color) {
     case "white":
-      for (let i = 0; i <= 15; i++) {
-        startSquare = parseInt(getSquareIndexFromPiece(i));
-        allLegalMoves += [generateLegalMoves(i)];
+      for (let i = 16; i < 32; i++) {
+        if (!arrayOfPieces[i].hasBeenCaptured) {
+          startSquare = getSquareIndexFromPiece(i);
+          allLegalMoves.push(generateLegalMoves(i));
+        }
       }
       break;
     case "black":
+      for (let i = 0; i < 16; i++) {
+        if (!arrayOfPieces[i].hasBeenCaptured) {
+          startSquare = getSquareIndexFromPiece(i);
+          allLegalMoves.push(generateLegalMoves(i));
+        }
+      }
       break;
   }
   return allLegalMoves;
 }
 
-//let yeehaw = [];
-//yeehaw = generateAllLegalMoves("white");
+let allWhiteMoves = [];
+allWhiteMoves = generateAllLegalMovesFor("white");
 
-//console.table(yeehaw);
+console.table(allWhiteMoves);
 
 function checkTurn(i) {
   if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
@@ -969,8 +978,9 @@ function hasNoOccupance(square) {
   } else return false;
 }
 
-function generatePawnMoves() {
+function generatePawnMoves(i) {
   let legalSquares = [];
+  let startSquare = getSquareIndexFromPiece(i);
   let pawnAttackLeft;
   let pawnAttackRight;
   let pawnMoveFoward;
@@ -1021,8 +1031,9 @@ function generatePawnMoves() {
   return filtered;
 }
 
-function generateBishopMoves() {
+function generateBishopMoves(i) {
   let legalSquares = [];
+  let startSquare = getSquareIndexFromPiece(i);
 
   for (let i = 0; i < 7; i++) {
     if (startSquare % 8 == i) break;
@@ -1060,8 +1071,9 @@ function generateBishopMoves() {
   return filtered;
 }
 
-function generateRookMoves() {
+function generateRookMoves(i) {
   let legalSquares = [];
+  let startSquare = getSquareIndexFromPiece(i);
   let offsetRank = 8;
   let offsetFile = 1;
 
@@ -1098,13 +1110,13 @@ function generateRookMoves() {
   return filtered;
 }
 
-function generateQueenMoves() {
+function generateQueenMoves(i) {
   let legalSquares = [];
   let legalBishopSquares = [];
   let legalRookSquares = [];
 
-  legalBishopSquares = generateBishopMoves();
-  legalRookSquares = generateRookMoves();
+  legalBishopSquares = generateBishopMoves(i);
+  legalRookSquares = generateRookMoves(i);
 
   legalSquares = legalBishopSquares.concat(legalRookSquares);
 
@@ -1113,8 +1125,9 @@ function generateQueenMoves() {
   return filtered;
 }
 
-function generateKnightMoves() {
+function generateKnightMoves(i) {
   let legalSquares = [];
+  let startSquare = getSquareIndexFromPiece(i);
   let factor = 1;
   let index = startSquare % 8;
 
@@ -1137,8 +1150,9 @@ function generateKnightMoves() {
   return filtered;
 }
 
-function generateKingMoves() {
+function generateKingMoves(i) {
   let legalSquares = [];
+  let startSquare = getSquareIndexFromPiece(i);
 
   //Initial offsets :D
   // Right
