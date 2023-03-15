@@ -912,21 +912,37 @@ function generateLegalMoves(i) {
 
 function generateAllLegalMovesFor(color) {
   let allLegalMoves = [];
+  let resetTurn;
+
   switch (color) {
     case "white":
+      if (!whiteToMove) {
+        whiteToMove = true;
+        resetTurn = true;
+      }
       for (let i = 16; i < 32; i++) {
         if (!arrayOfPieces[i].hasBeenCaptured) {
           startSquare = getSquareIndexFromPiece(i);
           allLegalMoves.push(generateLegalMoves(i));
         }
       }
+      if (resetTurn) {
+        whiteToMove = false;
+      }
       break;
     case "black":
+      if (whiteToMove) {
+        whiteToMove = false;
+        resetTurn = true;
+      }
       for (let i = 0; i < 16; i++) {
         if (!arrayOfPieces[i].hasBeenCaptured) {
           startSquare = getSquareIndexFromPiece(i);
           allLegalMoves.push(generateLegalMoves(i));
         }
+      }
+      if (resetTurn) {
+        whiteToMove = true;
       }
       break;
   }
@@ -938,6 +954,11 @@ allWhiteMoves = generateAllLegalMovesFor("white");
 
 console.table(allWhiteMoves);
 
+let allBlackMoves = [];
+allBlackMoves = generateAllLegalMovesFor("black");
+
+console.table(allBlackMoves);
+
 function checkTurn(i) {
   if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
     return true;
@@ -948,11 +969,13 @@ function checkTurn(i) {
 
 function hasFriendlyOccupance(square) {
   let i = getPieceIndexFromSquare(square);
+  let color;
+  if (whiteToMove) {
+    color = "white";
+  } else color = "black";
 
   if (i != undefined) {
-    if (arrayOfPieces[i].color == "white" && whiteToMove) {
-      return true;
-    } else if (arrayOfPieces[i].color == "black" && !whiteToMove) {
+    if (arrayOfPieces[i].color == color) {
       return true;
     } else return false;
   }
@@ -960,11 +983,13 @@ function hasFriendlyOccupance(square) {
 
 function hasEvilOccupance(square) {
   let i = getPieceIndexFromSquare(square);
+  let color;
+  if (!whiteToMove) {
+    color = "white";
+  } else color = "black";
 
   if (i != undefined) {
-    if (arrayOfPieces[i].color == "black" && whiteToMove) {
-      return true;
-    } else if (arrayOfPieces[i].color == "white" && !whiteToMove) {
+    if (arrayOfPieces[i].color == color) {
       return true;
     } else return false;
   }
