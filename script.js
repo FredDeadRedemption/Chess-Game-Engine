@@ -636,11 +636,11 @@ const arrayOfPieces = [
   })),
 ]; //32
 
-var moveCounter = 0;
-var startSquare = undefined; //first square selected by click
-var targetSquare = undefined; //second square selected by click
-var hasClicked = false; //flips onclick
-var whiteToMove = true; //flips on legal move
+let moveCounter = 0;
+let startSquare = undefined; //first square selected by click
+let targetSquare = undefined; //second square selected by click
+let hasClicked = false; //flips onclick
+let whiteToMove = true; //flips on legal move
 
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
@@ -782,8 +782,8 @@ function targetIsLegal() {
   }
 }
 
-var fx_move = new Audio("./fx/fx_move.mp3");
-var fx_capture = new Audio("./fx/fx_capture.mp3");
+let fx_move = new Audio("./fx/fx_move.mp3");
+let fx_capture = new Audio("./fx/fx_capture.mp3");
 
 function requestMove() {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
@@ -861,22 +861,22 @@ function castle() {
   //castle white
   if (!king_white.hasMoved) {
     //castle short
-    if (targetSquare == 6 && !rook_white2.hasMoved && !rook_white2.hasBeenCaptured) {
+    if (targetSquare == 6 && !rook_white2.hasMoved) {
       rook_white2.position = arrayOfSquares[5];
     }
     //castle long
-    if (targetSquare == 2 && !rook_white.hasMoved && !rook_white.hasBeenCaptured) {
+    if (targetSquare == 2 && !rook_white.hasMoved) {
       rook_white.position = arrayOfSquares[3];
     }
   }
   //castle black
   if (!king_black.hasMoved) {
     //castle short
-    if (targetSquare == 62 && !rook_black2.hasMoved && !rook_black2.hasBeenCaptured) {
+    if (targetSquare == 62 && !rook_black2.hasMoved) {
       rook_black2.position = arrayOfSquares[61];
     }
     //castle long
-    if (targetSquare == 58 && !rook_black.hasMoved && !rook_black.hasBeenCaptured) {
+    if (targetSquare == 58 && !rook_black.hasMoved) {
       rook_black.position = arrayOfSquares[59];
     }
   }
@@ -1214,19 +1214,19 @@ function generateKingMoves(i) {
   legalSquares[6] = startSquare + 8; //up
 
   //castle short white
-  if (!king_white.hasMoved && !rook_white2.hasMoved && hasNoOccupance(5) && hasNoOccupance(6)) {
+  if (!king_white.hasMoved && !rook_white2.hasMoved && !rook_white2.hasBeenCaptured && hasNoOccupance(5) && hasNoOccupance(6)) {
     legalSquares[8] = startSquare + 2;
   }
   //castle long white
-  if (!king_white.hasMoved && !rook_white.hasMoved && hasNoOccupance(1) && hasNoOccupance(2) && hasNoOccupance(3)) {
+  if (!king_white.hasMoved && !rook_white.hasMoved && !rook_white.hasBeenCaptured && hasNoOccupance(1) && hasNoOccupance(2) && hasNoOccupance(3)) {
     legalSquares[9] = startSquare - 2;
   }
   //castle short black
-  if (!king_black.hasMoved && !rook_black2.hasMoved && hasNoOccupance(61) && hasNoOccupance(62)) {
+  if (!king_black.hasMoved && !rook_black2.hasMoved && !rook_black2.hasBeenCaptured && hasNoOccupance(61) && hasNoOccupance(62)) {
     legalSquares[10] = startSquare + 2;
   }
   //castle long black
-  if (!king_black.hasMoved && !rook_black.hasMoved && hasNoOccupance(57) && hasNoOccupance(58) && hasNoOccupance(59)) {
+  if (!king_black.hasMoved && !rook_black.hasMoved && !rook_black.hasBeenCaptured && hasNoOccupance(57) && hasNoOccupance(58) && hasNoOccupance(59)) {
     legalSquares[11] = startSquare - 2;
   }
 
