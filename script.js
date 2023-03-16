@@ -817,7 +817,7 @@ function requestMove() {
         animateChessboard();
         fx_move.play();
         moveCounter++;
-        TEST_ALL_MOVES();
+        //TEST_ALL_MOVES();
       }
       break;
     }
@@ -884,8 +884,34 @@ function castle() {
 
 function checkBuffer(i, targetSquare) {
   if (whiteToMove) {
+
+
+
   } else if (!whiteToMove) {
   }
+}
+
+function checkForCheck() {
+  let evilSquaresArray = [];
+  let kingPosition;
+
+  if (whiteToMove) {
+    evilSquaresArray = generateAllLegalMovesFor("black");
+    kingPosition = getSquareIndexFromPiece(20);
+    startSquare = kingPosition;
+
+    
+    for(let i = 0; i < evilSquaresArray.length; i++) {
+      for(let j = 0; j < evilSquaresArray[i].length; j++) {
+      if(kingPosition == evilSquaresArray[i][j])
+        console.log("jaer");
+      }
+    }
+
+
+  } else if (!whiteToMove) {
+  }
+  return ;
 }
 
 function generateLegalMoves(i) {
@@ -1195,6 +1221,8 @@ function generateKnightMoves(i) {
 function generateKingMoves(i) {
   let legalSquares = [];
   let startSquare = getSquareIndexFromPiece(i);
+
+  let jaer = checkForCheck();
 
   //Initial offsets :D
   // Right
