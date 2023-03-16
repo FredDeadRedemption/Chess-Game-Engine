@@ -3,8 +3,8 @@ const c = canvas.getContext("2d");
 
 //Settings
 const boardSize = 900; //900x900 standard // !change in .main css class aswell!
-const squareColor1 = "wheat";
-const squareColor2 = randomColor();
+const squareColor1 = "oldlace";
+const squareColor2 = "darkviolet";
 
 const squareSize = boardSize / 8; //900x900 = 112.5 squareSize & pieceSize
 const pieceSize = boardSize / 8;
@@ -25,15 +25,12 @@ canvas.height = boardSize;
 
 //TO DO
 
-//Border patrol til pawns og kings
-
-//square 0 er broken
-
 //lav enPessant()
 
 //lav isInCheck()
 
 function randomColor() {
+  /*
   const number = Math.random();
   let color;
 
@@ -48,13 +45,21 @@ function randomColor() {
   } else if (number > 0.995) {
     color = "deeppink";
   }
-  //update css colors
-  document.getElementById("56").style.color = color;
-  document.getElementById("40").style.color = color;
-  document.getElementById("24").style.color = color;
-  document.getElementById("8").style.color = color;
-  return color;
+  */
+  //dark color
+  document.getElementById("56").style.color = squareColor2;
+  document.getElementById("40").style.color = squareColor2;
+  document.getElementById("24").style.color = squareColor2;
+  document.getElementById("8").style.color = squareColor2;
+  //light color
+  document.getElementById("0").style.color = squareColor1;
+  document.getElementById("16").style.color = squareColor1;
+  document.getElementById("32").style.color = squareColor1;
+  document.getElementById("48").style.color = squareColor1;
+  // return color;
 }
+
+randomColor();
 
 class Piece {
   constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured }) {
@@ -672,7 +677,7 @@ animatePieces();
 
 function animateLegalSquares(legalSquares) {
   //initial fillstyle
-  c.fillStyle = "rgba(255, 140, 0, 0.5)";
+  c.fillStyle = "rgba(135, 206, 235, 0.6"; //"rgba(255, 140, 0, 0.5)";
   for (let i = 0; i < legalSquares.length; i++) {
     //highligths enemies red
     if (hasEvilOccupance(legalSquares[i])) {
@@ -681,7 +686,7 @@ function animateLegalSquares(legalSquares) {
 
     //highlights legal moves orange
     c.fillRect(arrayOfSquares[legalSquares[i]].rank, arrayOfSquares[legalSquares[i]].file, squareSize, squareSize);
-    c.fillStyle = "rgba(255, 140, 0, 0.5)";
+    c.fillStyle = "rgba(135, 206, 235, 0.6"; //"rgba(255, 140, 0, 0.5)";
   }
   //highlights selected square red
   if (startSquare != undefined) {
@@ -767,6 +772,7 @@ function getSquareIndexFromPiece(piece) {
   }
 }
 
+//virker ik
 function targetIsLegal() {
   let i = getPieceIndexFromSquare(startSquare);
 
@@ -812,6 +818,7 @@ function requestMove() {
         animateChessboard();
         fx_move.play();
         moveCounter++;
+        TEST_ALL_MOVES();
       }
       break;
     }
@@ -872,6 +879,12 @@ function castle() {
     if (targetSquare == 58 && !rook_black.hasMoved) {
       rook_black.position = arrayOfSquares[59];
     }
+  }
+}
+
+function checkBuffer(i, targetSquare) {
+  if (whiteToMove) {
+  } else if (!whiteToMove) {
   }
 }
 
@@ -949,15 +962,21 @@ function generateAllLegalMovesFor(color) {
   return allLegalMoves;
 }
 
-let allWhiteMoves = [];
-allWhiteMoves = generateAllLegalMovesFor("white");
+function TEST_ALL_MOVES() {
+  if ((moveCounter = 5)) {
+    let allWhiteMoves = [];
+    allWhiteMoves = generateAllLegalMovesFor("white");
 
-console.table(allWhiteMoves);
+    console.log("whiteMoves:");
+    console.table(allWhiteMoves);
 
-let allBlackMoves = [];
-allBlackMoves = generateAllLegalMovesFor("black");
+    let allBlackMoves = [];
+    allBlackMoves = generateAllLegalMovesFor("black");
 
-console.table(allBlackMoves);
+    console.log("blackMoves:");
+    console.table(allBlackMoves);
+  }
+}
 
 function checkTurn(i) {
   if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
