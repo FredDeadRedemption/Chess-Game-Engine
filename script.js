@@ -636,11 +636,11 @@ const arrayOfPieces = [
   })),
 ]; //32
 
-let moveCounter = 0;
-let startSquare = undefined; //first square selected by click
-let targetSquare = undefined; //second square selected by click
-let hasClicked = false; //flips onclick
-let whiteToMove = true; //flips on legal move
+var moveCounter = 0;
+var startSquare = undefined; //first square selected by click
+var targetSquare = undefined; //second square selected by click
+var hasClicked = false; //flips onclick
+var whiteToMove = true; //flips on legal move
 
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
@@ -772,7 +772,6 @@ function getSquareIndexFromPiece(piece) {
   }
 }
 
-//virker ik
 function targetIsLegal() {
   let i = getPieceIndexFromSquare(startSquare);
 
@@ -783,8 +782,8 @@ function targetIsLegal() {
   }
 }
 
-let fx_move = new Audio("./fx/fx_move.mp3");
-let fx_capture = new Audio("./fx/fx_capture.mp3");
+var fx_move = new Audio("./fx/fx_move.mp3");
+var fx_capture = new Audio("./fx/fx_capture.mp3");
 
 function requestMove() {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
@@ -825,6 +824,7 @@ function requestMove() {
   }
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
+  console.log("move_count:", moveCounter);
 }
 
 function capture() {
@@ -861,22 +861,22 @@ function castle() {
   //castle white
   if (!king_white.hasMoved) {
     //castle short
-    if (targetSquare == 6 && !rook_white2.hasMoved) {
+    if (targetSquare == 6 && !rook_white2.hasMoved && !rook_white2.hasBeenCaptured) {
       rook_white2.position = arrayOfSquares[5];
     }
     //castle long
-    if (targetSquare == 2 && !rook_white.hasMoved) {
+    if (targetSquare == 2 && !rook_white.hasMoved && !rook_white.hasBeenCaptured) {
       rook_white.position = arrayOfSquares[3];
     }
   }
   //castle black
   if (!king_black.hasMoved) {
     //castle short
-    if (targetSquare == 62 && !rook_black2.hasMoved) {
+    if (targetSquare == 62 && !rook_black2.hasMoved && !rook_black2.hasBeenCaptured) {
       rook_black2.position = arrayOfSquares[61];
     }
     //castle long
-    if (targetSquare == 58 && !rook_black.hasMoved) {
+    if (targetSquare == 58 && !rook_black.hasMoved && !rook_black.hasBeenCaptured) {
       rook_black.position = arrayOfSquares[59];
     }
   }
@@ -963,19 +963,17 @@ function generateAllLegalMovesFor(color) {
 }
 
 function TEST_ALL_MOVES() {
-  if ((moveCounter = 5)) {
-    let allWhiteMoves = [];
-    allWhiteMoves = generateAllLegalMovesFor("white");
+  let allWhiteMoves = [];
+  allWhiteMoves = generateAllLegalMovesFor("white");
 
-    console.log("whiteMoves:");
-    console.table(allWhiteMoves);
+  console.log("whiteMoves:");
+  console.table(allWhiteMoves);
 
-    let allBlackMoves = [];
-    allBlackMoves = generateAllLegalMovesFor("black");
+  let allBlackMoves = [];
+  allBlackMoves = generateAllLegalMovesFor("black");
 
-    console.log("blackMoves:");
-    console.table(allBlackMoves);
-  }
+  console.log("blackMoves:");
+  console.table(allBlackMoves);
 }
 
 function checkTurn(i) {
