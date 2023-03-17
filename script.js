@@ -785,6 +785,8 @@ function targetIsLegal() {
 let fx_move = new Audio("./fx/fx_move.mp3");
 let fx_capture = new Audio("./fx/fx_capture.mp3");
 
+let isChecked = true;
+
 function requestMove() {
   let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
 
@@ -803,6 +805,9 @@ function requestMove() {
         //move execution
         arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
         whiteToMove = !whiteToMove; //Turn switch
+        //check
+        let isChecked = checkForCheck();
+        console.log(isChecked);
 
         //promote
         if (arrayOfPieces[i].type == "p" || arrayOfPieces[i].type == "P") {
@@ -884,9 +889,6 @@ function castle() {
 
 function checkBuffer(i, targetSquare) {
   if (whiteToMove) {
-
-
-
   } else if (!whiteToMove) {
   }
 }
@@ -900,18 +902,16 @@ function checkForCheck() {
     kingPosition = getSquareIndexFromPiece(20);
     startSquare = kingPosition;
 
-    
-    for(let i = 0; i < evilSquaresArray.length; i++) {
-      for(let j = 0; j < evilSquaresArray[i].length; j++) {
-      if(kingPosition == evilSquaresArray[i][j])
-        console.log("jaer");
+    for (let i = 0; i < evilSquaresArray.length; i++) {
+      for (let j = 0; j < evilSquaresArray[i].length; j++) {
+        if (kingPosition == evilSquaresArray[i][j]) {
+          return true;
+        }
       }
     }
-
-
   } else if (!whiteToMove) {
   }
-  return ;
+  return false;
 }
 
 function generateLegalMoves(i) {
