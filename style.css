@@ -2,11 +2,9 @@ body {
   background-color: #282828;
 }
 
-.main {
+.clickGrid {
   position: relative;
   display: inline-block;
-  height: 900px;
-  width: 900px;
 }
 
 .canvas {

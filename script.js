@@ -1,15 +1,21 @@
-const canvas = document.querySelector("canvas"); //allWhiteMoves
+const clickGrid = document.querySelector(".clickGrid");
+const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
 //Settings
-const boardSize = 900; //900x900 standard // !change in .main css class aswell!
-const squareColor1 = "oldlace";
-const squareColor2 = "darkviolet";
-
-const squareSize = boardSize / 8; //900x900 = 112.5 squareSize & pieceSize
-const pieceSize = boardSize / 8;
+const boardSize = 900; //900x900 standard
+const squareSize = boardSize / 8;
 canvas.width = boardSize;
 canvas.height = boardSize;
+clickGrid.style.height = boardSize + "px";
+clickGrid.style.width = boardSize + "px";
+
+//Color Settings
+const lightSquareColor = "oldlace";
+const DarkSquareColor = "darkviolet";
+
+const coloredMoves = "rgba(135, 206, 235, 0.6)"; // standard --> "rgba(255, 140, 0, 0.5)";
+const coloredAttacks = "rgba(255, 0, 0, 0.5)";
 
 //*********BitBoard********//
 // // // // // // // // // //
@@ -47,15 +53,15 @@ function randomColor() {
   }
   */
   //dark color
-  document.getElementById("56").style.color = squareColor2;
-  document.getElementById("40").style.color = squareColor2;
-  document.getElementById("24").style.color = squareColor2;
-  document.getElementById("8").style.color = squareColor2;
+  document.getElementById("56").style.color = DarkSquareColor;
+  document.getElementById("40").style.color = DarkSquareColor;
+  document.getElementById("24").style.color = DarkSquareColor;
+  document.getElementById("8").style.color = DarkSquareColor;
   //light color
-  document.getElementById("0").style.color = squareColor1;
-  document.getElementById("16").style.color = squareColor1;
-  document.getElementById("32").style.color = squareColor1;
-  document.getElementById("48").style.color = squareColor1;
+  document.getElementById("0").style.color = lightSquareColor;
+  document.getElementById("16").style.color = lightSquareColor;
+  document.getElementById("32").style.color = lightSquareColor;
+  document.getElementById("48").style.color = lightSquareColor;
   // return color;
 }
 
@@ -74,7 +80,7 @@ class Piece {
   }
 
   draw() {
-    c.drawImage(this.image, arrayOfSquares[this.position].rank, arrayOfSquares[this.position].file, pieceSize, pieceSize);
+    c.drawImage(this.image, arrayOfSquares[this.position].rank, arrayOfSquares[this.position].file, squareSize, squareSize);
   }
 
   update() {
@@ -643,12 +649,12 @@ function animateChessboard() {
     for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
       if (fileCount % 2 == 0) {
         if (rankCount % 2 == 0) {
-          c.fillStyle = squareColor1;
-        } else c.fillStyle = squareColor2;
+          c.fillStyle = lightSquareColor;
+        } else c.fillStyle = DarkSquareColor;
       } else if (fileCount % 2 !== 0) {
         if (rankCount % 2 == 0) {
-          c.fillStyle = squareColor2;
-        } else c.fillStyle = squareColor1;
+          c.fillStyle = DarkSquareColor;
+        } else c.fillStyle = lightSquareColor;
       }
 
       c.fillRect(rank, file, squareSize, squareSize);
@@ -673,30 +679,28 @@ animatePieces();
 
 function animateLegalSquares(legalSquares) {
   //initial fillstyle
-  c.fillStyle = "rgba(135, 206, 235, 0.6"; //"rgba(255, 140, 0, 0.5)";
+  c.fillStyle = coloredMoves;
   for (let i = 0; i < legalSquares.length; i++) {
     //highligths enemies red
     if (hasEvilOccupance(legalSquares[i])) {
-      c.fillStyle = "rgba(255, 0, 0, 0.5)";
+      c.fillStyle = coloredAttacks;
     }
 
     //highlights legal moves orange
     c.fillRect(arrayOfSquares[legalSquares[i]].rank, arrayOfSquares[legalSquares[i]].file, squareSize, squareSize);
-    c.fillStyle = "rgba(135, 206, 235, 0.6"; //"rgba(255, 140, 0, 0.5)";
+    c.fillStyle = coloredMoves;
   }
   //highlights selected square red
   if (startSquare != undefined) {
-    c.fillStyle = "rgba(255, 0, 0, 0.5)";
+    c.fillStyle = coloredAttacks;
     c.fillRect(arrayOfSquares[startSquare].rank, arrayOfSquares[startSquare].file, squareSize, squareSize);
   }
 }
 
 window.requestAnimationFrame(animateLegalSquares);
 
-const readClick = document.querySelector(".main");
-
 //click handler
-readClick.addEventListener(
+clickGrid.addEventListener(
   "click",
   (event) => {
     let piece;
@@ -819,7 +823,7 @@ function requestMove() {
         animateChessboard();
         fx_move.play();
         moveCounter++;
-        //TEST_ALL_MOVES();
+        TEST_ALL_MOVES();
       }
       break;
     }
@@ -965,8 +969,7 @@ function generateAllLegalMovesFor(color) {
       }
       for (let i = 16; i < 32; i++) {
         if (!arrayOfPieces[i].hasBeenCaptured) {
-          startSquare = getSquareFromPiece(i);
-          allLegalMoves.push(generateLegalMoves(i));
+          allLegalMoves.push(generateLegalMoves(arrayOfPieces[i]));
         }
       }
       if (resetTurn) {
@@ -980,8 +983,7 @@ function generateAllLegalMovesFor(color) {
       }
       for (let i = 0; i < 16; i++) {
         if (!arrayOfPieces[i].hasBeenCaptured) {
-          startSquare = getSquareFromPiece(i);
-          allLegalMoves.push(generateLegalMoves(i));
+          allLegalMoves.push(generateLegalMoves(arrayOfPieces[i]));
         }
       }
       if (resetTurn) {
@@ -1052,7 +1054,6 @@ function hasNoOccupance(square) {
 
 function generatePawnMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareFromPiece(piece);
   let pawnAttackLeft;
   let pawnAttackRight;
   let pawnMoveFoward;
@@ -1079,24 +1080,24 @@ function generatePawnMoves(piece) {
   //moving foward twice
   if (
     piece.hasMoved == false &&
-    !hasFriendlyOccupance(startSquare + pawnMoveFoward * 2) &&
-    !hasFriendlyOccupance(startSquare + pawnMoveFoward) &&
-    !hasEvilOccupance(startSquare + pawnMoveFoward * 2) &&
-    !hasEvilOccupance(startSquare + pawnMoveFoward)
+    !hasFriendlyOccupance(piece.position + pawnMoveFoward * 2) &&
+    !hasFriendlyOccupance(piece.position + pawnMoveFoward) &&
+    !hasEvilOccupance(piece.position + pawnMoveFoward * 2) &&
+    !hasEvilOccupance(piece.position + pawnMoveFoward)
   ) {
-    legalSquares[0] = startSquare + pawnMoveFoward * 2;
+    legalSquares[0] = piece.position + pawnMoveFoward * 2;
   }
   //moving foward once
-  if (!hasFriendlyOccupance(startSquare + pawnMoveFoward) && !hasEvilOccupance(startSquare + pawnMoveFoward)) {
-    legalSquares[1] = startSquare + pawnMoveFoward;
+  if (!hasFriendlyOccupance(piece.position + pawnMoveFoward) && !hasEvilOccupance(piece.position + pawnMoveFoward)) {
+    legalSquares[1] = piece.position + pawnMoveFoward;
   }
   //moving (attacking) left
-  if (hasEvilOccupance(startSquare + pawnAttackLeft) && startSquare % 8 != fileLeft) {
-    legalSquares[2] = startSquare + pawnAttackLeft;
+  if (hasEvilOccupance(piece.position + pawnAttackLeft) && piece.position % 8 != fileLeft) {
+    legalSquares[2] = piece.position + pawnAttackLeft;
   }
   //moving (attacking) right
-  if (hasEvilOccupance(startSquare + pawnAttackRight) && startSquare % 8 != fileRight) {
-    legalSquares[3] = startSquare + pawnAttackRight;
+  if (hasEvilOccupance(piece.position + pawnAttackRight) && piece.position % 8 != fileRight) {
+    legalSquares[3] = piece.position + pawnAttackRight;
   }
 
   filtered = filterLegalSquares(legalSquares);
@@ -1105,35 +1106,34 @@ function generatePawnMoves(piece) {
 
 function generateBishopMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareFromPiece(piece);
 
   for (let i = 0; i < 7; i++) {
-    if (startSquare % 8 == i) break;
-    legalSquares[i] = startSquare - -7 * (i + 1);
+    if (piece.position % 8 == i) break;
+    legalSquares[i] = piece.position - -7 * (i + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
   for (let i = 7; i < 14; i++) {
-    if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare - -9 * ((i % 7) + 1);
+    if (7 - (piece.position % 8) == i % 7) break;
+    legalSquares[i] = piece.position - -9 * ((i % 7) + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
   for (let i = 14; i < 21; i++) {
-    if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare - 7 * ((i % 7) + 1);
+    if (7 - (piece.position % 8) == i % 7) break;
+    legalSquares[i] = piece.position - 7 * ((i % 7) + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
   for (let i = 21; i < 28; i++) {
-    if (startSquare % 8 == i % 7) break;
-    legalSquares[i] = startSquare - 9 * ((i % 7) + 1);
+    if (piece.position % 8 == i % 7) break;
+    legalSquares[i] = piece.position - 9 * ((i % 7) + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
@@ -1145,34 +1145,33 @@ function generateBishopMoves(piece) {
 
 function generateRookMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareFromPiece(piece);
   let offsetRank = 8;
   let offsetFile = 1;
 
   for (let i = 0; i < 7; i++) {
-    legalSquares[i] = startSquare - offsetRank * (i + 1);
+    legalSquares[i] = piece.position - offsetRank * (i + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
   for (let i = 7; i < 14; i++) {
-    legalSquares[i] = startSquare - -offsetRank * ((i % 7) + 1);
+    legalSquares[i] = piece.position - -offsetRank * ((i % 7) + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
   for (let i = 14; i < 21; i++) {
-    if (startSquare % 8 == i % 7) break;
-    legalSquares[i] = startSquare - offsetFile * ((i % 7) + 1);
+    if (piece.position % 8 == i % 7) break;
+    legalSquares[i] = piece.position - offsetFile * ((i % 7) + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
   for (let i = 21; i < 29; i++) {
-    if (7 - (startSquare % 8) == i % 7) break;
-    legalSquares[i] = startSquare - -offsetFile * ((i % 7) + 1);
+    if (7 - (piece.position % 8) == i % 7) break;
+    legalSquares[i] = piece.position - -offsetFile * ((i % 7) + 1);
 
     let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
@@ -1199,15 +1198,14 @@ function generateQueenMoves(piece) {
 
 function generateKnightMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareFromPiece(piece);
   let factor = 1;
-  let index = startSquare % 8;
+  let index = piece.position % 8;
 
   for (let i = 0; i < 2; i++) {
-    legalSquares[i] = startSquare - 6 * factor;
-    legalSquares[i + 2] = startSquare - 10 * factor;
-    legalSquares[i + 4] = startSquare - 15 * factor;
-    legalSquares[i + 6] = startSquare - 17 * factor;
+    legalSquares[i] = piece.position - 6 * factor;
+    legalSquares[i + 2] = piece.position - 10 * factor;
+    legalSquares[i + 4] = piece.position - 15 * factor;
+    legalSquares[i + 6] = piece.position - 17 * factor;
 
     factor = factor * -1;
   }
@@ -1228,36 +1226,36 @@ function generateKingMoves(piece) {
 
   //Initial offsets :D
   // Right
-  if (startSquare % 8 != 7) {
-    legalSquares[7] = startSquare + 9;
-    legalSquares[1] = startSquare + 1;
-    legalSquares[2] = startSquare - 7;
+  if (piece.position % 8 != 7) {
+    legalSquares[7] = piece.position + 9;
+    legalSquares[1] = piece.position + 1;
+    legalSquares[2] = piece.position - 7;
   }
 
-  if (startSquare % 8 != 0) {
-    legalSquares[5] = startSquare + 7;
-    legalSquares[0] = startSquare - 1;
-    legalSquares[4] = startSquare - 9;
+  if (piece.position % 8 != 0) {
+    legalSquares[5] = piece.position + 7;
+    legalSquares[0] = piece.position - 1;
+    legalSquares[4] = piece.position - 9;
   }
 
-  legalSquares[3] = startSquare - 8; //down
-  legalSquares[6] = startSquare + 8; //up
+  legalSquares[3] = piece.position - 8; //down
+  legalSquares[6] = piece.position + 8; //up
 
   //castle short white
   if (!king_white.hasMoved && !rook_white2.hasMoved && !rook_white2.hasBeenCaptured && hasNoOccupance(5) && hasNoOccupance(6)) {
-    legalSquares[8] = startSquare + 2;
+    legalSquares[8] = piece.position + 2;
   }
   //castle long white
   if (!king_white.hasMoved && !rook_white.hasMoved && !rook_white.hasBeenCaptured && hasNoOccupance(1) && hasNoOccupance(2) && hasNoOccupance(3)) {
-    legalSquares[9] = startSquare - 2;
+    legalSquares[9] = piece.position - 2;
   }
   //castle short black
   if (!king_black.hasMoved && !rook_black2.hasMoved && !rook_black2.hasBeenCaptured && hasNoOccupance(61) && hasNoOccupance(62)) {
-    legalSquares[10] = startSquare + 2;
+    legalSquares[10] = piece.position + 2;
   }
   //castle long black
   if (!king_black.hasMoved && !rook_black.hasMoved && !rook_black.hasBeenCaptured && hasNoOccupance(57) && hasNoOccupance(58) && hasNoOccupance(59)) {
-    legalSquares[11] = startSquare - 2;
+    legalSquares[11] = piece.position - 2;
   }
 
   filtered = filterLegalSquares(legalSquares);
