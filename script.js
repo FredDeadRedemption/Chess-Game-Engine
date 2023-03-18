@@ -64,10 +64,6 @@ randomColor();
 class Piece {
   constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured }) {
     this.position = position;
-    position = {
-      rank: this.position.rank,
-      file: this.position.file,
-    };
     this.color = color; //"black" | "white"
     this.type = type; //King = "k" Queen = "q" Knight = "n" Rook = "r" Bishop = "b" Pawn = "p"
     this.worth = worth; //King = 99 Queen = 9 Knight = 3 Rook = 4 Bishop = 3 Pawn = 1
@@ -78,7 +74,7 @@ class Piece {
   }
 
   draw() {
-    c.drawImage(this.image, this.position.rank, this.position.file, pieceSize, pieceSize);
+    c.drawImage(this.image, arrayOfSquares[this.position].rank, arrayOfSquares[this.position].file, pieceSize, pieceSize);
   }
 
   update() {
@@ -347,7 +343,7 @@ const arrayOfSquares = [
 
 const arrayOfPieces = [
   (rook_black = new Piece({
-    position: arrayOfSquares[56],
+    position: 56,
     color: "black",
     type: "r",
     worth: 5,
@@ -356,7 +352,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (knight_black = new Piece({
-    position: arrayOfSquares[57],
+    position: 57,
     color: "black",
     type: "n",
     worth: 3,
@@ -365,7 +361,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (bishop_black = new Piece({
-    position: arrayOfSquares[58],
+    position: 58,
     color: "black",
     type: "b",
     worth: 3,
@@ -374,7 +370,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (queen_black = new Piece({
-    position: arrayOfSquares[59],
+    position: 59,
     color: "black",
     type: "q",
     worth: 9,
@@ -383,7 +379,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (king_black = new Piece({
-    position: arrayOfSquares[60],
+    position: 60,
     color: "black",
     type: "k",
     worth: 99,
@@ -392,7 +388,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (bishop_black2 = new Piece({
-    position: arrayOfSquares[61],
+    position: 61,
     color: "black",
     type: "b",
     worth: 3,
@@ -401,7 +397,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (knight_black2 = new Piece({
-    position: arrayOfSquares[62],
+    position: 62,
     color: "black",
     type: "n",
     worth: 3,
@@ -410,7 +406,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (rook_black2 = new Piece({
-    position: arrayOfSquares[63],
+    position: 63,
     color: "black",
     type: "r",
     worth: 5,
@@ -419,7 +415,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black = new Piece({
-    position: arrayOfSquares[48],
+    position: 48,
     color: "black",
     type: "p",
     worth: 1,
@@ -428,7 +424,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black2 = new Piece({
-    position: arrayOfSquares[49],
+    position: 49,
     color: "black",
     type: "p",
     worth: 1,
@@ -437,7 +433,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black3 = new Piece({
-    position: arrayOfSquares[50],
+    position: 50,
     color: "black",
     type: "p",
     worth: 1,
@@ -446,7 +442,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black4 = new Piece({
-    position: arrayOfSquares[51],
+    position: 51,
     color: "black",
     type: "p",
     worth: 1,
@@ -455,7 +451,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black5 = new Piece({
-    position: arrayOfSquares[52],
+    position: 52,
     color: "black",
     type: "p",
     worth: 1,
@@ -464,7 +460,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black6 = new Piece({
-    position: arrayOfSquares[53],
+    position: 53,
     color: "black",
     type: "p",
     worth: 1,
@@ -473,7 +469,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black7 = new Piece({
-    position: arrayOfSquares[54],
+    position: 54,
     color: "black",
     type: "p",
     worth: 1,
@@ -482,7 +478,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_black8 = new Piece({
-    position: arrayOfSquares[55],
+    position: 55,
     color: "black",
     type: "p",
     worth: 1,
@@ -491,7 +487,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (rook_white = new Piece({
-    position: arrayOfSquares[0],
+    position: 0,
     color: "white",
     type: "R",
     worth: 5,
@@ -500,7 +496,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (knight_white = new Piece({
-    position: arrayOfSquares[1],
+    position: 1,
     color: "white",
     type: "N",
     worth: 3,
@@ -509,7 +505,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (bishop_white = new Piece({
-    position: arrayOfSquares[2],
+    position: 2,
     color: "white",
     type: "B",
     worth: 3,
@@ -518,7 +514,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (queen_white = new Piece({
-    position: arrayOfSquares[3],
+    position: 3,
     color: "white",
     type: "Q",
     worth: 9,
@@ -527,7 +523,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (king_white = new Piece({
-    position: arrayOfSquares[4],
+    position: 4,
     color: "white",
     type: "K",
     worth: 99,
@@ -536,7 +532,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (bishop_white2 = new Piece({
-    position: arrayOfSquares[5],
+    position: 5,
     color: "white",
     type: "B",
     worth: 3,
@@ -545,7 +541,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (knight_white2 = new Piece({
-    position: arrayOfSquares[6],
+    position: 6,
     color: "white",
     type: "N",
     worth: 3,
@@ -554,7 +550,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (rook_white2 = new Piece({
-    position: arrayOfSquares[7],
+    position: 7,
     color: "white",
     type: "R",
     worth: 5,
@@ -563,7 +559,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white = new Piece({
-    position: arrayOfSquares[8],
+    position: 8,
     color: "white",
     type: "P",
     worth: 1,
@@ -572,7 +568,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white2 = new Piece({
-    position: arrayOfSquares[9],
+    position: 9,
     color: "white",
     type: "P",
     worth: 1,
@@ -581,7 +577,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white3 = new Piece({
-    position: arrayOfSquares[10],
+    position: 10,
     color: "white",
     type: "P",
     worth: 1,
@@ -590,7 +586,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white4 = new Piece({
-    position: arrayOfSquares[11],
+    position: 11,
     color: "white",
     type: "P",
     worth: 1,
@@ -599,7 +595,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white5 = new Piece({
-    position: arrayOfSquares[12],
+    position: 12,
     color: "white",
     type: "P",
     worth: 1,
@@ -608,7 +604,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white6 = new Piece({
-    position: arrayOfSquares[13],
+    position: 13,
     color: "white",
     type: "P",
     worth: 1,
@@ -617,7 +613,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white7 = new Piece({
-    position: arrayOfSquares[14],
+    position: 14,
     color: "white",
     type: "P",
     worth: 1,
@@ -626,7 +622,7 @@ const arrayOfPieces = [
     hasBeenCaptured: false,
   })),
   (pawn_white8 = new Piece({
-    position: arrayOfSquares[15],
+    position: 15,
     color: "white",
     type: "P",
     worth: 1,
@@ -703,6 +699,7 @@ const readClick = document.querySelector(".main");
 readClick.addEventListener(
   "click",
   (event) => {
+    let piece;
     //select target square
     if (hasClicked) {
       targetSquare = parseInt(event.target.id);
@@ -711,17 +708,17 @@ readClick.addEventListener(
         startSquare = targetSquare;
         targetSquare = undefined;
 
-        let i = getPieceIndexFromSquare(startSquare);
+        piece = getPieceFromSquare(startSquare);
 
-        if (checkTurn(i)) {
-          legalSquares = generateLegalMoves(i);
+        if (checkTurn(piece)) {
+          legalSquares = generateLegalMoves(piece);
           animateChessboard();
           animateLegalSquares(legalSquares);
           hasClicked = true;
         }
 
         hasClicked = true;
-      } else if (!targetIsLegal()) {
+      } else if (!targetIsLegal(targetSquare, piece)) {
         animateChessboard();
         hasClicked = false;
       } else hasClicked = false;
@@ -732,11 +729,13 @@ readClick.addEventListener(
     else if (!hasClicked) {
       startSquare = parseInt(event.target.id);
 
-      let i = getPieceIndexFromSquare(startSquare);
+      piece = getPieceFromSquare(startSquare);
 
-      if (i != undefined) {
-        if (checkTurn(i)) {
-          legalSquares = generateLegalMoves(i);
+      console.log(piece);
+
+      if (piece != undefined) {
+        if (checkTurn(piece)) {
+          legalSquares = generateLegalMoves(piece);
           animateLegalSquares(legalSquares);
           hasClicked = true;
         }
@@ -754,29 +753,27 @@ readClick.addEventListener(
   { capture: true } //stop event bubbling
 );
 
-//fetches index for piece on given square index
-function getPieceIndexFromSquare(inputSquare) {
+//fetches piece on given square index
+function getPieceFromSquare(inputSquare) {
   for (i = 0; i < arrayOfPieces.length; i++) {
-    if (arrayOfPieces[i].position == arrayOfSquares[inputSquare]) {
-      return i;
-    } //I can be undefined
+    if (arrayOfPieces[i].position == inputSquare) {
+      return arrayOfPieces[i];
+    } //piece can be undefined
   }
 }
 
 //fetches index for square for given piece index
-function getSquareIndexFromPiece(piece) {
+function getSquareFromPiece(piece) {
   for (i = 0; i < arrayOfSquares.length; i++) {
-    if (arrayOfPieces[piece].position == arrayOfSquares[i]) {
+    if (piece.position == i) {
       return i;
     }
   }
 }
 
-function targetIsLegal() {
-  let i = getPieceIndexFromSquare(startSquare);
-
+function targetIsLegal(targetSquare) {
   for (let j = 0; j < legalSquares.length; j++) {
-    if (targetSquare == legalSquares[j] && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
+    if (targetSquare == legalSquares[j] && !hasFriendlyOccupance(targetSquare)) {
       return true;
     } else return false;
   }
@@ -788,37 +785,37 @@ let fx_capture = new Audio("./fx/fx_capture.mp3");
 let isChecked = true;
 
 function requestMove() {
-  let i = getPieceIndexFromSquare(startSquare); //fetches the index for piece on startingsquare
+  let piece = getPieceFromSquare(startSquare); //fetches the index for piece on startingsquare
 
   //check legality of move
   for (let j = 0; j < legalSquares.length; j++) {
     if (targetSquare == legalSquares[j]) {
       //check extra conditions
-      if (i != undefined && checkTurn(i) && !hasFriendlyOccupance(targetSquare)) {
+      if (piece != undefined && checkTurn(piece) && !hasFriendlyOccupance(targetSquare)) {
         //Capture
         if (hasEvilOccupance(targetSquare)) {
           capture();
         }
 
-        let i = getPieceIndexFromSquare(startSquare);
+        let piece = getPieceFromSquare(startSquare);
 
         //move execution
-        arrayOfPieces[i].position = arrayOfSquares[targetSquare]; //Move
+        piece.position = targetSquare; //Move
         whiteToMove = !whiteToMove; //Turn switch
         //check
         let isChecked = checkForCheck();
         console.log(isChecked);
 
         //promote
-        if (arrayOfPieces[i].type == "p" || arrayOfPieces[i].type == "P") {
+        if (piece.type == "p" || piece.type == "P") {
           promote();
         }
         //castle
-        if (arrayOfPieces[i].type == "k" || arrayOfPieces[i].type == "K") {
+        if (piece.type == "k" || piece.type == "K") {
           castle();
         }
         //update board
-        arrayOfPieces[i].hasMoved = true;
+        piece.hasMoved = true;
         animateChessboard();
         fx_move.play();
         moveCounter++;
@@ -833,32 +830,32 @@ function requestMove() {
 }
 
 function capture() {
-  let i = getPieceIndexFromSquare(targetSquare);
-  arrayOfPieces[i].hasBeenCaptured = true;
-  arrayOfPieces[i].position = null;
+  let piece = getPieceFromSquare(targetSquare);
+  piece.hasBeenCaptured = true;
+  piece.position = null;
   fx_capture.play();
 }
 
 function promote() {
   //Promotion white
-  if (targetSquare > 55 && arrayOfPieces[i].color == "white") {
-    arrayOfPieces[i].type = "Q";
-    arrayOfPieces[i].worth = 9;
-    arrayOfPieces[i].image = new Image();
-    arrayOfPieces[i].imageSrc = "./pieces/queen_white.png";
-    arrayOfPieces[i].hasMoved = false;
+  if (targetSquare > 55 && piece.color == "white") {
+    piece.type = "Q";
+    piece.worth = 9;
+    piece.image = new Image();
+    piece.imageSrc = "./pieces/queen_white.png";
+    piece.hasMoved = false;
 
-    arrayOfPieces[i].image.src = arrayOfPieces[i].imageSrc;
+    piece.image.src = piece.imageSrc;
   }
   //Promotion Black
-  if (targetSquare < 8 && arrayOfPieces[i].color == "black") {
-    arrayOfPieces[i].type = "q";
-    arrayOfPieces[i].worth = 9;
-    arrayOfPieces[i].image = new Image();
-    arrayOfPieces[i].imageSrc = "./pieces/queen_black.png";
-    arrayOfPieces[i].hasMoved = false;
+  if (targetSquare < 8 && piece.color == "black") {
+    piece.type = "q";
+    piece.worth = 9;
+    piece.image = new Image();
+    piece.imageSrc = "./pieces/queen_black.png";
+    piece.hasMoved = false;
 
-    arrayOfPieces[i].image.src = arrayOfPieces[i].imageSrc;
+    piece.image.src = piece.imageSrc;
   }
 }
 
@@ -887,64 +884,71 @@ function castle() {
   }
 }
 
-function checkBuffer(i, targetSquare) {
-  if (whiteToMove) {
-  } else if (!whiteToMove) {
-  }
-}
-
 function checkForCheck() {
   let evilSquaresArray = [];
   let kingPosition;
 
   if (whiteToMove) {
     evilSquaresArray = generateAllLegalMovesFor("black");
-    kingPosition = getSquareIndexFromPiece(20);
+    kingPosition = getSquareFromPiece(20);
     startSquare = kingPosition;
 
     for (let i = 0; i < evilSquaresArray.length; i++) {
       for (let j = 0; j < evilSquaresArray[i].length; j++) {
         if (kingPosition == evilSquaresArray[i][j]) {
+          console.log("white king in check!");
           return true;
         }
       }
     }
   } else if (!whiteToMove) {
+    evilSquaresArray = generateAllLegalMovesFor("white");
+    kingPosition = getSquareFromPiece(4);
+    startSquare = kingPosition;
+
+    for (let i = 0; i < evilSquaresArray.length; i++) {
+      for (let j = 0; j < evilSquaresArray[i].length; j++) {
+        if (kingPosition == evilSquaresArray[i][j]) {
+          console.log("black king in check!");
+          return true;
+        }
+      }
+    }
   }
   return false;
 }
 
-function generateLegalMoves(i) {
+function generateLegalMoves(piece) {
   let legalSquares = [];
 
-  switch (arrayOfPieces[i].type) {
+  switch (piece.type) {
     case "R":
     case "r":
-      legalSquares = generateRookMoves(i);
+      legalSquares = generateRookMoves(piece);
       break;
     case "P":
     case "p":
-      legalSquares = generatePawnMoves(i);
+      legalSquares = generatePawnMoves(piece);
       break;
     case "B":
     case "b":
-      legalSquares = generateBishopMoves(i);
+      legalSquares = generateBishopMoves(piece);
       break;
     case "Q":
     case "q":
-      legalSquares = generateQueenMoves(i);
+      legalSquares = generateQueenMoves(piece);
       break;
     case "N":
     case "n":
-      legalSquares = generateKnightMoves(i);
+      legalSquares = generateKnightMoves(piece);
       break;
     case "K":
     case "k":
-      legalSquares = generateKingMoves(i);
+      legalSquares = generateKingMoves(piece);
       break;
   }
 
-  //console.log(`%cLegal moves for ${arrayOfPieces[i].type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
+  //console.log(`%cLegal moves for ${piece.type} starting on square ${startSquare} is: \n${legalSquares.join("\n")}`, `color : orange; font-size: 20px`);
 
   return legalSquares;
 }
@@ -960,8 +964,8 @@ function generateAllLegalMovesFor(color) {
         resetTurn = true;
       }
       for (let i = 16; i < 32; i++) {
-        if (!arrayOfPieces[i].hasBeenCaptured) {
-          startSquare = getSquareIndexFromPiece(i);
+        if (!piece.hasBeenCaptured) {
+          startSquare = getSquareFromPiece(i);
           allLegalMoves.push(generateLegalMoves(i));
         }
       }
@@ -975,8 +979,8 @@ function generateAllLegalMovesFor(color) {
         resetTurn = true;
       }
       for (let i = 0; i < 16; i++) {
-        if (!arrayOfPieces[i].hasBeenCaptured) {
-          startSquare = getSquareIndexFromPiece(i);
+        if (!piece.hasBeenCaptured) {
+          startSquare = getSquareFromPiece(i);
           allLegalMoves.push(generateLegalMoves(i));
         }
       }
@@ -1002,58 +1006,58 @@ function TEST_ALL_MOVES() {
   console.table(allBlackMoves);
 }
 
-function checkTurn(i) {
-  if (arrayOfPieces[i].color == "white" && whiteToMove == true) {
+function checkTurn(piece) {
+  if (piece.color == "white" && whiteToMove == true) {
     return true;
-  } else if (arrayOfPieces[i].color == "black" && whiteToMove == false) {
+  } else if (piece.color == "black" && whiteToMove == false) {
     return true;
   } else return false;
 }
 
 function hasFriendlyOccupance(square) {
-  let i = getPieceIndexFromSquare(square);
+  let piece = getPieceFromSquare(square);
   let color;
   if (whiteToMove) {
     color = "white";
   } else color = "black";
 
-  if (i != undefined) {
-    if (arrayOfPieces[i].color == color) {
+  if (piece != undefined) {
+    if (piece.color == color) {
       return true;
     } else return false;
   }
 }
 
 function hasEvilOccupance(square) {
-  let i = getPieceIndexFromSquare(square);
+  let piece = getPieceFromSquare(square);
   let color;
   if (!whiteToMove) {
     color = "white";
   } else color = "black";
 
-  if (i != undefined) {
-    if (arrayOfPieces[i].color == color) {
+  if (piece != undefined) {
+    if (piece.color == color) {
       return true;
     } else return false;
   }
 }
 
 function hasNoOccupance(square) {
-  let i = getPieceIndexFromSquare(square);
+  let piece = getPieceFromSquare(square);
 
-  if (i == undefined) {
+  if (piece == undefined) {
     return true;
   } else return false;
 }
 
-function generatePawnMoves(i) {
+function generatePawnMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareIndexFromPiece(i);
+  let startSquare = getSquareFromPiece(piece);
   let pawnAttackLeft;
   let pawnAttackRight;
   let pawnMoveFoward;
 
-  switch (arrayOfPieces[i].type) {
+  switch (piece.type) {
     //white pawn offsets
     case "P":
       pawnAttackLeft = 7;
@@ -1074,7 +1078,7 @@ function generatePawnMoves(i) {
 
   //moving foward twice
   if (
-    arrayOfPieces[i].hasMoved == false &&
+    piece.hasMoved == false &&
     !hasFriendlyOccupance(startSquare + pawnMoveFoward * 2) &&
     !hasFriendlyOccupance(startSquare + pawnMoveFoward) &&
     !hasEvilOccupance(startSquare + pawnMoveFoward * 2) &&
@@ -1099,15 +1103,15 @@ function generatePawnMoves(i) {
   return filtered;
 }
 
-function generateBishopMoves(i) {
+function generateBishopMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareIndexFromPiece(i);
+  let startSquare = getSquareFromPiece(piece);
 
   for (let i = 0; i < 7; i++) {
     if (startSquare % 8 == i) break;
     legalSquares[i] = startSquare - -7 * (i + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
@@ -1115,7 +1119,7 @@ function generateBishopMoves(i) {
     if (7 - (startSquare % 8) == i % 7) break;
     legalSquares[i] = startSquare - -9 * ((i % 7) + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
@@ -1123,7 +1127,7 @@ function generateBishopMoves(i) {
     if (7 - (startSquare % 8) == i % 7) break;
     legalSquares[i] = startSquare - 7 * ((i % 7) + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
@@ -1131,7 +1135,7 @@ function generateBishopMoves(i) {
     if (startSquare % 8 == i % 7) break;
     legalSquares[i] = startSquare - 9 * ((i % 7) + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
@@ -1139,30 +1143,30 @@ function generateBishopMoves(i) {
   return filtered;
 }
 
-function generateRookMoves(i) {
+function generateRookMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareIndexFromPiece(i);
+  let startSquare = getSquareFromPiece(piece);
   let offsetRank = 8;
   let offsetFile = 1;
 
   for (let i = 0; i < 7; i++) {
     legalSquares[i] = startSquare - offsetRank * (i + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
   for (let i = 7; i < 14; i++) {
     legalSquares[i] = startSquare - -offsetRank * ((i % 7) + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
   for (let i = 14; i < 21; i++) {
     if (startSquare % 8 == i % 7) break;
     legalSquares[i] = startSquare - offsetFile * ((i % 7) + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
@@ -1170,7 +1174,7 @@ function generateRookMoves(i) {
     if (7 - (startSquare % 8) == i % 7) break;
     legalSquares[i] = startSquare - -offsetFile * ((i % 7) + 1);
 
-    let j = getPieceIndexFromSquare(legalSquares[i]);
+    let j = getPieceFromSquare(legalSquares[i]);
     if (j != undefined) break;
   }
 
@@ -1178,13 +1182,13 @@ function generateRookMoves(i) {
   return filtered;
 }
 
-function generateQueenMoves(i) {
+function generateQueenMoves(piece) {
   let legalSquares = [];
   let legalBishopSquares = [];
   let legalRookSquares = [];
 
-  legalBishopSquares = generateBishopMoves(i);
-  legalRookSquares = generateRookMoves(i);
+  legalBishopSquares = generateBishopMoves(piece);
+  legalRookSquares = generateRookMoves(piece);
 
   legalSquares = legalBishopSquares.concat(legalRookSquares);
 
@@ -1193,9 +1197,9 @@ function generateQueenMoves(i) {
   return filtered;
 }
 
-function generateKnightMoves(i) {
+function generateKnightMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareIndexFromPiece(i);
+  let startSquare = getSquareFromPiece(piece);
   let factor = 1;
   let index = startSquare % 8;
 
@@ -1218,11 +1222,9 @@ function generateKnightMoves(i) {
   return filtered;
 }
 
-function generateKingMoves(i) {
+function generateKingMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareIndexFromPiece(i);
-
-  let jaer = checkForCheck();
+  let startSquare = getSquareFromPiece(piece);
 
   //Initial offsets :D
   // Right
