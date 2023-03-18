@@ -808,7 +808,7 @@ function requestMove() {
 
         //promote
         if (piece.type == "p" || piece.type == "P") {
-          promote();
+          promote(piece);
         }
         //castle
         if (piece.type == "k" || piece.type == "K") {
@@ -836,7 +836,7 @@ function capture() {
   fx_capture.play();
 }
 
-function promote() {
+function promote(piece) {
   //Promotion white
   if (targetSquare > 55 && piece.color == "white") {
     piece.type = "Q";
@@ -864,22 +864,22 @@ function castle() {
   if (!king_white.hasMoved) {
     //castle short
     if (targetSquare == 6 && !rook_white2.hasMoved) {
-      rook_white2.position = arrayOfSquares[5];
+      rook_white2.position = 5;
     }
     //castle long
     if (targetSquare == 2 && !rook_white.hasMoved) {
-      rook_white.position = arrayOfSquares[3];
+      rook_white.position = 3;
     }
   }
   //castle black
   if (!king_black.hasMoved) {
     //castle short
     if (targetSquare == 62 && !rook_black2.hasMoved) {
-      rook_black2.position = arrayOfSquares[61];
+      rook_black2.position = 61;
     }
     //castle long
     if (targetSquare == 58 && !rook_black.hasMoved) {
-      rook_black.position = arrayOfSquares[59];
+      rook_black.position = 59;
     }
   }
 }
@@ -964,7 +964,7 @@ function generateAllLegalMovesFor(color) {
         resetTurn = true;
       }
       for (let i = 16; i < 32; i++) {
-        if (!piece.hasBeenCaptured) {
+        if (!arrayOfPieces[i].hasBeenCaptured) {
           startSquare = getSquareFromPiece(i);
           allLegalMoves.push(generateLegalMoves(i));
         }
@@ -979,7 +979,7 @@ function generateAllLegalMovesFor(color) {
         resetTurn = true;
       }
       for (let i = 0; i < 16; i++) {
-        if (!piece.hasBeenCaptured) {
+        if (!arrayOfPieces[i].hasBeenCaptured) {
           startSquare = getSquareFromPiece(i);
           allLegalMoves.push(generateLegalMoves(i));
         }
