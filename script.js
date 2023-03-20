@@ -2,8 +2,8 @@ const clickGrid = document.querySelector(".clickGrid");
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
-//Settings
-const boardSize = 900; //900x900 standard
+//Board
+const boardSize = 900; //Changable (900x900 standard)
 const squareSize = boardSize / 8;
 canvas.width = boardSize;
 canvas.height = boardSize;
@@ -638,12 +638,6 @@ const arrayOfPieces = [
   })),
 ]; //32
 
-let moveCounter = 0;
-let startSquare = undefined; //first square selected by click
-let targetSquare = undefined; //second square selected by click
-let hasClicked = false; //flips onclick
-let whiteToMove = true; //flips on legal move
-
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
     for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
@@ -699,51 +693,64 @@ function animateLegalSquares(legalSquares) {
 
 window.requestAnimationFrame(animateLegalSquares);
 
+let moveCounter = 0;
+let startSquare = undefined; //first square selected by click
+let targetSquare = undefined; //second square selected by click
+let hasClicked = false; //flips onclick
+let whiteToMove = true; //flips on legal move
+
+let allWhiteMoves = [];
+let allBlackMoves = [];
+
 //click handler
 clickGrid.addEventListener(
   "click",
   (event) => {
     let piece;
-    //select target square
-    if (hasClicked) {
+
+    //first click
+    if (!hasClicked) {
+      //load square
+      startSquare = parseInt(event.target.id);
+
+      //load piece
+      piece = getPieceFromSquare(startSquare);
+
+      console.log(piece);
+
+      //first click is valid
+      if (piece != undefined && checkTurn(piece)) {
+        legalSquares = generateLegalMoves(piece);
+        animateLegalSquares(legalSquares);
+        hasClicked = true;
+      }
+    }
+    //second click
+    else if (hasClicked) {
+      //load square
       targetSquare = parseInt(event.target.id);
 
+      //choose new start square instead
       if (hasFriendlyOccupance(targetSquare)) {
         startSquare = targetSquare;
         targetSquare = undefined;
 
         piece = getPieceFromSquare(startSquare);
 
-        if (checkTurn(piece)) {
-          legalSquares = generateLegalMoves(piece);
-          animateChessboard();
-          animateLegalSquares(legalSquares);
-          hasClicked = true;
-        }
-
+        legalSquares = generateLegalMoves(piece);
+        animateChessboard();
+        animateLegalSquares(legalSquares);
         hasClicked = true;
-      } else if (!targetIsLegal(targetSquare, piece)) {
+      }
+      //second click not valid
+      else if (!targetIsLegal(targetSquare)) {
         animateChessboard();
         hasClicked = false;
-      } else hasClicked = false;
+      }
+      //second click valid
+      else hasClicked = false;
 
       // animatePieces();
-    }
-    //select start square
-    else if (!hasClicked) {
-      startSquare = parseInt(event.target.id);
-
-      piece = getPieceFromSquare(startSquare);
-
-      console.log(piece);
-
-      if (piece != undefined) {
-        if (checkTurn(piece)) {
-          legalSquares = generateLegalMoves(piece);
-          animateLegalSquares(legalSquares);
-          hasClicked = true;
-        }
-      }
     }
 
     //request move
@@ -777,7 +784,7 @@ function getSquareFromPiece(piece) {
 
 function targetIsLegal(targetSquare) {
   for (let j = 0; j < legalSquares.length; j++) {
-    if (targetSquare == legalSquares[j] && !hasFriendlyOccupance(targetSquare)) {
+    if (targetSquare == legalSquares[j]) {
       return true;
     } else return false;
   }
@@ -794,37 +801,35 @@ function requestMove() {
   //check legality of move
   for (let j = 0; j < legalSquares.length; j++) {
     if (targetSquare == legalSquares[j]) {
-      //check extra conditions
-      if (piece != undefined && checkTurn(piece) && !hasFriendlyOccupance(targetSquare)) {
-        //Capture
-        if (hasEvilOccupance(targetSquare)) {
-          capture();
-        }
-
-        let piece = getPieceFromSquare(startSquare);
-
-        //move execution
-        piece.position = targetSquare; //Move
-        whiteToMove = !whiteToMove; //Turn switch
-        //check
-        let isChecked = checkForCheck();
-        console.log(isChecked);
-
-        //promote
-        if (piece.type == "p" || piece.type == "P") {
-          promote(piece);
-        }
-        //castle
-        if (piece.type == "k" || piece.type == "K") {
-          castle();
-        }
-        //update board
-        piece.hasMoved = true;
-        animateChessboard();
-        fx_move.play();
-        moveCounter++;
-        TEST_ALL_MOVES();
+      //Capture
+      if (hasEvilOccupance(targetSquare)) {
+        capture();
       }
+
+      let piece = getPieceFromSquare(startSquare);
+
+      //move execution
+      piece.position = targetSquare; //Move
+      whiteToMove = !whiteToMove; //Turn switch
+      //check
+      let isChecked = checkForCheck();
+      console.log(isChecked);
+
+      //promote
+      if (piece.type == "p" || piece.type == "P") {
+        promote(piece);
+      }
+      //castle
+      if (piece.type == "k" || piece.type == "K") {
+        castle();
+      }
+      //update board
+      piece.hasMoved = true;
+      animateChessboard();
+      fx_move.play();
+      moveCounter++;
+      updateAllMoves();
+
       break;
     }
   }
@@ -834,9 +839,9 @@ function requestMove() {
 }
 
 function capture() {
-  let piece = getPieceFromSquare(targetSquare);
-  piece.hasBeenCaptured = true;
-  piece.position = null;
+  let evilPiece = getPieceFromSquare(targetSquare);
+  evilPiece.hasBeenCaptured = true;
+  evilPiece.position = null;
   fx_capture.play();
 }
 
@@ -989,14 +994,12 @@ function generateAllLegalMovesFor(color) {
   return allLegalMoves;
 }
 
-function TEST_ALL_MOVES() {
-  let allWhiteMoves = [];
+function updateAllMoves() {
   allWhiteMoves = generateAllLegalMovesFor("white");
 
   console.log("whiteMoves:");
   console.table(allWhiteMoves);
 
-  let allBlackMoves = [];
   allBlackMoves = generateAllLegalMovesFor("black");
 
   console.log("blackMoves:");
@@ -1073,17 +1076,11 @@ function generatePawnMoves(piece) {
   }
 
   //moving foward twice
-  if (
-    piece.hasMoved == false &&
-    !hasFriendlyOccupance(piece.position + pawnMoveFoward * 2) &&
-    !hasFriendlyOccupance(piece.position + pawnMoveFoward) &&
-    !hasEvilOccupance(piece.position + pawnMoveFoward * 2) &&
-    !hasEvilOccupance(piece.position + pawnMoveFoward)
-  ) {
+  if (piece.hasMoved == false && hasNoOccupance(piece.position + pawnMoveFoward * 2) && hasNoOccupance(piece.position + pawnMoveFoward)) {
     legalSquares[0] = piece.position + pawnMoveFoward * 2;
   }
   //moving foward once
-  if (!hasFriendlyOccupance(piece.position + pawnMoveFoward) && !hasEvilOccupance(piece.position + pawnMoveFoward)) {
+  if (hasNoOccupance(piece.position + pawnMoveFoward)) {
     legalSquares[1] = piece.position + pawnMoveFoward;
   }
   //moving (attacking) left
