@@ -17,6 +17,10 @@ const DarkSquareColor = "darkviolet";
 const colorMoves = "rgba(135, 206, 235, 0.6)"; // standard --> "rgba(255, 140, 0, 0.5)";
 const colorAttacks = "rgba(255, 0, 0, 0.5)";
 
+//FX
+const fx_move = new Audio("./fx/fx_move.mp3");
+const fx_capture = new Audio("./fx/fx_capture.mp3");
+
 //*********BitBoard********//
 // // // // // // // // // //
 // 56 57 58 59 60 61 62 63 //
@@ -667,9 +671,7 @@ function animatePieces() {
   }
 }
 
-animatePieces();
-
-//skal lige ned og hente icetea i netto
+animatePieces(); //skal lige ned og hente icetea i netto
 
 function animateLegalSquares(legalSquares) {
   //initial fillstyle
@@ -697,7 +699,7 @@ let moveCounter = 0;
 let startSquare = undefined; //first square selected by click
 let targetSquare = undefined; //second square selected by click
 let hasClicked = false; //flips onclick
-let whiteToMove = true; //flips on legal move
+let whiteToMove = true; //flips on move
 
 let allWhiteMoves = [];
 let allBlackMoves = [];
@@ -735,6 +737,7 @@ clickGrid.addEventListener(
         startSquare = targetSquare;
         targetSquare = undefined;
 
+        //load piece
         piece = getPieceFromSquare(startSquare);
 
         legalSquares = generateLegalMoves(piece);
@@ -742,38 +745,39 @@ clickGrid.addEventListener(
         animateLegalSquares(legalSquares);
         hasClicked = true;
       }
-      //second click not valid
-      else if (!targetIsLegal(targetSquare)) {
-        animateChessboard();
-        hasClicked = false;
-      }
       //second click valid
-      else hasClicked = false;
+      else if (targetIsLegal(targetSquare)) {
+        //load piece
+        piece = getPieceFromSquare(startSquare);
 
-      // animatePieces();
-    }
+        move(startSquare, targetSquare, piece);
 
-    //request move
-    if (targetSquare != undefined && startSquare != undefined && targetSquare != startSquare && !hasClicked) {
-      requestMove();
-
-      startSquare = undefined;
-      targetSquare = undefined;
+        resetClick();
+      }
+      //second click invalid
+      else {
+        resetClick();
+      }
     }
   },
   { capture: true } //stop event bubbling
 );
 
-//fetches piece on given square index
+function resetClick() {
+  startSquare = undefined;
+  targetSquare = undefined;
+  hasClicked = false;
+  animateChessboard();
+}
+
 function getPieceFromSquare(inputSquare) {
   for (i = 0; i < arrayOfPieces.length; i++) {
     if (arrayOfPieces[i].position == inputSquare) {
       return arrayOfPieces[i];
-    } //piece can be undefined
+    } //piece can be undefined duh!
   }
 }
 
-//fetches index for square for given piece
 function getSquareFromPiece(piece) {
   for (i = 0; i < arrayOfSquares.length; i++) {
     if (piece.position == i) {
@@ -783,56 +787,46 @@ function getSquareFromPiece(piece) {
 }
 
 function targetIsLegal(targetSquare) {
-  for (let j = 0; j < legalSquares.length; j++) {
-    if (targetSquare == legalSquares[j]) {
+  console.log(targetSquare);
+  console.log(legalSquares);
+  for (let i = 0; i < legalSquares.length; i++) {
+    if (targetSquare == legalSquares[i]) {
       return true;
-    } else return false;
+    }
   }
+  return false;
 }
-
-let fx_move = new Audio("./fx/fx_move.mp3");
-let fx_capture = new Audio("./fx/fx_capture.mp3");
 
 let isChecked = true;
 
-function requestMove() {
-  let piece = getPieceFromSquare(startSquare); //fetches the index for piece on startingsquare
-
-  //check legality of move
-  for (let j = 0; j < legalSquares.length; j++) {
-    if (targetSquare == legalSquares[j]) {
-      //Capture
-      if (hasEvilOccupance(targetSquare)) {
-        capture();
-      }
-
-      let piece = getPieceFromSquare(startSquare);
-
-      //move execution
-      piece.position = targetSquare; //Move
-      whiteToMove = !whiteToMove; //Turn switch
-      //check
-      let isChecked = checkForCheck();
-      console.log(isChecked);
-
-      //promote
-      if (piece.type == "p" || piece.type == "P") {
-        promote(piece);
-      }
-      //castle
-      if (piece.type == "k" || piece.type == "K") {
-        castle();
-      }
-      //update board
-      piece.hasMoved = true;
-      animateChessboard();
-      fx_move.play();
-      moveCounter++;
-      updateAllMoves();
-
-      break;
-    }
+function move(startSquare, targetSquare, piece) {
+  //capture
+  if (hasEvilOccupance(targetSquare)) {
+    capture();
   }
+
+  //move execution
+  piece.position = targetSquare; //Move
+  //check
+  let isChecked = checkForCheck();
+  console.log(isChecked);
+
+  //promote
+  if (piece.type == "p" || piece.type == "P") {
+    promote(piece);
+  }
+  //castle
+  if (piece.type == "k" || piece.type == "K") {
+    castle();
+  }
+  //update board
+  piece.hasMoved = true;
+  animateChessboard();
+  fx_move.play();
+  whiteToMove = !whiteToMove; //Turn switch
+  moveCounter++;
+  updateAllMoves();
+
   console.log("startSquare", startSquare);
   console.log("targetSquare", targetSquare);
   console.log("move_count:", moveCounter);
@@ -894,25 +888,19 @@ function castle() {
 }
 
 function checkForCheck() {
-  let evilSquaresArray = [];
-
   if (whiteToMove) {
-    evilSquaresArray = generateAllLegalMovesFor("black");
-
-    for (let i = 0; i < evilSquaresArray.length; i++) {
-      for (let j = 0; j < evilSquaresArray[i].length; j++) {
-        if (king_white.position == evilSquaresArray[i][j]) {
+    for (let i = 0; i < allBlackMoves.length; i++) {
+      for (let j = 0; j < allBlackMoves[i].length; j++) {
+        if (king_white.position == allBlackMoves[i][j]) {
           console.log("white king in check!");
           return true;
         }
       }
     }
   } else if (!whiteToMove) {
-    evilSquaresArray = generateAllLegalMovesFor("white");
-
-    for (let i = 0; i < evilSquaresArray.length; i++) {
-      for (let j = 0; j < evilSquaresArray[i].length; j++) {
-        if (king_black.position == evilSquaresArray[i][j]) {
+    for (let i = 0; i < allWhiteMoves.length; i++) {
+      for (let j = 0; j < allWhiteMoves[i].length; j++) {
+        if (king_black.position == allWhiteMoves[i][j]) {
           console.log("black king in check!");
           return true;
         }
@@ -1263,3 +1251,5 @@ function filterLegalSquares(legalSquares) {
 }
 
 let filterEmpty = (element) => element !== "";
+
+function filterMovesThatCheckDaKing() {}
