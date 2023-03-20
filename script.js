@@ -14,8 +14,8 @@ clickGrid.style.width = boardSize + "px";
 const lightSquareColor = "oldlace";
 const DarkSquareColor = "darkviolet";
 
-const coloredMoves = "rgba(135, 206, 235, 0.6)"; // standard --> "rgba(255, 140, 0, 0.5)";
-const coloredAttacks = "rgba(255, 0, 0, 0.5)";
+const colorMoves = "rgba(135, 206, 235, 0.6)"; // standard --> "rgba(255, 140, 0, 0.5)";
+const colorAttacks = "rgba(255, 0, 0, 0.5)";
 
 //*********BitBoard********//
 // // // // // // // // // //
@@ -679,20 +679,20 @@ animatePieces();
 
 function animateLegalSquares(legalSquares) {
   //initial fillstyle
-  c.fillStyle = coloredMoves;
+  c.fillStyle = colorMoves;
   for (let i = 0; i < legalSquares.length; i++) {
-    //highligths enemies red
+    //highligth enemy squares
     if (hasEvilOccupance(legalSquares[i])) {
-      c.fillStyle = coloredAttacks;
+      c.fillStyle = colorAttacks;
     }
 
-    //highlights legal moves orange
+    //highlight legal moves
     c.fillRect(arrayOfSquares[legalSquares[i]].rank, arrayOfSquares[legalSquares[i]].file, squareSize, squareSize);
-    c.fillStyle = coloredMoves;
+    c.fillStyle = colorMoves;
   }
-  //highlights selected square red
+  //highlight selected square
   if (startSquare != undefined) {
-    c.fillStyle = coloredAttacks;
+    c.fillStyle = colorAttacks;
     c.fillRect(arrayOfSquares[startSquare].rank, arrayOfSquares[startSquare].file, squareSize, squareSize);
   }
 }
@@ -766,7 +766,7 @@ function getPieceFromSquare(inputSquare) {
   }
 }
 
-//fetches index for square for given piece index
+//fetches index for square for given piece
 function getSquareFromPiece(piece) {
   for (i = 0; i < arrayOfSquares.length; i++) {
     if (piece.position == i) {
@@ -890,16 +890,13 @@ function castle() {
 
 function checkForCheck() {
   let evilSquaresArray = [];
-  let kingPosition;
 
   if (whiteToMove) {
     evilSquaresArray = generateAllLegalMovesFor("black");
-    kingPosition = getSquareFromPiece(20);
-    startSquare = kingPosition;
 
     for (let i = 0; i < evilSquaresArray.length; i++) {
       for (let j = 0; j < evilSquaresArray[i].length; j++) {
-        if (kingPosition == evilSquaresArray[i][j]) {
+        if (king_white.position == evilSquaresArray[i][j]) {
           console.log("white king in check!");
           return true;
         }
@@ -907,12 +904,10 @@ function checkForCheck() {
     }
   } else if (!whiteToMove) {
     evilSquaresArray = generateAllLegalMovesFor("white");
-    kingPosition = getSquareFromPiece(4);
-    startSquare = kingPosition;
 
     for (let i = 0; i < evilSquaresArray.length; i++) {
       for (let j = 0; j < evilSquaresArray[i].length; j++) {
-        if (kingPosition == evilSquaresArray[i][j]) {
+        if (king_black.position == evilSquaresArray[i][j]) {
           console.log("black king in check!");
           return true;
         }
@@ -1222,24 +1217,22 @@ function generateKnightMoves(piece) {
 
 function generateKingMoves(piece) {
   let legalSquares = [];
-  let startSquare = getSquareFromPiece(piece);
 
-  //Initial offsets :D
-  // Right
+  //right
   if (piece.position % 8 != 7) {
     legalSquares[7] = piece.position + 9;
     legalSquares[1] = piece.position + 1;
     legalSquares[2] = piece.position - 7;
   }
-
+  //left
   if (piece.position % 8 != 0) {
     legalSquares[5] = piece.position + 7;
     legalSquares[0] = piece.position - 1;
     legalSquares[4] = piece.position - 9;
   }
-
-  legalSquares[3] = piece.position - 8; //down
-  legalSquares[6] = piece.position + 8; //up
+  //up & down
+  legalSquares[6] = piece.position + 8;
+  legalSquares[3] = piece.position - 8;
 
   //castle short white
   if (!king_white.hasMoved && !rook_white2.hasMoved && !rook_white2.hasBeenCaptured && hasNoOccupance(5) && hasNoOccupance(6)) {
@@ -1272,6 +1265,4 @@ function filterLegalSquares(legalSquares) {
   return filtered;
 }
 
-function filterEmpty(element) {
-  return element !== "";
-}
+let filterEmpty = (element) => element !== "";
