@@ -750,9 +750,9 @@ clickGrid.addEventListener(
         //load piece
         piece = getPieceFromSquare(startSquare);
 
-        move(startSquare, targetSquare, piece);
-
-        resetClick();
+        if (!isStillInCheckAfterMove(startSquare, targetSquare, piece)) {
+          move(startSquare, targetSquare, piece);
+        } else resetClick();
       }
       //second click invalid
       else {
@@ -797,8 +797,6 @@ function targetIsLegal(targetSquare) {
   return false;
 }
 
-let isChecked = true;
-
 function move(startSquare, targetSquare, piece) {
   //capture
   if (hasEvilOccupance(targetSquare)) {
@@ -807,9 +805,6 @@ function move(startSquare, targetSquare, piece) {
 
   //move execution
   piece.position = targetSquare; //Move
-  //check
-  let isChecked = checkForCheck();
-  console.log(isChecked);
 
   //promote
   if (piece.type == "p" || piece.type == "P") {
@@ -887,23 +882,40 @@ function castle() {
   }
 }
 
-function checkForCheck() {
-  if (whiteToMove) {
-    for (let i = 0; i < allBlackMoves.length; i++) {
-      for (let j = 0; j < allBlackMoves[i].length; j++) {
-        if (king_white.position == allBlackMoves[i][j]) {
-          console.log("white king in check!");
-          return true;
-        }
+function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
+  piece.position = targetSquare;
+  updateAllMoves();
+  if (whiteToMove && whiteInCheck()) {
+    piece.position = startSquare;
+    updateAllMoves();
+    return true;
+  } else if (!whiteToMove && blackInCheck()) {
+    piece.position = startSquare;
+    updateAllMoves();
+    return true;
+  }
+  piece.position = startSquare;
+  return false;
+}
+
+function whiteInCheck() {
+  for (let i = 0; i < allBlackMoves.length; i++) {
+    for (let j = 0; j < allBlackMoves[i].length; j++) {
+      if (king_white.position == allBlackMoves[i][j]) {
+        console.log("white king in check!");
+        return true;
       }
     }
-  } else if (!whiteToMove) {
-    for (let i = 0; i < allWhiteMoves.length; i++) {
-      for (let j = 0; j < allWhiteMoves[i].length; j++) {
-        if (king_black.position == allWhiteMoves[i][j]) {
-          console.log("black king in check!");
-          return true;
-        }
+  }
+  return false;
+}
+
+function blackInCheck() {
+  for (let i = 0; i < allWhiteMoves.length; i++) {
+    for (let j = 0; j < allWhiteMoves[i].length; j++) {
+      if (king_black.position == allWhiteMoves[i][j]) {
+        console.log("black king in check!");
+        return true;
       }
     }
   }
