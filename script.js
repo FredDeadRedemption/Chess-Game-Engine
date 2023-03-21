@@ -883,15 +883,28 @@ function castle() {
 }
 
 function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
+  let captureTookPlace = false;
   piece.position = targetSquare;
   updateAllMoves();
+  if (hasEvilOccupance(targetSquare)) {
+    capture();
+    captureTookPlace = true;
+  }
   if (whiteToMove && whiteInCheck()) {
     piece.position = startSquare;
     updateAllMoves();
+    if (captureTookPlace) {
+      piece.position = targetSquare;
+      whiteToMove = !whiteToMove;
+    }
     return true;
   } else if (!whiteToMove && blackInCheck()) {
     piece.position = startSquare;
     updateAllMoves();
+    if (captureTookPlace) {
+      piece.position = targetSquare;
+      whiteToMove = !whiteToMove;
+    }
     return true;
   }
   piece.position = startSquare;
