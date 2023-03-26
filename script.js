@@ -37,7 +37,7 @@ const fx_capture = new Audio("./fx/fx_capture.mp3");
 
 //lav enPessant()
 
-//lav isInCheck()
+//lav isInCheck i tilfælde af castle og promotion
 
 function randomColor() {
   /*
@@ -801,6 +801,7 @@ function move(startSquare, targetSquare, piece) {
   //capture
   if (hasEvilOccupance(targetSquare)) {
     capture();
+    fx_capture.play();
   }
 
   //move execution
@@ -831,7 +832,6 @@ function capture() {
   let evilPiece = getPieceFromSquare(targetSquare);
   evilPiece.hasBeenCaptured = true;
   evilPiece.position = null;
-  fx_capture.play();
 }
 
 function promote(piece) {
@@ -883,31 +883,39 @@ function castle() {
 }
 
 function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
+  let evilPiece = getPieceFromSquare(targetSquare);
   let captureTookPlace = false;
   piece.position = targetSquare;
-  updateAllMoves();
   if (hasEvilOccupance(targetSquare)) {
     capture();
     captureTookPlace = true;
   }
+
+  //update opposing moves
+  whiteToMove ? updateBlackMoves() : updateWhiteMoves();
+
   if (whiteToMove && whiteInCheck()) {
     piece.position = startSquare;
-    updateAllMoves();
     if (captureTookPlace) {
-      piece.position = targetSquare;
-      whiteToMove = !whiteToMove;
+      evilPiece.position = targetSquare;
+      evilPiece.hasBeenCaptured = false;
     }
+    updateBlackMoves();
     return true;
   } else if (!whiteToMove && blackInCheck()) {
     piece.position = startSquare;
-    updateAllMoves();
     if (captureTookPlace) {
-      piece.position = targetSquare;
-      whiteToMove = !whiteToMove;
+      evilPiece.position = targetSquare;
+      evilPiece.hasBeenCaptured = false;
     }
+    updateWhiteMoves();
     return true;
   }
   piece.position = startSquare;
+  if (captureTookPlace) {
+    evilPiece.position = targetSquare;
+    evilPiece.hasBeenCaptured = false;
+  }
   return false;
 }
 
@@ -1008,15 +1016,23 @@ function generateAllLegalMovesFor(color) {
 }
 
 function updateAllMoves() {
-  allWhiteMoves = generateAllLegalMovesFor("white");
+  updateWhiteMoves();
 
   console.log("whiteMoves:");
   console.table(allWhiteMoves);
 
-  allBlackMoves = generateAllLegalMovesFor("black");
+  updateBlackMoves();
 
   console.log("blackMoves:");
   console.table(allBlackMoves);
+}
+
+function updateWhiteMoves() {
+  allWhiteMoves = generateAllLegalMovesFor("white");
+}
+
+function updateBlackMoves() {
+  allBlackMoves = generateAllLegalMovesFor("black");
 }
 
 function checkTurn(piece) {
@@ -1266,15 +1282,17 @@ function generateKingMoves(piece) {
 }
 
 function filterLegalSquares(legalSquares) {
+  //filter values outside of board
   for (let i = legalSquares.length - 1; i >= 0; i--) {
     if (legalSquares[i] < 0 || legalSquares[i] > 63 || hasFriendlyOccupance(legalSquares[i])) {
       legalSquares.splice(i, 1);
     }
   }
+
+  //filter empty
   filtered = legalSquares.filter(filterEmpty);
+
   return filtered;
 }
 
 let filterEmpty = (element) => element !== "";
-
-function filterMovesThatCheckDaKing() {}
