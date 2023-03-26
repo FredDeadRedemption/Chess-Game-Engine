@@ -723,6 +723,7 @@ clickGrid.addEventListener(
       //first click is valid
       if (piece != undefined && checkTurn(piece)) {
         legalSquares = generateLegalMoves(piece);
+        legalSquares = filterMovesThatUncheck(legalSquares, piece);
         animateLegalSquares(legalSquares);
         hasClicked = true;
       }
@@ -741,6 +742,7 @@ clickGrid.addEventListener(
         piece = getPieceFromSquare(startSquare);
 
         legalSquares = generateLegalMoves(piece);
+        legalSquares = filterMovesThatUncheck(legalSquares, piece);
         animateChessboard();
         animateLegalSquares(legalSquares);
         hasClicked = true;
@@ -1296,3 +1298,13 @@ function filterLegalSquares(legalSquares) {
 }
 
 let filterEmpty = (element) => element !== "";
+
+function filterMovesThatUncheck(legalSquares, piece) {
+  for (let i = legalSquares.length - 1; i >= 0; i--) {
+    if (isStillInCheckAfterMove(piece.position, legalSquares[i], piece)) {
+      console.log("you are still in check after move: ", legalSquares[i]);
+      legalSquares.splice(i, 1);
+    }
+  }
+  return legalSquares;
+}
