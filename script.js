@@ -754,9 +754,8 @@ clickGrid.addEventListener(
         //load piece
         piece = getPieceFromSquare(startSquare);
 
-        if (!isStillInCheckAfterMove(startSquare, targetSquare, piece)) {
-          move(startSquare, targetSquare, piece);
-        } else resetClick();
+        move(startSquare, targetSquare, piece);
+        resetClick();
       }
       //second click invalid
       else {
