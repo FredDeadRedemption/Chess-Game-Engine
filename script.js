@@ -39,8 +39,6 @@ const fx_capture = new Audio("./fx/fx_capture.mp3");
 
 //lav isInCheck i tilfælde af castle og promotion
 
-//targetmove i isStillInCheckAfterMove virker ikke med filterMovesThatUncheck når man laver capture :( ( og hesten fucker)
-
 function randomColor() {
   /*
   const number = Math.random();
