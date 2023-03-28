@@ -728,7 +728,7 @@ clickGrid.addEventListener(
         legalSquares = filterMovesThatUncheck(legalSquares, piece);
         animateLegalSquares(legalSquares);
         hasClicked = true;
-      }
+      } else resetClick();
     }
     //second click
     else if (hasClicked) {
@@ -804,7 +804,7 @@ function targetIsLegal(targetSquare) {
 function move(startSquare, targetSquare, piece) {
   //capture
   if (hasEvilOccupance(targetSquare)) {
-    capture();
+    capture(targetSquare);
     fx_capture.play();
   }
 
@@ -832,7 +832,7 @@ function move(startSquare, targetSquare, piece) {
   console.log("move_count:", moveCounter);
 }
 
-function capture() {
+function capture(targetSquare) {
   let evilPiece = getPieceFromSquare(targetSquare);
   evilPiece.hasBeenCaptured = true;
   evilPiece.position = null;
@@ -889,11 +889,11 @@ function castle() {
 function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
   let evilPiece = getPieceFromSquare(targetSquare);
   let captureTookPlace = false;
-  piece.position = targetSquare;
   if (hasEvilOccupance(targetSquare)) {
-    capture();
+    capture(targetSquare);
     captureTookPlace = true;
   }
+  piece.position = targetSquare;
 
   //update opposing moves
   whiteToMove ? updateBlackMoves() : updateWhiteMoves();
