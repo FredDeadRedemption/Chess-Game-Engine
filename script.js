@@ -1,6 +1,6 @@
 const clickGrid = document.querySelector(".clickGrid");
 const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 
 //Board
 const boardSize = 900; //Changable (900x900 standard)
@@ -11,10 +11,10 @@ clickGrid.style.height = boardSize + "px";
 clickGrid.style.width = boardSize + "px";
 
 //Color Settings
-const lightSquareColor = "oldlace";
-const DarkSquareColor = "darkviolet";
+const lightSquareColor = "wheat"; //lightsquare
+const darkSquareColor = randomColor(); //darksquare
 
-const colorMoves = "rgba(135, 206, 235, 0.6)"; // standard --> "rgba(255, 140, 0, 0.5)";
+const colorMoves = "rgba(255, 140, 0, 0.5)"; // alt --> "rgba(135, 206, 235, 0.6)";
 const colorAttacks = "rgba(255, 0, 0, 0.5)";
 
 //FX
@@ -40,7 +40,6 @@ const fx_capture = new Audio("./fx/fx_capture.mp3");
 //lav isInCheck i tilfælde af castle og promotion
 
 function randomColor() {
-  /*
   const number = Math.random();
   let color;
 
@@ -55,21 +54,17 @@ function randomColor() {
   } else if (number > 0.995) {
     color = "deeppink";
   }
-  */
-  //dark color
-  document.getElementById("56").style.color = DarkSquareColor;
-  document.getElementById("40").style.color = DarkSquareColor;
-  document.getElementById("24").style.color = DarkSquareColor;
-  document.getElementById("8").style.color = DarkSquareColor;
-  //light color
-  document.getElementById("0").style.color = lightSquareColor;
-  document.getElementById("16").style.color = lightSquareColor;
-  document.getElementById("32").style.color = lightSquareColor;
-  document.getElementById("48").style.color = lightSquareColor;
-  // return color;
+  return color;
 }
 
-randomColor();
+document.getElementById("56").style.color = darkSquareColor;
+document.getElementById("40").style.color = darkSquareColor;
+document.getElementById("24").style.color = darkSquareColor;
+document.getElementById("8").style.color = darkSquareColor;
+document.getElementById("0").style.color = lightSquareColor;
+document.getElementById("16").style.color = lightSquareColor;
+document.getElementById("32").style.color = lightSquareColor;
+document.getElementById("48").style.color = lightSquareColor;
 
 class Piece {
   constructor({ position, color, type, worth, imageSrc, hasMoved, hasBeenCaptured }) {
@@ -84,7 +79,7 @@ class Piece {
   }
 
   draw() {
-    c.drawImage(this.image, arrayOfSquares[this.position].rank, arrayOfSquares[this.position].file, squareSize, squareSize);
+    ctx.drawImage(this.image, arrayOfSquares[this.position].rank, arrayOfSquares[this.position].file, squareSize, squareSize);
   }
 
   update() {
@@ -647,15 +642,15 @@ function animateChessboard() {
     for (let rank = 0, rankCount = 0; rank < canvas.width, rankCount < 8; rank += squareSize, rankCount++) {
       if (fileCount % 2 == 0) {
         if (rankCount % 2 == 0) {
-          c.fillStyle = lightSquareColor;
-        } else c.fillStyle = DarkSquareColor;
+          ctx.fillStyle = lightSquareColor;
+        } else ctx.fillStyle = darkSquareColor;
       } else if (fileCount % 2 !== 0) {
         if (rankCount % 2 == 0) {
-          c.fillStyle = DarkSquareColor;
-        } else c.fillStyle = lightSquareColor;
+          ctx.fillStyle = darkSquareColor;
+        } else ctx.fillStyle = lightSquareColor;
       }
 
-      c.fillRect(rank, file, squareSize, squareSize);
+      ctx.fillRect(rank, file, squareSize, squareSize);
     }
   }
 }
@@ -675,21 +670,21 @@ animatePieces(); //skal lige ned og hente icetea i netto
 
 function animateLegalSquares(legalSquares) {
   //initial fillstyle
-  c.fillStyle = colorMoves;
+  ctx.fillStyle = colorMoves;
   for (let i = 0; i < legalSquares.length; i++) {
     //highligth enemy squares
     if (hasEvilOccupance(legalSquares[i])) {
-      c.fillStyle = colorAttacks;
+      ctx.fillStyle = colorAttacks;
     }
 
     //highlight legal moves
-    c.fillRect(arrayOfSquares[legalSquares[i]].rank, arrayOfSquares[legalSquares[i]].file, squareSize, squareSize);
-    c.fillStyle = colorMoves;
+    ctx.fillRect(arrayOfSquares[legalSquares[i]].rank, arrayOfSquares[legalSquares[i]].file, squareSize, squareSize);
+    ctx.fillStyle = colorMoves;
   }
   //highlight selected square
   if (startSquare != undefined) {
-    c.fillStyle = colorAttacks;
-    c.fillRect(arrayOfSquares[startSquare].rank, arrayOfSquares[startSquare].file, squareSize, squareSize);
+    ctx.fillStyle = colorAttacks;
+    ctx.fillRect(arrayOfSquares[startSquare].rank, arrayOfSquares[startSquare].file, squareSize, squareSize);
   }
 }
 
@@ -1262,19 +1257,19 @@ function generateKingMoves(piece) {
   legalSquares[3] = piece.position - 8;
 
   //castle short white
-  if (!king_white.hasMoved && !rook_white2.hasMoved && !rook_white2.hasBeenCaptured && hasNoOccupance(5) && hasNoOccupance(6)) {
+  if (piece.color == "white" && !king_white.hasMoved && !rook_white2.hasMoved && !rook_white2.hasBeenCaptured && hasNoOccupance(5) && hasNoOccupance(6)) {
     legalSquares[8] = piece.position + 2;
   }
   //castle long white
-  if (!king_white.hasMoved && !rook_white.hasMoved && !rook_white.hasBeenCaptured && hasNoOccupance(1) && hasNoOccupance(2) && hasNoOccupance(3)) {
+  if (piece.color == "white" && !king_white.hasMoved && !rook_white.hasMoved && !rook_white.hasBeenCaptured && hasNoOccupance(1) && hasNoOccupance(2) && hasNoOccupance(3)) {
     legalSquares[9] = piece.position - 2;
   }
   //castle short black
-  if (!king_black.hasMoved && !rook_black2.hasMoved && !rook_black2.hasBeenCaptured && hasNoOccupance(61) && hasNoOccupance(62)) {
+  if (piece.color == "black" && !king_black.hasMoved && !rook_black2.hasMoved && !rook_black2.hasBeenCaptured && hasNoOccupance(61) && hasNoOccupance(62)) {
     legalSquares[10] = piece.position + 2;
   }
   //castle long black
-  if (!king_black.hasMoved && !rook_black.hasMoved && !rook_black.hasBeenCaptured && hasNoOccupance(57) && hasNoOccupance(58) && hasNoOccupance(59)) {
+  if (piece.color == "black" && !king_black.hasMoved && !rook_black.hasMoved && !rook_black.hasBeenCaptured && hasNoOccupance(57) && hasNoOccupance(58) && hasNoOccupance(59)) {
     legalSquares[11] = piece.position - 2;
   }
 
