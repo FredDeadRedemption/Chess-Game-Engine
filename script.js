@@ -344,7 +344,7 @@ const arrayOfSquares = [
     rank: squareSize * 7,
     file: 0,
   }),
-]; //64
+]; //63
 
 const arrayOfPieces = [
   (rook_black = new Piece({
@@ -635,7 +635,7 @@ const arrayOfPieces = [
     hasMoved: false,
     hasBeenCaptured: false,
   })),
-]; //32
+]; //31
 
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
@@ -713,8 +713,6 @@ clickGrid.addEventListener(
       //load piece
       piece = getPieceFromSquare(startSquare);
 
-      console.log(piece);
-
       //first click is valid
       if (piece != undefined && checkTurn(piece)) {
         legalSquares = generateLegalMoves(piece);
@@ -743,11 +741,11 @@ clickGrid.addEventListener(
         hasClicked = true;
       }
       //second click valid
-      else if (targetIsLegal(targetSquare)) {
+      else if (legalSquares.includes(targetSquare)) {
         //load piece
         piece = getPieceFromSquare(startSquare);
 
-        move(startSquare, targetSquare, piece);
+        move(targetSquare, piece);
         resetClick();
       }
       //second click invalid
@@ -756,7 +754,7 @@ clickGrid.addEventListener(
       }
     }
   },
-  { capture: true } //stop event bubbling
+  { captureOn: true } //stop event bubbling
 );
 
 function resetClick() {
@@ -766,11 +764,11 @@ function resetClick() {
   animateChessboard();
 }
 
-function getPieceFromSquare(inputSquare) {
+function getPieceFromSquare(square) {
   for (i = 0; i < arrayOfPieces.length; i++) {
-    if (arrayOfPieces[i].position == inputSquare) {
+    if (arrayOfPieces[i].position == square) {
       return arrayOfPieces[i];
-    } //piece can be undefined duh!
+    } //piece can be undefined
   }
 }
 
@@ -782,21 +780,10 @@ function getSquareFromPiece(piece) {
   }
 }
 
-function targetIsLegal(targetSquare) {
-  console.log(targetSquare);
-  console.log(legalSquares);
-  for (let i = 0; i < legalSquares.length; i++) {
-    if (targetSquare == legalSquares[i]) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function move(startSquare, targetSquare, piece) {
+function move(targetSquare, piece) {
   //capture
   if (hasEvilOccupance(targetSquare)) {
-    capture(targetSquare);
+    captureOn(targetSquare);
     fx_capture.play();
   }
 
@@ -809,7 +796,7 @@ function move(startSquare, targetSquare, piece) {
   }
   //castle
   if (piece.type == "k" || piece.type == "K") {
-    castle();
+    castle(piece);
   }
   //update board
   piece.hasMoved = true;
@@ -819,20 +806,19 @@ function move(startSquare, targetSquare, piece) {
   moveCounter++;
   updateAllMoves();
 
-  console.log("startSquare", startSquare);
-  console.log("targetSquare", targetSquare);
-  console.log("move_count:", moveCounter);
+  if (whiteInCheck()) console.log("%cwhite king in check!", "color: orange");
+  if (blackInCheck()) console.log("%cblack king in check!", "color: orange");
 }
 
-function capture(targetSquare) {
-  let evilPiece = getPieceFromSquare(targetSquare);
+function captureOn(square) {
+  let evilPiece = getPieceFromSquare(square);
   evilPiece.hasBeenCaptured = true;
   evilPiece.position = null;
 }
 
 function promote(piece) {
   //Promotion white
-  if (targetSquare > 55 && piece.color == "white") {
+  if (piece.position > 55 && piece.color == "white") {
     piece.type = "Q";
     piece.worth = 9;
     piece.image = new Image();
@@ -842,7 +828,7 @@ function promote(piece) {
     piece.image.src = piece.imageSrc;
   }
   //Promotion Black
-  if (targetSquare < 8 && piece.color == "black") {
+  if (piece.position < 8 && piece.color == "black") {
     piece.type = "q";
     piece.worth = 9;
     piece.image = new Image();
@@ -853,26 +839,26 @@ function promote(piece) {
   }
 }
 
-function castle() {
+function castle(piece) {
   //castle white
   if (!king_white.hasMoved) {
     //castle short
-    if (targetSquare == 6 && !rook_white2.hasMoved) {
+    if (piece.position == 6 && !rook_white2.hasMoved) {
       rook_white2.position = 5;
     }
     //castle long
-    if (targetSquare == 2 && !rook_white.hasMoved) {
+    if (piece.position == 2 && !rook_white.hasMoved) {
       rook_white.position = 3;
     }
   }
   //castle black
   if (!king_black.hasMoved) {
     //castle short
-    if (targetSquare == 62 && !rook_black2.hasMoved) {
+    if (piece.position == 62 && !rook_black2.hasMoved) {
       rook_black2.position = 61;
     }
     //castle long
-    if (targetSquare == 58 && !rook_black.hasMoved) {
+    if (piece.position == 58 && !rook_black.hasMoved) {
       rook_black.position = 59;
     }
   }
@@ -882,7 +868,7 @@ function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
   let evilPiece = getPieceFromSquare(targetSquare);
   let captureTookPlace = false;
   if (hasEvilOccupance(targetSquare)) {
-    capture(targetSquare);
+    captureOn(targetSquare);
     captureTookPlace = true;
   }
   piece.position = targetSquare;
@@ -919,7 +905,6 @@ function whiteInCheck() {
   for (let i = 0; i < allBlackMoves.length; i++) {
     for (let j = 0; j < allBlackMoves[i].length; j++) {
       if (king_white.position == allBlackMoves[i][j]) {
-        console.log("white king in check!");
         return true;
       }
     }
@@ -931,7 +916,6 @@ function blackInCheck() {
   for (let i = 0; i < allWhiteMoves.length; i++) {
     for (let j = 0; j < allWhiteMoves[i].length; j++) {
       if (king_black.position == allWhiteMoves[i][j]) {
-        console.log("black king in check!");
         return true;
       }
     }
@@ -1286,17 +1270,14 @@ function filterLegalSquares(legalSquares) {
   }
 
   //filter empty
-  filtered = legalSquares.filter(filterEmpty);
+  filtered = legalSquares.filter((element) => element !== "");
 
   return filtered;
 }
 
-let filterEmpty = (element) => element !== "";
-
 function filterMovesThatUncheck(legalSquares, piece) {
   for (let i = legalSquares.length - 1; i >= 0; i--) {
     if (isStillInCheckAfterMove(piece.position, legalSquares[i], piece)) {
-      console.log("you are still in check after move: ", legalSquares[i]);
       legalSquares.splice(i, 1);
     }
   }
