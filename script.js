@@ -874,7 +874,7 @@ function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
   piece.position = targetSquare;
 
   //update opposing moves
-  whiteToMove ? updateBlackMoves() : updateWhiteMoves();
+  whiteToMove ? updateBlackMoves(false) : updateWhiteMoves(false);
 
   if (whiteToMove && whiteInCheck()) {
     piece.position = startSquare;
@@ -882,7 +882,7 @@ function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
       evilPiece.position = targetSquare;
       evilPiece.hasBeenCaptured = false;
     }
-    updateBlackMoves();
+    updateBlackMoves(true);
     return true;
   } else if (!whiteToMove && blackInCheck()) {
     piece.position = startSquare;
@@ -890,7 +890,7 @@ function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
       evilPiece.position = targetSquare;
       evilPiece.hasBeenCaptured = false;
     }
-    updateWhiteMoves();
+    updateWhiteMoves(true);
     return true;
   }
   piece.position = startSquare;
@@ -958,7 +958,7 @@ function generateLegalMoves(piece) {
   return legalSquares;
 }
 
-function generateAllLegalMovesFor(color) {
+function generateAllLegalMovesFor(color, filter) {
   let allLegalMoves = [];
   let resetTurn;
 
@@ -970,7 +970,16 @@ function generateAllLegalMovesFor(color) {
       }
       for (let i = 16; i < 32; i++) {
         if (!arrayOfPieces[i].hasBeenCaptured) {
-          allLegalMoves.push(generateLegalMoves(arrayOfPieces[i]));
+          if (filter) {
+            let legalMoves = generateLegalMoves(arrayOfPieces[i]);
+            let filteredMoves = filterMovesThatUncheck(legalMoves, arrayOfPieces[i]);
+
+            allLegalMoves.push(filteredMoves);
+          } else {
+            if (!arrayOfPieces[i].hasBeenCaptured) {
+              allLegalMoves.push(generateLegalMoves(arrayOfPieces[i]));
+            }
+          }
         }
       }
       if (resetTurn) {
@@ -984,7 +993,16 @@ function generateAllLegalMovesFor(color) {
       }
       for (let i = 0; i < 16; i++) {
         if (!arrayOfPieces[i].hasBeenCaptured) {
-          allLegalMoves.push(generateLegalMoves(arrayOfPieces[i]));
+          if (filter) {
+            let legalMoves = generateLegalMoves(arrayOfPieces[i]);
+            let filteredMoves = filterMovesThatUncheck(legalMoves, arrayOfPieces[i]);
+
+            allLegalMoves.push(filteredMoves);
+          } else {
+            if (!arrayOfPieces[i].hasBeenCaptured) {
+              allLegalMoves.push(generateLegalMoves(arrayOfPieces[i]));
+            }
+          }
         }
       }
       if (resetTurn) {
@@ -996,23 +1014,23 @@ function generateAllLegalMovesFor(color) {
 }
 
 function updateAllMoves() {
-  updateWhiteMoves();
+  updateWhiteMoves(true);
 
   console.log("whiteMoves:");
   console.table(allWhiteMoves);
 
-  updateBlackMoves();
+  updateBlackMoves(true);
 
   console.log("blackMoves:");
   console.table(allBlackMoves);
 }
 
-function updateWhiteMoves() {
-  allWhiteMoves = generateAllLegalMovesFor("white");
+function updateWhiteMoves(filter) {
+  allWhiteMoves = generateAllLegalMovesFor("white", filter);
 }
 
-function updateBlackMoves() {
-  allBlackMoves = generateAllLegalMovesFor("black");
+function updateBlackMoves(filter) {
+  allBlackMoves = generateAllLegalMovesFor("black", filter);
 }
 
 function checkTurn(piece) {
