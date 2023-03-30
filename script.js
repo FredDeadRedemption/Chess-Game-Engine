@@ -863,7 +863,7 @@ function castle(piece) {
     }
   }
 }
-
+var count = 0;
 function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
   let evilPiece = getPieceFromSquare(targetSquare);
   let captureTookPlace = false;
@@ -873,6 +873,8 @@ function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
   }
   piece.position = targetSquare;
 
+  count++;
+  console.log(`%c ${count}`, "color: red;");
   //update opposing moves
   whiteToMove ? updateBlackMoves(false) : updateWhiteMoves(false);
 
