@@ -344,7 +344,7 @@ const arrayOfSquares = [
     rank: squareSize * 7,
     file: 0,
   }),
-]; //63
+]; //64
 
 const arrayOfPieces = [
   (rook_black = new Piece({
@@ -635,7 +635,7 @@ const arrayOfPieces = [
     hasMoved: false,
     hasBeenCaptured: false,
   })),
-]; //31
+]; //32
 
 function animateChessboard() {
   for (let file = 0, fileCount = 0; file < canvas.width, fileCount < 8; file += squareSize, fileCount++) {
@@ -668,7 +668,7 @@ function animatePieces() {
 
 animatePieces(); //skal lige ned og hente icetea i netto
 
-function animateLegalSquares(legalSquares) {
+function animateLegalSquares(legalSquares, startSquare) {
   //initial fillstyle
   ctx.fillStyle = colorMoves;
   for (let i = 0; i < legalSquares.length; i++) {
@@ -717,7 +717,7 @@ clickGrid.addEventListener(
       if (piece != undefined && checkTurn(piece)) {
         legalSquares = generateLegalMoves(piece);
         legalSquares = filterMovesThatUncheck(legalSquares, piece);
-        animateLegalSquares(legalSquares);
+        animateLegalSquares(legalSquares, startSquare);
         hasClicked = true;
       } else resetClick();
     }
@@ -737,7 +737,7 @@ clickGrid.addEventListener(
         legalSquares = generateLegalMoves(piece);
         legalSquares = filterMovesThatUncheck(legalSquares, piece);
         animateChessboard();
-        animateLegalSquares(legalSquares);
+        animateLegalSquares(legalSquares, startSquare);
         hasClicked = true;
       }
       //second click valid
