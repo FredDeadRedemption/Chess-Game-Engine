@@ -884,7 +884,7 @@ function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
       evilPiece.position = targetSquare;
       evilPiece.hasBeenCaptured = false;
     }
-    updateBlackMoves(true);
+    //updateBlackMoves(true);
     return true;
   } else if (!whiteToMove && blackInCheck()) {
     piece.position = startSquare;
@@ -892,7 +892,7 @@ function isStillInCheckAfterMove(startSquare, targetSquare, piece) {
       evilPiece.position = targetSquare;
       evilPiece.hasBeenCaptured = false;
     }
-    updateWhiteMoves(true);
+    //updateWhiteMoves(true);
     return true;
   }
   piece.position = startSquare;
