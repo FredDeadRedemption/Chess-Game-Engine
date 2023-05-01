@@ -9,6 +9,8 @@ canvas.width = boardSize;
 canvas.height = boardSize;
 clickGrid.style.height = boardSize + "px";
 clickGrid.style.width = boardSize + "px";
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = "high";
 
 //Color Settings
 const lightSquareColor = "wheat"; //lightsquare
@@ -769,14 +771,6 @@ function getPieceFromSquare(square) {
     if (arrayOfPieces[i].position == square) {
       return arrayOfPieces[i];
     } //piece can be undefined
-  }
-}
-
-function getSquareFromPiece(piece) {
-  for (i = 0; i < arrayOfSquares.length; i++) {
-    if (piece.position == i) {
-      return i;
-    }
   }
 }
 
