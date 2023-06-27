@@ -42,21 +42,8 @@ const fx_capture = new Audio("./fx/fx_capture.mp3");
 //lav isInCheck i tilfælde af castle og promotion
 
 function randomColor() {
-  const number = Math.random();
-  let color;
-
-  if (number <= 0.25) {
-    color = "rgb(166, 188, 143)"; //"teal";
-  } else if (number > 0.25 && number <= 0.5) {
-    color = "rgb(143, 188, 147)"; //"darkslategrey";
-  } else if (number > 0.5 && number <= 0.75) {
-    color = "rgb(188, 143, 143)"; //"rosybrown";
-  } else if (number > 0.75 && number <= 0.995) {
-    color = "rgb(143, 188, 188)"; //"seagreen";
-  } else if (number > 0.995) {
-    color = "deeppink";
-  }
-  return color;
+  const arr = ["rgb(166, 188, 143)", "rgb(143, 188, 147)", "rgb(188, 143, 143)", "rgb(143, 188, 188)"];
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 document.getElementById("56").style.color = darkSquareColor;
