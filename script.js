@@ -14,7 +14,7 @@ ctx.imageSmoothingQuality = "high";
 
 //Color Settings
 const lightSquareColor = "wheat"; //lightsquare
-const darkSquareColor = randomColor(); //darksquare
+const darkSquareColor = "red"; //darksquare
 
 const colorMoves = "rgba(255, 140, 0, 0.5)"; // alt --> "rgba(135, 206, 235, 0.6)";
 const colorAttacks = "rgba(255, 0, 0, 0.5)";
@@ -40,11 +40,6 @@ const fx_capture = new Audio("./fx/fx_capture.mp3");
 //lav enPessant()
 
 //lav isInCheck i tilfælde af castle og promotion
-
-function randomColor() {
-  const arr = ["rgb(166, 188, 143)", "rgb(143, 188, 147)", "rgb(188, 143, 143)", "rgb(143, 188, 188)"];
-  return arr[Math.floor(Math.random() * arr.length)];
-}
 
 document.getElementById("56").style.color = darkSquareColor;
 document.getElementById("40").style.color = darkSquareColor;
