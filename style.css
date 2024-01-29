@@ -17,6 +17,7 @@ body {
 
 #canvas {
 	position: absolute;
+	pointer-events: none;
 }
 
 #fakeCanvas {

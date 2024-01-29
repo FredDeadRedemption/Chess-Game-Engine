@@ -22,8 +22,6 @@ import {
 } from './brrrr.js';
 import { animateChessboard, animatePieces } from './render.js';
 
-const clickGrid = document.getElementById('clickGrid');
-
 animateChessboard();
 
 let state = {
@@ -58,12 +56,8 @@ setTimeout(() => {
 	animatePieces(state);
 }, 4);
 
-clickGrid.addEventListener(
-	'click',
-	(event) => {
-		console.log(event.target.id);
-	},
-	{ captureOn: true } //stop event bubbling
-);
+document.getElementById('clickGrid').addEventListener('click', (event) => {
+	console.log(event.target.id);
+});
 
 console.log(state);
