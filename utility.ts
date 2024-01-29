@@ -27,48 +27,48 @@ export const toBitBoardBlack = (file: number, rank: number) => {
   return rank * 8 + (7 - file);
 };
 
-export const bishopOffsets = [7, -7, 9, -9];
+export const OFFSETS_BISHOP = [7, -7, 9, -9];
 
-export const rookOffsets = [8, -8, 1, -1];
+export const OFFSETS_ROCK = [8, -8, 1, -1];
 
-export const queenOffsets = [7, -7, 9, -9, 8, -8, 1, -1];
+export const OFFSETS_QUEEN = [7, -7, 9, -9, 8, -8, 1, -1];
 
 export const squareOnEdge = (square: number, offset: number) => {
   switch (offset) {
     // NW
     case 7:
-      return TOP_EDGE[square] || LEFT_EDGE[square]; // top edge / left edge
+      return TOP[square] || LEFT[square]; // top edge / left edge
     // NE
     case 9:
-      return TOP_EDGE[square] || RIGHT_EDGE[square]; // top edge / right edge
+      return TOP[square] || RIGHT[square]; // top edge / right edge
     // SE
     case -7:
-      return BOTTOM_EDGE[square] || RIGHT_EDGE[square]; // bottom edge / right edge
+      return BOTTOM[square] || RIGHT[square]; // bottom edge / right edge
     // SW
     case -9:
-      return BOTTOM_EDGE[square] || LEFT_EDGE[square]; // bottom edge / left edge
+      return BOTTOM[square] || LEFT[square]; // bottom edge / left edge
     // N
     case 8:
-      return TOP_EDGE[square]; // top edge
+      return TOP[square]; // top edge
     // S
     case -8:
-      return BOTTOM_EDGE[square]; // bottom edge
+      return BOTTOM[square]; // bottom edge
     // E
     case 1:
-      return RIGHT_EDGE[square]; // right edge
+      return RIGHT[square]; // right edge
     // W
     case -1:
-      return LEFT_EDGE[square]; // left edge
+      return LEFT[square]; // left edge
   }
 };
 
-export const BOTTOM_EDGE = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+export const BOTTOM = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-export const TOP_EDGE = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1];
+export const TOP = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1];
 
-export const LEFT_EDGE = [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0];
+export const LEFT = [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0];
 
-export const RIGHT_EDGE = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1];
+export const RIGHT = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1];
 
 export const bitboardWhitePiecesInitState = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
