@@ -3,20 +3,20 @@ export const randomColor = () => {
 	return arr[Math.floor(Math.random() * arr.length)];
 };
 
-export const fileToBitboardWhite = (index) => {
-	return index % 8;
+export const bitBoardToFileWhite = (index, squareSize) => {
+	return (index % 8) * squareSize;
 };
 
-export const fileToBitboardBlack = (index) => {
-	return 7 - (index % 8);
+export const bitBoardToFileBlack = (index, squareSize) => {
+  return (7 - (index % 8)) * squareSize;
 };
 
-export const rankToBitboardWhite = (index) => {
-	return 8 - 1 - index / 8;
+export const bitBoardToRankWhite = (index, squareSize) => {
+	return (8 - 1 - Math.floor(index / 8)) * squareSize;
 };
 
-export const rankToBitboardBlack = (index) => {
-	return 7 - (8 - 1 - index / 8);
+export const bitBoardToRankBlack = (index, squareSize) => {
+  return (Math.floor(index / 8)) * squareSize;
 };
 
 export const toBitBoardWhite = (file, rank) => {
@@ -48,16 +48,16 @@ export const squareOnEdge = (square, offset) => {
 	}
 };
 
-export const castSlidingRays = (s, offsets, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
+export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	let moves = [];
 
 	offsets.forEach((offset) => {
 		// stop of piece is already on edge based on its offset;
-		if (squareOnEdge(s, offset)) return;
+		if (squareOnEdge(originSquare, offset)) return;
 
 		// cast sliding ray in offsets direction
 		for (let i = 1; i < 8; i++) {
-			const newMove = s + offset * i;
+			const newMove = originSquare + offset * i;
 
 			// add new move if no friendly occupance
 			if ((forWhite && !occupiedSquaresWhite[newMove]) || (!forWhite && !occupiedSquaresBlack[newMove])) {
@@ -337,3 +337,16 @@ export const BLACK_PAWNS_INIT = [
   1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0
 ];
+
+export const PIECE_INDEX_INIT = [
+  "R", "N", "B", "Q", "K", "B", "N", "R",
+  "P", "P", "P", "P", "P", "P", "P", "P",
+  " ", " ", " ", " ", " ", " ", " ", " ",
+  " ", " ", " ", " ", " ", " ", " ", " ",
+  " ", " ", " ", " ", " ", " ", " ", " ",
+  " ", " ", " ", " ", " ", " ", " ", " ",
+  "p", "p", "p", "p", "p", "p", "p", "p",
+  "r", "n", "b", "q", "k", "b", "n", "r",
+]
+
+
