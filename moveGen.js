@@ -1,4 +1,13 @@
-import { OFFSETS_BISHOP, OFFSETS_ROOK, OFFSETS_QUEEN, OFFSETS_KING, squareOnEdge, castSlidingRays, WHITE_PAWNS_INIT, BLACK_PAWNS_INIT } from './brrrr.js';
+import {
+	OFFSETS_BISHOP,
+	OFFSETS_ROOK,
+	OFFSETS_QUEEN,
+	OFFSETS_KING,
+	squareOnEdge,
+	castSlidingRays,
+	WHITE_PAWNS_INIT,
+	BLACK_PAWNS_INIT
+} from './brrrr.js';
 
 export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, occupiedSquaresBlack, occupiedSquaresWhite }) => {
 	let moves = [];
@@ -9,16 +18,25 @@ export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, 
 	// advancing once and twice
 	if (!occupiedSquaresAll[originSquare + offsets[0]] && !squareOnEdge(originSquare, offsets[0])) {
 		moves.push(originSquare + offsets[0]);
-		if (((forWhite && WHITE_PAWNS_INIT[originSquare]) || (!forWhite && BLACK_PAWNS_INIT[originSquare])) && !occupiedSquaresAll[originSquare + offsets[1]]) {
+		if (
+			((forWhite && WHITE_PAWNS_INIT[originSquare]) || (!forWhite && BLACK_PAWNS_INIT[originSquare])) &&
+			!occupiedSquaresAll[originSquare + offsets[1]]
+		) {
 			moves.push(originSquare + offsets[1]);
 		}
 	}
 	//moving (attacking) left
-	if (((forWhite && occupiedSquaresBlack[originSquare + offsets[2]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) && !squareOnEdge(originSquare, offsets[2])) {
+	if (
+		((forWhite && occupiedSquaresBlack[originSquare + offsets[2]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) &&
+		!squareOnEdge(originSquare, offsets[2])
+	) {
 		moves.push(originSquare + offsets[2]);
 	}
 	//moving (attacking) right
-	if (((forWhite && occupiedSquaresBlack[originSquare + offsets[3]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) && !squareOnEdge(originSquare, offsets[3])) {
+	if (
+		((forWhite && occupiedSquaresBlack[originSquare + offsets[3]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) &&
+		!squareOnEdge(originSquare, offsets[3])
+	) {
 		moves.push(originSquare + offsets[3]);
 	}
 

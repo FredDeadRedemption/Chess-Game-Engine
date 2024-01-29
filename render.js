@@ -12,17 +12,8 @@ clickGrid.style.width = boardSize + 'px';
 ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = 'high';
 
-const lightSquareColor = 'wheat';
+const lightSquareColor = 'beige';
 const darkSquareColor = randomColor();
-
-document.getElementById('56').style.color = darkSquareColor;
-document.getElementById('48').style.color = lightSquareColor;
-document.getElementById('40').style.color = darkSquareColor;
-document.getElementById('32').style.color = lightSquareColor;
-document.getElementById('24').style.color = darkSquareColor;
-document.getElementById('16').style.color = lightSquareColor;
-document.getElementById('8').style.color = darkSquareColor;
-document.getElementById('0').style.color = lightSquareColor;
 
 const spriteSheet = new Image();
 spriteSheet.src = '/chess.png';
@@ -31,7 +22,7 @@ export const animateChessboard = () => {
 	let squareIsLight = true;
 	for (let file = 0; file < 8; file++) {
 		for (let rank = 0; rank < 8; rank++) {
-			squareIsLight ? (ctx.fillStyle = lightSquareColor) : (ctx.fillStyle = darkSquareColor);
+			squareIsLight ? (ctx.fillStyle = lightSquareColor) : (ctx.fillStyle = randomColor()); //hihi
 
 			ctx.fillRect(rank * squareSize, file * squareSize, squareSize, squareSize);
 			squareIsLight = !squareIsLight;

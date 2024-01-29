@@ -27,6 +27,7 @@ const clickGrid = document.getElementById('clickGrid');
 animateChessboard();
 
 let state = {
+	whiteToMove: true,
 	occupiedSquaresWhite: OCCUPIED_SQUARES_WHITE_INIT,
 	occupiedSquaresBlack: OCCUPIED_SQUARES_BLACK_INIT,
 	occupiedSquaresAll: OCCUPIED_SQUARES_ALL_INIT,
@@ -48,6 +49,8 @@ let state = {
 	blackPawns: BLACK_PAWNS_INIT,
 	pieceIndex: PIECE_INDEX_INIT
 };
+
+let temp = structuredClone(state);
 
 //animateChessboard(ctx, squareSize);
 
