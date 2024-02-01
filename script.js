@@ -54,10 +54,48 @@ let temp = structuredClone(state);
 
 setTimeout(() => {
 	animatePieces(state);
-}, 4);
+}, 44);
 
-document.getElementById('clickGrid').addEventListener('click', (event) => {
-	console.log(event.target.id);
-});
+document.getElementById('clickGrid').addEventListener(
+	'click',
+	(event) => {
+		console.log(event.target.id);
+	},
+	{ captureOn: true }
+);
 
 console.log(state);
+
+const generateMoves = ({ pieceIndex }) => {
+	for (let i = 0; i < pieceIndex.length; i++) {
+		let forWhite;
+		pieceIndex[i] === pieceIndex[i].toUpperCase() ? (forWhite = true) : (forWhite = false);
+		switch (pieceIndex[i]) {
+			case 'K':
+				break;
+			case 'k':
+				break;
+			case 'Q':
+				break;
+			case 'q':
+				break;
+			case 'B':
+				break;
+			case 'b':
+				break;
+			case 'N':
+				break;
+			case 'n':
+				break;
+			case 'R':
+				break;
+			case 'r':
+				break;
+			case 'P':
+				break;
+			case 'p':
+		}
+	}
+};
+
+generateMoves(state);

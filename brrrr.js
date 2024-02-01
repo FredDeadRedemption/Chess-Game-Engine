@@ -85,7 +85,7 @@ export const OFFSETS_QUEEN = [7, -7, 9, -9, 8, -8, 1, -1];
 
 export const OFFSETS_KING = [7, -7, 9, -9, 8, -8, 1, -1];
 
-export const BOTTOM = [
+export const BOTTOM = [ 
 	1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
