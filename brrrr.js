@@ -79,6 +79,19 @@ export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquar
 	return moves;
 };
 
+export const validateTurn = (clickedSquare, { whiteToMove, occupiedSquaresWhite, occupiedSquaresBlack}) => {
+  if (whiteToMove && occupiedSquaresWhite[clickedSquare]){
+    return true;
+  } else if (!whiteToMove && occupiedSquaresBlack[clickedSquare]){
+    return true;
+  }
+  return false;
+}
+
+export const findValidMove = (clickOrigin, clickTarget, moves) => {
+  return moves.find((move) => move.origin === clickOrigin && move.target === clickTarget);
+}
+
 export const OFFSETS_BISHOP = [7, -7, 9, -9];
 
 export const OFFSETS_ROOK = [8, -8, 1, -1];

@@ -137,16 +137,12 @@ export const generateKingMoves = (originSquare, forWhite, { occupiedSquaresWhite
 
 export const generateKnightMoves = (originSquare, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	let moves = [];
-	let targets = [];
 
 	let factor = 1;
 	const file = originSquare % 8;
 
 	for (let i = 0; i < 2; i++) {
-		targets.push(originSquare - 6 * factor);
-		targets.push(originSquare - 10 * factor);
-		targets.push(originSquare - 15 * factor);
-		targets.push(originSquare - 17 * factor);
+		const targets = [originSquare - 6 * factor, originSquare - 10 * factor, originSquare - 15 * factor, originSquare - 17 * factor];
 
 		targets.forEach((target) => {
 			if ((forWhite && !occupiedSquaresWhite[target]) || (!forWhite && !occupiedSquaresBlack[target])) {

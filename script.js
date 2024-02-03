@@ -1,4 +1,5 @@
 import {
+	validateTurn,
 	CONTESTED_SQUARES_BLACK_INIT,
 	CONTESTED_SQUARES_WHITE_INIT,
 	OCCUPIED_SQUARES_ALL_INIT,
@@ -18,9 +19,10 @@ import {
 	BLACK_KNIGHTS_INIT,
 	BLACK_PAWNS_INIT,
 	BLACK_DEATH_RAYS_INIT,
-	PIECE_INDEX_INIT
+	PIECE_INDEX_INIT,
+	findValidMove
 } from './brrrr.js';
-import { animateChessboard, animatePieces } from './render.js';
+import { animateChessboard, animatePieces, animateMoves } from './render.js';
 import { generatePawnMoves, generateBishopMoves, generateKingMoves, generateKnightMoves, generateQueenMoves, generateRookMoves } from './moveGen.js';
 
 animateChessboard();
@@ -57,10 +59,44 @@ setTimeout(() => {
 	animatePieces(state);
 }, 44);
 
+let firstClick = true;
+let firstClickedSquare = null;
+
+const handleFirstClick = (clickedSquare) => {
+	if (validateTurn(clickedSquare, state)) {
+		animateMoves(clickedSquare, moves, state);
+		animatePieces(state);
+		firstClickedSquare = clickedSquare;
+		firstClick = false;
+	}
+};
+
+const handleSecondClick = (clickedSquare) => {
+	// if second click is friendly piece, consider it first click
+	if (validateTurn(clickedSquare, state)) {
+		animateChessboard();
+		handleFirstClick(clickedSquare);
+	}
+	// if second click is valid execute the move
+	else if (findValidMove(firstClickedSquare, clickedSquare, moves)) {
+		console.log('LEGIT MOVE');
+		firstClick = true;
+		animateChessboard();
+		animatePieces(state);
+		state.whiteToMove = !state.whiteToMove;
+	}
+	// reset
+	else {
+		firstClick = true;
+		animateChessboard();
+		animatePieces(state);
+	}
+};
+
 document.getElementById('clickGrid').addEventListener(
 	'click',
 	(event) => {
-		console.log(event.target.id);
+		firstClick ? handleFirstClick(parseInt(event.target.id)) : handleSecondClick(parseInt(event.target.id));
 	},
 	{ captureOn: true }
 );
@@ -70,7 +106,7 @@ console.log(state);
 let moves = [];
 
 const generateMoves = ({ pieceIndex }) => {
-	for (let i = 0; i < pieceIndex.length; i++) {
+	for (let i = 0; i < 64; i++) {
 		let forWhite;
 		pieceIndex[i] === pieceIndex[i].toUpperCase() ? (forWhite = true) : (forWhite = false);
 		switch (pieceIndex[i]) {
