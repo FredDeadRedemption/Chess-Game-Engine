@@ -8,6 +8,7 @@ import {
 	WHITE_PAWNS_INIT,
 	BLACK_PAWNS_INIT
 } from './brrrr.js';
+import { Move } from './Move.js';
 
 export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, occupiedSquaresBlack, occupiedSquaresWhite }) => {
 	let moves = [];
@@ -17,12 +18,12 @@ export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, 
 
 	// advancing once and twice
 	if (!occupiedSquaresAll[originSquare + offsets[0]] && !squareOnEdge(originSquare, offsets[0])) {
-		moves.push(originSquare + offsets[0]);
+		moves.push(new Move(originSquare, originSquare + offsets[0]));
 		if (
 			((forWhite && WHITE_PAWNS_INIT[originSquare]) || (!forWhite && BLACK_PAWNS_INIT[originSquare])) &&
 			!occupiedSquaresAll[originSquare + offsets[1]]
 		) {
-			moves.push(originSquare + offsets[1]);
+			moves.push(new Move(originSquare, originSquare + offsets[1]));
 		}
 	}
 	//moving (attacking) left
@@ -30,14 +31,14 @@ export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, 
 		((forWhite && occupiedSquaresBlack[originSquare + offsets[2]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) &&
 		!squareOnEdge(originSquare, offsets[2])
 	) {
-		moves.push(originSquare + offsets[2]);
+		moves.push(new Move(originSquare, originSquare + offsets[2]));
 	}
 	//moving (attacking) right
 	if (
 		((forWhite && occupiedSquaresBlack[originSquare + offsets[3]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) &&
 		!squareOnEdge(originSquare, offsets[3])
 	) {
-		moves.push(originSquare + offsets[3]);
+		moves.push(new Move(originSquare, originSquare + offsets[3]));
 	}
 
 	return moves;
@@ -55,12 +56,13 @@ export const generateQueenMoves = (originSquare, forWhite, state) => {
 	return castSlidingRays(originSquare, OFFSETS_QUEEN, forWhite, state);
 };
 
-export const generateKingMoves = (originSquare) => {
+export const generateKingMoves = (originSquare, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	let moves = [];
 
 	OFFSETS_KING.forEach((offset) => {
-		if (!squareOnEdge(originSquare, offset)) {
-			moves.push(originSquare + offset);
+		const target = originSquare + offset;
+		if (!squareOnEdge(originSquare, offset) && ((forWhite && !occupiedSquaresWhite[target]) || (!forWhite && !occupiedSquaresBlack[target]))) {
+			moves.push(new Move(originSquare, target));
 		}
 	});
 
@@ -82,7 +84,7 @@ export const generateKingMoves = (originSquare) => {
   // down
   if (!BOTTOM[originSquare]) moves.push(originSquare - 8);
   */
-
+	/*
 	// TODO: + check if squares between king and rook are contested
 	// castling
 	if (!this.HasMoved()) {
@@ -129,26 +131,35 @@ export const generateKingMoves = (originSquare) => {
 			moves.add(58);
 		}
 	}
+	*/
+	return moves;
 };
 
 export const generateKnightMoves = (originSquare, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	let moves = [];
+	let targets = [];
 
 	let factor = 1;
 	const file = originSquare % 8;
 
 	for (let i = 0; i < 2; i++) {
-		moves.push(originSquare - 6 * factor);
-		moves.push(originSquare - 10 * factor);
-		moves.push(originSquare - 15 * factor);
-		moves.push(originSquare - 17 * factor);
+		targets.push(originSquare - 6 * factor);
+		targets.push(originSquare - 10 * factor);
+		targets.push(originSquare - 15 * factor);
+		targets.push(originSquare - 17 * factor);
+
+		targets.forEach((target) => {
+			if ((forWhite && !occupiedSquaresWhite[target]) || (!forWhite && !occupiedSquaresBlack[target])) {
+				moves.push(new Move(originSquare, target));
+			}
+		});
 
 		factor = factor * -1;
 	}
 
 	for (let i = moves.length - 1; i >= 0; i--) {
-		if ((file < 2 && moves[i] % 8 > file + 2) || (file > 5 && moves[i] % 8 < file - 2)) {
-			moves = moves.splice(i, 1);
+		if ((file < 2 && moves[i].target % 8 > file + 2) || (file > 5 && moves[i].target % 8 < file - 2) || moves[i].target < 0 || moves[i].target > 63) {
+			moves.splice(i, 1);
 		}
 	}
 

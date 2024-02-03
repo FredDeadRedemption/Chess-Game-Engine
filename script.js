@@ -21,6 +21,7 @@ import {
 	PIECE_INDEX_INIT
 } from './brrrr.js';
 import { animateChessboard, animatePieces } from './render.js';
+import { generatePawnMoves, generateBishopMoves, generateKingMoves, generateKnightMoves, generateQueenMoves, generateRookMoves } from './moveGen.js';
 
 animateChessboard();
 
@@ -66,36 +67,41 @@ document.getElementById('clickGrid').addEventListener(
 
 console.log(state);
 
+let moves = [];
+
 const generateMoves = ({ pieceIndex }) => {
 	for (let i = 0; i < pieceIndex.length; i++) {
 		let forWhite;
 		pieceIndex[i] === pieceIndex[i].toUpperCase() ? (forWhite = true) : (forWhite = false);
 		switch (pieceIndex[i]) {
 			case 'K':
-				break;
 			case 'k':
+				moves.push(...generateKingMoves(i, forWhite, state));
 				break;
 			case 'Q':
-				break;
 			case 'q':
+				moves.push(...generateQueenMoves(i, forWhite, state));
 				break;
 			case 'B':
-				break;
 			case 'b':
+				moves.push(...generateBishopMoves(i, forWhite, state));
 				break;
 			case 'N':
-				break;
 			case 'n':
+				moves.push(...generateKnightMoves(i, forWhite, state));
 				break;
 			case 'R':
-				break;
 			case 'r':
+				moves.push(...generateRookMoves(i, forWhite, state));
 				break;
 			case 'P':
-				break;
 			case 'p':
+				moves.push(...generatePawnMoves(i, forWhite, state));
+				break;
 		}
 	}
 };
 
 generateMoves(state);
+
+console.table(moves);

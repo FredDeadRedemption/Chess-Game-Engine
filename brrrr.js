@@ -1,3 +1,5 @@
+import { Move } from "./Move.js";
+
 export const randomColor = () => {
 	const arr = ['rgb(166, 188, 143)', 'rgb(143, 188, 147)', 'rgb(188, 143, 143)', 'rgb(143, 188, 188)'];
 	return arr[Math.floor(Math.random() * arr.length)];
@@ -57,18 +59,18 @@ export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquar
 
 		// cast sliding ray in offsets direction
 		for (let i = 1; i < 8; i++) {
-			const newMove = originSquare + offset * i;
+			const newTarget = originSquare + offset * i;
 
 			// add new move if no friendly occupance
-			if ((forWhite && !occupiedSquaresWhite[newMove]) || (!forWhite && !occupiedSquaresBlack[newMove])) {
-				moves.push(newMove);
+			if ((forWhite && !occupiedSquaresWhite[newTarget]) || (!forWhite && !occupiedSquaresBlack[newTarget])) {
+				moves.push(new Move(originSquare, newTarget));
 			} else break;
 
 			// stop further ray casting if new move hits edge
-			if (squareOnEdge(newMove, offset)) break;
+			if (squareOnEdge(newTarget, offset)) break;
 
 			// stop further ray casting if new move hits enemy
-			if ((forWhite && occupiedSquaresBlack[newMove]) || (!forWhite && occupiedSquaresWhite[newMove])) {
+			if ((forWhite && occupiedSquaresBlack[newTarget]) || (!forWhite && occupiedSquaresWhite[newTarget])) {
 				break;
 			}
 		}
