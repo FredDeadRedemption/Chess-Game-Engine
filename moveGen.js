@@ -5,10 +5,9 @@ import {
 	OFFSETS_KING,
 	squareOnEdge,
 	castSlidingRays,
-	WHITE_PAWNS_INIT,
-	BLACK_PAWNS_INIT,
-	CONTESTED_SQUARES_WHITE_INIT,
-	CONTESTED_SQUARES_BLACK_INIT
+	DOUBLEPAWNWHITE,
+	DOUBLEPAWNBLACK,
+	ZERO_TABLE
 } from './brrrr.js';
 import { Move } from './Move.js';
 
@@ -38,7 +37,7 @@ export const generateMoves = (state) => {
 		}
 	}
 	// Map white contested squares in game state
-	state.contestedSquaresWhite = CONTESTED_SQUARES_WHITE_INIT;
+	state.contestedSquaresWhite = ZERO_TABLE;
 	whiteMoves.forEach((move) => {
 		state.contestedSquaresWhite[move.target] = 1;
 	});
@@ -68,7 +67,7 @@ export const generateMoves = (state) => {
 		}
 	}
 	// Map black contested squares in game state
-	state.contestedSquaresBlack = CONTESTED_SQUARES_BLACK_INIT;
+	state.contestedSquaresBlack = ZERO_TABLE;
 	blackMoves.forEach((move) => {
 		state.contestedSquaresBlack[move.target] = 1;
 	});
@@ -76,18 +75,23 @@ export const generateMoves = (state) => {
 	return [...whiteMoves, ...blackMoves];
 };
 
-export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, occupiedSquaresBlack, occupiedSquaresWhite }) => {
+export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresBlack, occupiedSquaresWhite }) => {
 	let moves = [];
 	let offsets = [];
 
 	forWhite ? (offsets = [8, 16, 7, 9]) : (offsets = [-8, -16, -7, -9]);
 
 	// advancing once and twice
-	if (!occupiedSquaresAll[originSquare + offsets[0]] && !squareOnEdge(originSquare, offsets[0])) {
+	if (
+		!occupiedSquaresWhite[originSquare + offsets[0]] &&
+		!occupiedSquaresBlack[originSquare + offsets[0]] &&
+		!squareOnEdge(originSquare, offsets[0])
+	) {
 		moves.push(new Move(originSquare, originSquare + offsets[0]));
 		if (
-			((forWhite && WHITE_PAWNS_INIT[originSquare]) || (!forWhite && BLACK_PAWNS_INIT[originSquare])) &&
-			!occupiedSquaresAll[originSquare + offsets[1]]
+			!occupiedSquaresWhite[originSquare + offsets[1]] &&
+			!occupiedSquaresBlack[originSquare + offsets[1]] &&
+			((forWhite && DOUBLEPAWNWHITE[originSquare]) || (!forWhite && DOUBLEPAWNBLACK[originSquare]))
 		) {
 			moves.push(new Move(originSquare, originSquare + offsets[1]));
 		}
@@ -101,7 +105,7 @@ export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, 
 	}
 	//moving (attacking) right
 	if (
-		((forWhite && occupiedSquaresBlack[originSquare + offsets[3]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) &&
+		((forWhite && occupiedSquaresBlack[originSquare + offsets[3]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[3]])) &&
 		!squareOnEdge(originSquare, offsets[3])
 	) {
 		moves.push(new Move(originSquare, originSquare + offsets[3]));

@@ -62,7 +62,7 @@ export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquar
 		for (let i = 1; i < 8; i++) {
 			const newTarget = originSquare + offset * i;
 
-			// add new move if no friendly occupance
+			// add new move if no friendly occupancy
 			if ((forWhite && !occupiedSquaresWhite[newTarget]) || (!forWhite && !occupiedSquaresBlack[newTarget])) {
 				moves.push(new Move(originSquare, newTarget));
 			} else break;
@@ -85,8 +85,9 @@ export const validateTurn = (clickedSquare, { whiteToMove, occupiedSquaresWhite,
     return true;
   } else if (!whiteToMove && occupiedSquaresBlack[clickedSquare]){
     return true;
+  } else {
+    return false;
   }
-  return false;
 }
 
 export const findValidMove = (clickOrigin, clickTarget, moves) => {
@@ -167,35 +168,13 @@ export const OCCUPIED_SQUARES_BLACK_INIT = [
   1, 1, 1, 1, 1, 1, 1, 1
 ];
 
-export const OCCUPIED_SQUARES_ALL_INIT = [
-	1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1
-];
-
-export const CONTESTED_SQUARES_WHITE_INIT = [
+export const ZERO_TABLE = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
-  1, 1, 1, 1, 1, 1, 1, 1, 
+  0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0
-];
-
-export const CONTESTED_SQUARES_BLACK_INIT = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0
 ];
@@ -222,7 +201,7 @@ export const BLACK_DEATH_RAYS_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const WHITE_KING_INIT = [
+export let whiteKingBit = [
 	0, 0, 0, 0, 1, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -233,7 +212,7 @@ export const WHITE_KING_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const WHITE_QUEENS_INIT = [
+export let whiteQueensBit = [
 	0, 0, 0, 1, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -244,7 +223,7 @@ export const WHITE_QUEENS_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const WHITE_BISHOPS_INIT = [
+export let whiteBishopsBit = [
 	0, 0, 1, 0, 0, 1, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -255,7 +234,7 @@ export const WHITE_BISHOPS_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const WHITE_KNIGHTS_INIT = [
+export let whiteKnightsBit = [
 	0, 1, 0, 0, 0, 0, 1, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -266,7 +245,7 @@ export const WHITE_KNIGHTS_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const WHITE_ROOKS_INIT = [
+export let whiteRooksBit = [
 	1, 0, 0, 0, 0, 0, 0, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -277,7 +256,7 @@ export const WHITE_ROOKS_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const WHITE_PAWNS_INIT = [
+export let whitePawnsBit = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -288,7 +267,7 @@ export const WHITE_PAWNS_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const BLACK_KING_INIT = [
+export let blackKingBit = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -299,7 +278,7 @@ export const BLACK_KING_INIT = [
   0, 0, 0, 0, 1, 0, 0, 0
 ];
 
-export const BLACK_QUEENS_INIT = [
+export let blackQueensBit = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -310,7 +289,7 @@ export const BLACK_QUEENS_INIT = [
   0, 0, 0, 1, 0, 0, 0, 0
 ];
 
-export const BLACK_BISHOPS_INIT = [
+export let blackBishopsBit = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -321,7 +300,7 @@ export const BLACK_BISHOPS_INIT = [
   0, 0, 1, 0, 0, 1, 0, 0
 ];
 
-export const BLACK_KNIGHTS_INIT = [
+export let blackKnightsBit = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -332,7 +311,7 @@ export const BLACK_KNIGHTS_INIT = [
   0, 1, 0, 0, 0, 0, 1, 0
 ];
 
-export const BLACK_ROOKS_INIT = [
+export let blackRooksBit = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -343,13 +322,35 @@ export const BLACK_ROOKS_INIT = [
   1, 0, 0, 0, 0, 0, 0, 1
 ];
 
-export const BLACK_PAWNS_INIT = [
+export let blackPawnsBit = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
+  0, 0, 0, 0, 0, 0, 0, 0
+];
+
+export const DOUBLEPAWNWHITE = [
+	0, 0, 0, 0, 0, 0, 0, 0, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0
+];
+
+export const DOUBLEPAWNBLACK = [
+	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0,
   1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0
 ];

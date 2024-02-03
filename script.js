@@ -1,23 +1,21 @@
 import {
 	validateTurn,
-	CONTESTED_SQUARES_BLACK_INIT,
-	CONTESTED_SQUARES_WHITE_INIT,
-	OCCUPIED_SQUARES_ALL_INIT,
+	ZERO_TABLE,
 	OCCUPIED_SQUARES_BLACK_INIT,
 	OCCUPIED_SQUARES_WHITE_INIT,
-	WHITE_KING_INIT,
-	WHITE_QUEENS_INIT,
-	WHITE_BISHOPS_INIT,
-	WHITE_ROOKS_INIT,
-	WHITE_KNIGHTS_INIT,
-	WHITE_PAWNS_INIT,
+	whiteKingBit,
+	whiteQueensBit,
+	whiteBishopsBit,
+	whiteRooksBit,
+	whiteKnightsBit,
+	whitePawnsBit,
 	WHITE_DEATH_RAYS_INIT,
-	BLACK_KING_INIT,
-	BLACK_QUEENS_INIT,
-	BLACK_BISHOPS_INIT,
-	BLACK_ROOKS_INIT,
-	BLACK_KNIGHTS_INIT,
-	BLACK_PAWNS_INIT,
+	blackKingBit,
+	blackQueensBit,
+	blackBishopsBit,
+	blackRooksBit,
+	blackKnightsBit,
+	blackPawnsBit,
 	BLACK_DEATH_RAYS_INIT,
 	PIECE_INDEX_INIT,
 	findValidMove
@@ -25,37 +23,59 @@ import {
 import { animateChessboard, animatePieces, animateMoves } from './render.js';
 import { generateMoves } from './moveGen.js';
 
-animateChessboard();
-
 let state = {
 	whiteToMove: true,
 	occupiedSquaresWhite: OCCUPIED_SQUARES_WHITE_INIT,
 	occupiedSquaresBlack: OCCUPIED_SQUARES_BLACK_INIT,
-	occupiedSquaresAll: OCCUPIED_SQUARES_ALL_INIT,
-	contestedSquaresWhite: CONTESTED_SQUARES_WHITE_INIT,
-	contestedSquaresBlack: CONTESTED_SQUARES_BLACK_INIT,
+	contestedSquaresWhite: ZERO_TABLE,
+	contestedSquaresBlack: ZERO_TABLE,
 	whiteDeathRays: WHITE_DEATH_RAYS_INIT,
 	blackDeathRays: BLACK_DEATH_RAYS_INIT,
-	whiteKing: WHITE_KING_INIT,
-	whiteQueens: WHITE_QUEENS_INIT,
-	whiteBishops: WHITE_BISHOPS_INIT,
-	whiteRooks: WHITE_ROOKS_INIT,
-	whiteKnights: WHITE_KNIGHTS_INIT,
-	whitePawns: WHITE_PAWNS_INIT,
-	blackKing: BLACK_KING_INIT,
-	blackQueens: BLACK_QUEENS_INIT,
-	blackBishops: BLACK_BISHOPS_INIT,
-	blackRooks: BLACK_ROOKS_INIT,
-	blackKnights: BLACK_KNIGHTS_INIT,
-	blackPawns: BLACK_PAWNS_INIT,
+	bitBoards: {
+		K: whiteKingBit,
+		Q: whiteQueensBit,
+		B: whiteBishopsBit,
+		R: whiteRooksBit,
+		N: whiteKnightsBit,
+		P: whitePawnsBit,
+		k: blackKingBit,
+		q: blackQueensBit,
+		b: blackBishopsBit,
+		r: blackRooksBit,
+		n: blackKnightsBit,
+		p: blackPawnsBit
+	},
 	pieceIndex: PIECE_INDEX_INIT,
 	moves: []
 };
 
-let temp = structuredClone(state);
+const executeMove = (origin, target, piece) => {
+	// handle origin
+	state.pieceIndex[origin] = ' ';
+	state.bitBoards[piece][origin] = 0;
 
-//animateChessboard(ctx, squareSize);
+	state.occupiedSquaresWhite[origin] = 0;
+	state.occupiedSquaresBlack[origin] = 0;
 
+	// handle target
+	state.pieceIndex[target] = piece;
+	state.bitBoards[piece][target] = 1;
+	// handle capture
+	if (state.whiteToMove) {
+		state.occupiedSquaresWhite[target] = 1;
+		state.occupiedSquaresBlack[target] = 0;
+	} else {
+		state.occupiedSquaresBlack[target] = 1;
+		state.occupiedSquaresWhite[target] = 0;
+	}
+	// flip turn
+	state.whiteToMove = !state.whiteToMove;
+	// generate new moves
+	state.moves = generateMoves(state);
+	console.table(state.occupiedSquaresWhite);
+};
+
+animateChessboard();
 setTimeout(() => {
 	animatePieces(state);
 }, 44);
@@ -72,25 +92,26 @@ const handleFirstClick = (clickedSquare) => {
 	}
 };
 
+const resetClick = () => {
+	firstClick = true;
+	animateChessboard();
+	animatePieces(state);
+};
+
 const handleSecondClick = (clickedSquare) => {
 	// if second click is friendly piece, consider it first click
 	if (validateTurn(clickedSquare, state)) {
 		animateChessboard();
 		handleFirstClick(clickedSquare);
 	}
-	// if second click is valid execute the move
+	// if second click is valid move, execute
 	else if (findValidMove(firstClickedSquare, clickedSquare, state.moves)) {
-		console.log('LEGIT MOVE');
-		firstClick = true;
-		animateChessboard();
-		animatePieces(state);
-		state.whiteToMove = !state.whiteToMove;
+		executeMove(firstClickedSquare, clickedSquare, state.pieceIndex[firstClickedSquare]);
+		resetClick();
 	}
 	// reset
 	else {
-		firstClick = true;
-		animateChessboard();
-		animatePieces(state);
+		resetClick();
 	}
 };
 
@@ -99,7 +120,7 @@ document.getElementById('clickGrid').addEventListener(
 	(event) => {
 		firstClick ? handleFirstClick(parseInt(event.target.id)) : handleSecondClick(parseInt(event.target.id));
 	},
-	{ captureOn: true }
+	{ capture: true }
 );
 
 console.log(state);
