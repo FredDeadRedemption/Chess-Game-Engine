@@ -6,9 +6,75 @@ import {
 	squareOnEdge,
 	castSlidingRays,
 	WHITE_PAWNS_INIT,
-	BLACK_PAWNS_INIT
+	BLACK_PAWNS_INIT,
+	CONTESTED_SQUARES_WHITE_INIT,
+	CONTESTED_SQUARES_BLACK_INIT
 } from './brrrr.js';
 import { Move } from './Move.js';
+
+export const generateMoves = (state) => {
+	let whiteMoves = [];
+	// Generate all white moves
+	for (let i = 0; i < 64; i++) {
+		switch (state.pieceIndex[i]) {
+			case 'K':
+				whiteMoves.push(...generateKingMoves(i, true, state));
+				break;
+			case 'Q':
+				whiteMoves.push(...generateQueenMoves(i, true, state));
+				break;
+			case 'B':
+				whiteMoves.push(...generateBishopMoves(i, true, state));
+				break;
+			case 'N':
+				whiteMoves.push(...generateKnightMoves(i, true, state));
+				break;
+			case 'R':
+				whiteMoves.push(...generateRookMoves(i, true, state));
+				break;
+			case 'P':
+				whiteMoves.push(...generatePawnMoves(i, true, state));
+				break;
+		}
+	}
+	// Map white contested squares in game state
+	state.contestedSquaresWhite = CONTESTED_SQUARES_WHITE_INIT;
+	whiteMoves.forEach((move) => {
+		state.contestedSquaresWhite[move.target] = 1;
+	});
+
+	let blackMoves = [];
+	// Generate all black moves
+	for (let i = 0; i < 64; i++) {
+		switch (state.pieceIndex[i]) {
+			case 'k':
+				blackMoves.push(...generateKingMoves(i, false, state));
+				break;
+			case 'q':
+				blackMoves.push(...generateQueenMoves(i, false, state));
+				break;
+			case 'b':
+				blackMoves.push(...generateBishopMoves(i, false, state));
+				break;
+			case 'n':
+				blackMoves.push(...generateKnightMoves(i, false, state));
+				break;
+			case 'r':
+				blackMoves.push(...generateRookMoves(i, false, state));
+				break;
+			case 'p':
+				blackMoves.push(...generatePawnMoves(i, false, state));
+				break;
+		}
+	}
+	// Map black contested squares in game state
+	state.contestedSquaresBlack = CONTESTED_SQUARES_BLACK_INIT;
+	blackMoves.forEach((move) => {
+		state.contestedSquaresBlack[move.target] = 1;
+	});
+	// Return all moves
+	return [...whiteMoves, ...blackMoves];
+};
 
 export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresAll, occupiedSquaresBlack, occupiedSquaresWhite }) => {
 	let moves = [];

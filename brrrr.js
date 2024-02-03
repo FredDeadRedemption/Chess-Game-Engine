@@ -29,6 +29,7 @@ export const toBitBoardBlack = (file, rank) => {
 	return rank * 8 + (7 - file);
 };
 
+// true if square is already on edge based on its offset;
 export const squareOnEdge = (square, offset) => {
 	switch (offset) {
 		case 7:
@@ -54,7 +55,7 @@ export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquar
 	let moves = [];
 
 	offsets.forEach((offset) => {
-		// stop of piece is already on edge based on its offset;
+		// stop if piece is already on edge based on its offset;
 		if (squareOnEdge(originSquare, offset)) return;
 
 		// cast sliding ray in offsets direction

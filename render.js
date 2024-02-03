@@ -34,100 +34,32 @@ export const animateChessboard = () => {
 	}
 };
 
+// x = piece type, y = piece color
 export const animatePieces = ({ pieceIndex }) => {
 	for (let i = 0; i < pieceIndex.length; i++) {
-		let multiplier;
-		pieceIndex[i] === pieceIndex[i].toUpperCase() ? (multiplier = 0) : (multiplier = 200);
-		switch (pieceIndex[i]) {
-			case 'K':
-			case 'k':
-				ctx.drawImage(
-					spriteSheet,
-					0,
-					multiplier,
-					200,
-					200,
-					bitBoardToFileWhite(i, squareSize),
-					bitBoardToRankWhite(i, squareSize),
-					squareSize,
-					squareSize
-				);
-				break;
-			case 'Q':
-			case 'q':
-				ctx.drawImage(
-					spriteSheet,
-					200,
-					multiplier,
-					200,
-					200,
-					bitBoardToFileWhite(i, squareSize),
-					bitBoardToRankWhite(i, squareSize),
-					squareSize,
-					squareSize
-				);
-				break;
-			case 'B':
-			case 'b':
-				ctx.drawImage(
-					spriteSheet,
-					400,
-					multiplier,
-					200,
-					200,
-					bitBoardToFileWhite(i, squareSize),
-					bitBoardToRankWhite(i, squareSize),
-					squareSize,
-					squareSize
-				);
-				break;
-			case 'N':
-			case 'n':
-				ctx.drawImage(
-					spriteSheet,
-					600,
-					multiplier,
-					200,
-					200,
-					bitBoardToFileWhite(i, squareSize),
-					bitBoardToRankWhite(i, squareSize),
-					squareSize,
-					squareSize
-				);
-				break;
-			case 'R':
-			case 'r':
-				ctx.drawImage(
-					spriteSheet,
-					800,
-					multiplier,
-					200,
-					200,
-					bitBoardToFileWhite(i, squareSize),
-					bitBoardToRankWhite(i, squareSize),
-					squareSize,
-					squareSize
-				);
-				break;
-			case 'P':
-			case 'p':
-				ctx.drawImage(
-					spriteSheet,
-					1000,
-					multiplier,
-					200,
-					200,
-					bitBoardToFileWhite(i, squareSize),
-					bitBoardToRankWhite(i, squareSize),
-					squareSize,
-					squareSize
-				);
-				break;
+		let x, y;
+		pieceIndex[i] === pieceIndex[i].toUpperCase() ? (y = 0) : (y = 200);
+		x =
+			pieceIndex[i] === 'K' || pieceIndex[i] === 'k'
+				? 0
+				: pieceIndex[i] === 'Q' || pieceIndex[i] === 'q'
+				? 200
+				: pieceIndex[i] === 'B' || pieceIndex[i] === 'b'
+				? 400
+				: pieceIndex[i] === 'N' || pieceIndex[i] === 'n'
+				? 600
+				: pieceIndex[i] === 'R' || pieceIndex[i] === 'r'
+				? 800
+				: pieceIndex[i] === 'P' || pieceIndex[i] === 'p'
+				? 1000
+				: null;
+		if (x !== null) {
+			ctx.drawImage(spriteSheet, x, y, 200, 200, bitBoardToFileWhite(i, squareSize), bitBoardToRankWhite(i, squareSize), squareSize, squareSize);
 		}
 	}
 };
 
-export const animateMoves = (originSquare, moves, { whiteToMove, occupiedSquaresWhite, occupiedSquaresBlack }) => {
+export const animateMoves = (originSquare, { moves, whiteToMove, occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	// set initial color
 	ctx.fillStyle = colorMoves;
 	const validMoves = moves.filter((move) => move.origin === originSquare);

@@ -23,7 +23,7 @@ import {
 	findValidMove
 } from './brrrr.js';
 import { animateChessboard, animatePieces, animateMoves } from './render.js';
-import { generatePawnMoves, generateBishopMoves, generateKingMoves, generateKnightMoves, generateQueenMoves, generateRookMoves } from './moveGen.js';
+import { generateMoves } from './moveGen.js';
 
 animateChessboard();
 
@@ -48,7 +48,8 @@ let state = {
 	blackRooks: BLACK_ROOKS_INIT,
 	blackKnights: BLACK_KNIGHTS_INIT,
 	blackPawns: BLACK_PAWNS_INIT,
-	pieceIndex: PIECE_INDEX_INIT
+	pieceIndex: PIECE_INDEX_INIT,
+	moves: []
 };
 
 let temp = structuredClone(state);
@@ -64,7 +65,7 @@ let firstClickedSquare = null;
 
 const handleFirstClick = (clickedSquare) => {
 	if (validateTurn(clickedSquare, state)) {
-		animateMoves(clickedSquare, moves, state);
+		animateMoves(clickedSquare, state);
 		animatePieces(state);
 		firstClickedSquare = clickedSquare;
 		firstClick = false;
@@ -78,7 +79,7 @@ const handleSecondClick = (clickedSquare) => {
 		handleFirstClick(clickedSquare);
 	}
 	// if second click is valid execute the move
-	else if (findValidMove(firstClickedSquare, clickedSquare, moves)) {
+	else if (findValidMove(firstClickedSquare, clickedSquare, state.moves)) {
 		console.log('LEGIT MOVE');
 		firstClick = true;
 		animateChessboard();
@@ -103,41 +104,6 @@ document.getElementById('clickGrid').addEventListener(
 
 console.log(state);
 
-let moves = [];
+state.moves = generateMoves(state);
 
-const generateMoves = ({ pieceIndex }) => {
-	for (let i = 0; i < 64; i++) {
-		let forWhite;
-		pieceIndex[i] === pieceIndex[i].toUpperCase() ? (forWhite = true) : (forWhite = false);
-		switch (pieceIndex[i]) {
-			case 'K':
-			case 'k':
-				moves.push(...generateKingMoves(i, forWhite, state));
-				break;
-			case 'Q':
-			case 'q':
-				moves.push(...generateQueenMoves(i, forWhite, state));
-				break;
-			case 'B':
-			case 'b':
-				moves.push(...generateBishopMoves(i, forWhite, state));
-				break;
-			case 'N':
-			case 'n':
-				moves.push(...generateKnightMoves(i, forWhite, state));
-				break;
-			case 'R':
-			case 'r':
-				moves.push(...generateRookMoves(i, forWhite, state));
-				break;
-			case 'P':
-			case 'p':
-				moves.push(...generatePawnMoves(i, forWhite, state));
-				break;
-		}
-	}
-};
-
-generateMoves(state);
-
-console.table(moves);
+console.table(state.moves);
