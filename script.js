@@ -9,14 +9,12 @@ import {
 	whiteRooksBit,
 	whiteKnightsBit,
 	whitePawnsBit,
-	WHITE_DEATH_RAYS_INIT,
 	blackKingBit,
 	blackQueensBit,
 	blackBishopsBit,
 	blackRooksBit,
 	blackKnightsBit,
 	blackPawnsBit,
-	BLACK_DEATH_RAYS_INIT,
 	PIECE_INDEX_INIT,
 	findValidMove
 } from './brrrr.js';
@@ -29,8 +27,8 @@ let state = {
 	occupiedSquaresBlack: OCCUPIED_SQUARES_BLACK_INIT,
 	contestedSquaresWhite: ZERO_TABLE,
 	contestedSquaresBlack: ZERO_TABLE,
-	whiteDeathRays: WHITE_DEATH_RAYS_INIT,
-	blackDeathRays: BLACK_DEATH_RAYS_INIT,
+	whiteDeathRays: ZERO_TABLE,
+	blackDeathRays: ZERO_TABLE,
 	bitBoards: {
 		K: whiteKingBit,
 		Q: whiteQueensBit,
