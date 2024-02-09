@@ -18,17 +18,17 @@ import {
 	PIECE_INDEX_INIT,
 	findValidMove
 } from './brrrr.js';
-import { animateChessboard, animatePieces, animateMoves } from './render.js';
+import { animateChessboard, animatePieces, animateMoves, animateContestedSquares } from './render.js';
 import { generateMoves } from './moveGen.js';
 
 let state = {
 	whiteToMove: true,
 	occupiedSquaresWhite: OCCUPIED_SQUARES_WHITE_INIT,
 	occupiedSquaresBlack: OCCUPIED_SQUARES_BLACK_INIT,
-	contestedSquaresWhite: ZERO_TABLE,
-	contestedSquaresBlack: ZERO_TABLE,
-	whiteDeathRays: ZERO_TABLE,
-	blackDeathRays: ZERO_TABLE,
+	contestedSquaresWhite: structuredClone(ZERO_TABLE),
+	contestedSquaresBlack: structuredClone(ZERO_TABLE),
+	whiteDeathRays: structuredClone(ZERO_TABLE),
+	blackDeathRays: structuredClone(ZERO_TABLE),
 	bitBoards: {
 		K: whiteKingBit,
 		Q: whiteQueensBit,
@@ -46,6 +46,8 @@ let state = {
 	pieceIndex: PIECE_INDEX_INIT,
 	moves: []
 };
+
+// snapshot = structuredClone(state) :D
 
 const executeMove = (origin, target, piece) => {
 	// handle origin
@@ -69,8 +71,22 @@ const executeMove = (origin, target, piece) => {
 	// flip turn
 	state.whiteToMove = !state.whiteToMove;
 	// generate new moves
-	state.moves = generateMoves(state);
-	console.table(state.occupiedSquaresWhite);
+	let { whiteMoves, blackMoves } = generateMoves(state);
+	// Map white contested squares in game state
+	state.contestedSquaresWhite = structuredClone(ZERO_TABLE);
+	whiteMoves.forEach((move) => {
+		state.contestedSquaresWhite[move.target] = 1;
+	});
+
+	// Map white contested squares in game state
+	state.contestedSquaresBlack = structuredClone(ZERO_TABLE);
+	blackMoves.forEach((move) => {
+		state.contestedSquaresBlack[move.target] = 1;
+	});
+
+	console.log(state.contestedSquaresWhite);
+	state.moves = [...whiteMoves, ...blackMoves];
+	//console.table('IIWEIUH', state.occupiedSquaresWhite);
 };
 
 animateChessboard();
@@ -106,6 +122,7 @@ const handleSecondClick = (clickedSquare) => {
 	else if (findValidMove(firstClickedSquare, clickedSquare, state.moves)) {
 		executeMove(firstClickedSquare, clickedSquare, state.pieceIndex[firstClickedSquare]);
 		resetClick();
+		animateContestedSquares(state);
 	}
 	// reset
 	else {
@@ -121,8 +138,4 @@ document.getElementById('clickGrid').addEventListener(
 	{ capture: true }
 );
 
-console.log(state);
-
-state.moves = generateMoves(state);
-
-console.table(state.moves);
+state.moves = [...generateMoves(state).whiteMoves, ...generateMoves(state).blackMoves];

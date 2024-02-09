@@ -78,3 +78,15 @@ export const animateMoves = (originSquare, { moves, whiteToMove, occupiedSquares
 	ctx.fillStyle = colorAttacks;
 	ctx.fillRect(bitBoardToFileWhite(originSquare, squareSize), bitBoardToRankWhite(originSquare, squareSize), squareSize, squareSize);
 };
+
+export const animateContestedSquares = ({ contestedSquaresWhite, contestedSquaresBlack }) => {
+	// set initial color
+	console.log('brrrr', contestedSquaresWhite);
+	ctx.fillStyle = 'red';
+	for (let i = 0; i < 64; i++) {
+		if (contestedSquaresWhite[i]) {
+			console.log(i);
+			ctx.fillRect(bitBoardToFileWhite(i, squareSize), bitBoardToRankWhite(i, squareSize), squareSize / 6, squareSize / 6);
+		}
+	}
+};
