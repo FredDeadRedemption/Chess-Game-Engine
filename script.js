@@ -1,8 +1,8 @@
 import {
 	validateTurn,
 	ZERO_TABLE,
-	OCCUPIED_SQUARES_BLACK_INIT,
-	OCCUPIED_SQUARES_WHITE_INIT,
+	occupiedSquaresBlack,
+	occupiedSquaresWhite,
 	whiteKingBit,
 	whiteQueensBit,
 	whiteBishopsBit,
@@ -15,7 +15,7 @@ import {
 	blackRooksBit,
 	blackKnightsBit,
 	blackPawnsBit,
-	PIECE_INDEX_INIT,
+	pieceIndex,
 	findValidMove
 } from './brrrr.js';
 import { animateChessboard, animatePieces, animateMoves, animateContestedSquares } from './render.js';
@@ -23,8 +23,8 @@ import { generateMoves } from './moveGen.js';
 
 let state = {
 	whiteToMove: true,
-	occupiedSquaresWhite: OCCUPIED_SQUARES_WHITE_INIT,
-	occupiedSquaresBlack: OCCUPIED_SQUARES_BLACK_INIT,
+	occupiedSquaresWhite: occupiedSquaresWhite,
+	occupiedSquaresBlack: occupiedSquaresBlack,
 	contestedSquaresWhite: structuredClone(ZERO_TABLE),
 	contestedSquaresBlack: structuredClone(ZERO_TABLE),
 	whiteDeathRays: structuredClone(ZERO_TABLE),
@@ -43,7 +43,7 @@ let state = {
 		n: blackKnightsBit,
 		p: blackPawnsBit
 	},
-	pieceIndex: PIECE_INDEX_INIT,
+	pieceIndex: pieceIndex,
 	moves: []
 };
 
@@ -72,17 +72,6 @@ const executeMove = (origin, target, piece) => {
 	state.whiteToMove = !state.whiteToMove;
 	// generate new moves
 	let { whiteMoves, blackMoves } = generateMoves(state);
-	// Map white contested squares in game state
-	state.contestedSquaresWhite = structuredClone(ZERO_TABLE);
-	whiteMoves.forEach((move) => {
-		state.contestedSquaresWhite[move.target] = 1;
-	});
-
-	// Map white contested squares in game state
-	state.contestedSquaresBlack = structuredClone(ZERO_TABLE);
-	blackMoves.forEach((move) => {
-		state.contestedSquaresBlack[move.target] = 1;
-	});
 
 	console.log(state.contestedSquaresWhite);
 	state.moves = [...whiteMoves, ...blackMoves];

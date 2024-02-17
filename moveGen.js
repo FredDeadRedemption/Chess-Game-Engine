@@ -36,6 +36,11 @@ export const generateMoves = (state) => {
 				break;
 		}
 	}
+	// Map white contested squares in game state
+	state.contestedSquaresWhite = structuredClone(ZERO_TABLE);
+	whiteMoves.forEach((move) => {
+		state.contestedSquaresWhite[move.target] = 1;
+	});
 
 	let blackMoves = [];
 	// Generate all black moves
@@ -61,6 +66,11 @@ export const generateMoves = (state) => {
 				break;
 		}
 	}
+	// Map black contested squares in game state
+	state.contestedSquaresBlack = structuredClone(ZERO_TABLE);
+	blackMoves.forEach((move) => {
+		state.contestedSquaresBlack[move.target] = 1;
+	});
 	// Return all moves
 	return { whiteMoves, blackMoves };
 };

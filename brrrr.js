@@ -94,6 +94,7 @@ export const findValidMove = (clickOrigin, clickTarget, moves) => {
   return moves.find((move) => move.origin === clickOrigin && move.target === clickTarget);
 }
 
+// offsets
 export const OFFSETS_BISHOP = [7, -7, 9, -9];
 
 export const OFFSETS_ROOK = [8, -8, 1, -1];
@@ -102,6 +103,7 @@ export const OFFSETS_QUEEN = [7, -7, 9, -9, 8, -8, 1, -1];
 
 export const OFFSETS_KING = [7, -7, 9, -9, 8, -8, 1, -1];
 
+// constant tables
 export const BOTTOM = [ 
 	1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -146,8 +148,8 @@ export const RIGHT = [
   0, 0, 0, 0, 0, 0, 0, 1
 ];
 
-export const OCCUPIED_SQUARES_WHITE_INIT = [
-	1, 1, 1, 1, 1, 1, 1, 1, 
+export const DOUBLEPAWNWHITE = [
+	0, 0, 0, 0, 0, 0, 0, 0, 
   1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -157,15 +159,15 @@ export const OCCUPIED_SQUARES_WHITE_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const OCCUPIED_SQUARES_BLACK_INIT = [
+export const DOUBLEPAWNBLACK = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0,
   1, 1, 1, 1, 1, 1, 1, 1, 
-  1, 1, 1, 1, 1, 1, 1, 1
+  0, 0, 0, 0, 0, 0, 0, 0
 ];
 
 export const ZERO_TABLE = [
@@ -179,9 +181,9 @@ export const ZERO_TABLE = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const WHITE_DEATH_RAYS_INIT = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
+export let occupiedSquaresWhite = [
+	1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -190,15 +192,15 @@ export const WHITE_DEATH_RAYS_INIT = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const BLACK_DEATH_RAYS_INIT = [
+export let occupiedSquaresBlack = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0
+  1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1
 ];
 
 export let whiteKingBit = [
@@ -333,29 +335,7 @@ export let blackPawnsBit = [
   0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-export const DOUBLEPAWNWHITE = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
-  1, 1, 1, 1, 1, 1, 1, 1, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0
-];
-
-export const DOUBLEPAWNBLACK = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0,
-  1, 1, 1, 1, 1, 1, 1, 1, 
-  0, 0, 0, 0, 0, 0, 0, 0
-];
-
-export const PIECE_INDEX_INIT = [
+export let pieceIndex = [
   "R", "N", "B", "Q", "K", "B", "N", "R",
   "P", "P", "P", "P", "P", "P", "P", "P",
   " ", " ", " ", " ", " ", " ", " ", " ",
