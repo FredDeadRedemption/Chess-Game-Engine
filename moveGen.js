@@ -7,7 +7,7 @@ import {
 	castSlidingRays,
 	DOUBLEPAWNWHITE,
 	DOUBLEPAWNBLACK,
-	ZERO_TABLE
+	occupiedSquaresWhite
 } from './brrrr.js';
 import { Move } from './Move.js';
 
@@ -37,11 +37,21 @@ export const generateMoves = (state) => {
 				break;
 		}
 	}
-	// Map white contested squares in game state
-	state.contestedSquaresWhite = structuredClone(ZERO_TABLE);
+	// Map white contested squares in game state for all pieces except pawns
+	state.contestedSquaresWhite = new Array(64).fill(0);
 	whiteMoves.forEach((move) => {
 		state.contestedSquaresWhite[move.target] = 1;
 	});
+	// Map white contested squares for pawns only
+	for (let i = 0; i < 64; i++) {
+		if (state.bitBoards['P'][i]) {
+			[i + 7, i + 9].forEach((target) => {
+				if (!state.occupiedSquaresWhite[target] && !squareOnEdge(i, target - i)) {
+					state.contestedSquaresWhite[target] = 1;
+				}
+			});
+		}
+	}
 
 	let blackMoves = [];
 	let blackPawnMoves = [];
@@ -68,11 +78,21 @@ export const generateMoves = (state) => {
 				break;
 		}
 	}
-	// Map black contested squares in game state
-	state.contestedSquaresBlack = structuredClone(ZERO_TABLE);
+	// Map black contested squares in game state for all pieces except pawns
+	state.contestedSquaresBlack = new Array(64).fill(0);
 	blackMoves.forEach((move) => {
 		state.contestedSquaresBlack[move.target] = 1;
 	});
+	// Map black contested squares for pawns only
+	for (let i = 0; i < 64; i++) {
+		if (state.bitBoards['p'][i]) {
+			[i + -7, i + -9].forEach((target) => {
+				if (!state.occupiedSquaresBlack[target] && !squareOnEdge(i, target - i)) {
+					state.contestedSquaresBlack[target] = 1;
+				}
+			});
+		}
+	}
 	// add pawn moves
 	whiteMoves.push(...whitePawnMoves);
 	blackMoves.push(...blackPawnMoves);
@@ -86,9 +106,7 @@ export const generatePawnMoves = (
 	{ occupiedSquaresBlack, occupiedSquaresWhite, contestedSquaresWhite, contestedSquaresBlack }
 ) => {
 	let moves = [];
-	let offsets = [];
-
-	forWhite ? (offsets = [8, 16, 7, 9]) : (offsets = [-8, -16, -7, -9]);
+	let offsets = forWhite ? [8, 16, 7, 9] : [-8, -16, -7, -9];
 
 	// advancing once and twice
 	if (
@@ -122,12 +140,16 @@ export const generatePawnMoves = (
 
 	// attacking diagonally
 	const diagonalOffsets = forWhite ? [7, 9] : [-7, -9];
-	diagonalOffsets.forEach(offset => {
-			const targetSquare = originSquare + offset;
-			const isOccupiedByEnemy = forWhite ? occupiedSquaresBlack[targetSquare] : occupiedSquaresWhite[targetSquare];
-			if (isOccupiedByEnemy && !squareOnEdge(originSquare, offset)) {
-					moves.push(new Move(originSquare, targetSquare));
-			}
+	diagonalOffsets.forEach((offset) => {
+		const target = originSquare + offset;
+		const isOccupiedByFriend = forWhite ? occupiedSquaresWhite[target] : occupiedSquaresBlack[target];
+		if (forWhite && !isOccupiedByFriend && !squareOnEdge(originSquare, offset)) {
+			console.log('SYGEFIUYEGFIEUYG');
+			contestedSquaresWhite[target] = 1;
+		}
+		if (!forWhite && !isOccupiedByFriend && !squareOnEdge(originSquare, offset)) {
+			contestedSquaresBlack[target] = 1;
+		}
 	});
 
 	return moves;

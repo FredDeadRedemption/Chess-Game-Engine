@@ -1,6 +1,5 @@
 import {
 	validateTurn,
-	ZERO_TABLE,
 	occupiedSquaresBlack,
 	occupiedSquaresWhite,
 	whiteKingBit,
@@ -25,10 +24,10 @@ let state = {
 	whiteToMove: true,
 	occupiedSquaresWhite: occupiedSquaresWhite,
 	occupiedSquaresBlack: occupiedSquaresBlack,
-	contestedSquaresWhite: structuredClone(ZERO_TABLE),
-	contestedSquaresBlack: structuredClone(ZERO_TABLE),
-	whiteDeathRays: structuredClone(ZERO_TABLE),
-	blackDeathRays: structuredClone(ZERO_TABLE),
+	contestedSquaresWhite: new Array(64).fill(0),
+	contestedSquaresBlack: new Array(64).fill(0),
+	whiteDeathRays: new Array(64).fill(0),
+	blackDeathRays: new Array(64).fill(0),
 	bitBoards: {
 		K: whiteKingBit,
 		Q: whiteQueensBit,
