@@ -29,26 +29,64 @@ export const toBitBoardBlack = (file, rank) => {
 	return rank * 8 + (7 - file);
 };
 
-// true if square is already on edge based on its offset;
+export const TOP = [
+	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  1, 1, 1, 1, 1, 1, 1, 1
+];
+
+export const BOTTOM = [ 
+	1, 1, 1, 1, 1, 1, 1, 1, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0
+];
+
+export const LEFT = [
+	1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0
+];
+
+export const RIGHT = [
+	0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1
+];
+
+const directionLookup = {
+  "7": [TOP, LEFT],   // NW
+  "9": [TOP, RIGHT],  // NE
+  "-7": [BOTTOM, RIGHT], // SE
+  "-9": [BOTTOM, LEFT],  // SW
+  "8": [TOP],         // N
+  "-8": [BOTTOM],   // S
+  "1": [RIGHT],       // E
+  "-1": [LEFT]      // W
+};
+
 export const squareOnEdge = (square, offset) => {
-	switch (offset) {
-		case 7:
-			return TOP[square] || LEFT[square]; // NW
-		case 9:
-			return TOP[square] || RIGHT[square]; // NE
-		case -7:
-			return BOTTOM[square] || RIGHT[square]; // SE
-		case -9:
-			return BOTTOM[square] || LEFT[square]; // SW
-		case 8:
-			return TOP[square]; // N
-		case -8:
-			return BOTTOM[square]; // S
-		case 1:
-			return RIGHT[square]; // E
-		case -1:
-			return LEFT[square]; // W
-	}
+	const directions = directionLookup[offset] ?? []; // which edge to detect for based on offset?
+  return directions.some(direction => direction[square]); // is it on the edge?
 };
 
 export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
@@ -81,16 +119,10 @@ export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquar
 };
 
 export const validateTurn = (clickedSquare, { whiteToMove, occupiedSquaresWhite, occupiedSquaresBlack}) => {
-  if (whiteToMove && occupiedSquaresWhite[clickedSquare]){
-    return true;
-  } else if (!whiteToMove && occupiedSquaresBlack[clickedSquare]){
-    return true;
-  } else {
-    return false;
-  }
+  return (whiteToMove && occupiedSquaresWhite[clickedSquare]) || (!whiteToMove && occupiedSquaresBlack[clickedSquare]);
 }
 
-export const findValidMove = (clickOrigin, clickTarget, moves) => {
+export const validateMove = (clickOrigin, clickTarget, moves) => {
   return moves.find((move) => move.origin === clickOrigin && move.target === clickTarget);
 }
 
@@ -102,51 +134,6 @@ export const OFFSETS_ROOK = [8, -8, 1, -1];
 export const OFFSETS_QUEEN = [7, -7, 9, -9, 8, -8, 1, -1];
 
 export const OFFSETS_KING = [7, -7, 9, -9, 8, -8, 1, -1];
-
-// constant tables
-export const BOTTOM = [ 
-	1, 1, 1, 1, 1, 1, 1, 1, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0
-];
-
-export const TOP = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  1, 1, 1, 1, 1, 1, 1, 1
-];
-
-export const LEFT = [
-	1, 0, 0, 0, 0, 0, 0, 0, 
-  1, 0, 0, 0, 0, 0, 0, 0, 
-  1, 0, 0, 0, 0, 0, 0, 0, 
-  1, 0, 0, 0, 0, 0, 0, 0, 
-  1, 0, 0, 0, 0, 0, 0, 0, 
-  1, 0, 0, 0, 0, 0, 0, 0, 
-  1, 0, 0, 0, 0, 0, 0, 0, 
-  1, 0, 0, 0, 0, 0, 0, 0
-];
-
-export const RIGHT = [
-	0, 0, 0, 0, 0, 0, 0, 1, 
-  0, 0, 0, 0, 0, 0, 0, 1, 
-  0, 0, 0, 0, 0, 0, 0, 1, 
-  0, 0, 0, 0, 0, 0, 0, 1, 
-  0, 0, 0, 0, 0, 0, 0, 1, 
-  0, 0, 0, 0, 0, 0, 0, 1, 
-  0, 0, 0, 0, 0, 0, 0, 1, 
-  0, 0, 0, 0, 0, 0, 0, 1
-];
 
 export const DOUBLEPAWNWHITE = [
 	0, 0, 0, 0, 0, 0, 0, 0, 

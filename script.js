@@ -16,7 +16,7 @@ import {
 	blackKnightsBit,
 	blackPawnsBit,
 	pieceIndex,
-	findValidMove
+	validateMove
 } from './brrrr.js';
 import { animateChessboard, animatePieces, animateMoves, animateContestedSquares } from './render.js';
 import { generateMoves } from './moveGen.js';
@@ -102,13 +102,13 @@ const resetClick = () => {
 };
 
 const handleSecondClick = (clickedSquare) => {
-	// if second click is friendly piece, consider it first click
+	// if second click is friendly piece, consider it new first click
 	if (validateTurn(clickedSquare, state)) {
 		animateChessboard();
 		handleFirstClick(clickedSquare);
 	}
 	// if second click is valid move, execute
-	else if (findValidMove(firstClickedSquare, clickedSquare, state.moves)) {
+	else if (validateMove(firstClickedSquare, clickedSquare, state.moves)) {
 		executeMove(firstClickedSquare, clickedSquare, state.pieceIndex[firstClickedSquare]);
 		resetClick();
 		animateContestedSquares(state);

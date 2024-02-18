@@ -21,11 +21,20 @@ const colorAttacks = 'rgba(255, 0, 0, 0.5)';
 const spriteSheet = new Image();
 spriteSheet.src = '/chess.png';
 
+const spriteSheetLookupX = {
+	K: 0,
+	Q: 200,
+	B: 400,
+	N: 600,
+	R: 800,
+	P: 1000
+};
+
 export const animateChessboard = () => {
 	let squareIsLight = true;
 	for (let file = 0; file < 8; file++) {
 		for (let rank = 0; rank < 8; rank++) {
-			squareIsLight ? (ctx.fillStyle = lightSquareColor) : (ctx.fillStyle = randomColor()); //hihi
+			squareIsLight ? (ctx.fillStyle = lightSquareColor) : (ctx.fillStyle = darkSquareColor);
 
 			ctx.fillRect(rank * squareSize, file * squareSize, squareSize, squareSize);
 			squareIsLight = !squareIsLight;
@@ -34,28 +43,16 @@ export const animateChessboard = () => {
 	}
 };
 
-// x = piece type, y = piece color
 export const animatePieces = ({ pieceIndex }) => {
 	for (let i = 0; i < pieceIndex.length; i++) {
 		let x, y;
+		// get y value (piece color)
 		pieceIndex[i] === pieceIndex[i].toUpperCase() ? (y = 0) : (y = 200);
-		x =
-			pieceIndex[i] === 'K' || pieceIndex[i] === 'k'
-				? 0
-				: pieceIndex[i] === 'Q' || pieceIndex[i] === 'q'
-				? 200
-				: pieceIndex[i] === 'B' || pieceIndex[i] === 'b'
-				? 400
-				: pieceIndex[i] === 'N' || pieceIndex[i] === 'n'
-				? 600
-				: pieceIndex[i] === 'R' || pieceIndex[i] === 'r'
-				? 800
-				: pieceIndex[i] === 'P' || pieceIndex[i] === 'p'
-				? 1000
-				: null;
-		if (x !== null) {
+		// get x value (piece type)
+		x = spriteSheetLookupX[pieceIndex[i].toUpperCase()];
+		// render if piece
+		x !== null &&
 			ctx.drawImage(spriteSheet, x, y, 200, 200, bitBoardToFileWhite(i, squareSize), bitBoardToRankWhite(i, squareSize), squareSize, squareSize);
-		}
 	}
 };
 
