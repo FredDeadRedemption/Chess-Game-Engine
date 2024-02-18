@@ -29,6 +29,14 @@ export const toBitBoardBlack = (file, rank) => {
 	return rank * 8 + (7 - file);
 };
 
+export const validateTurn = (clickedSquare, { whiteToMove, occupiedSquaresWhite, occupiedSquaresBlack}) => {
+  return (whiteToMove && occupiedSquaresWhite[clickedSquare]) || (!whiteToMove && occupiedSquaresBlack[clickedSquare]);
+}
+
+export const validateMove = (clickOrigin, clickTarget, moves) => {
+  return moves.find((move) => move.origin === clickOrigin && move.target === clickTarget);
+}
+
 export const TOP = [
 	0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -117,14 +125,6 @@ export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquar
 
 	return moves;
 };
-
-export const validateTurn = (clickedSquare, { whiteToMove, occupiedSquaresWhite, occupiedSquaresBlack}) => {
-  return (whiteToMove && occupiedSquaresWhite[clickedSquare]) || (!whiteToMove && occupiedSquaresBlack[clickedSquare]);
-}
-
-export const validateMove = (clickOrigin, clickTarget, moves) => {
-  return moves.find((move) => move.origin === clickOrigin && move.target === clickTarget);
-}
 
 // offsets
 export const OFFSETS_BISHOP = [7, -7, 9, -9];

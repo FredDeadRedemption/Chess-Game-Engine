@@ -13,6 +13,7 @@ import { Move } from './Move.js';
 
 export const generateMoves = (state) => {
 	let whiteMoves = [];
+	let whitePawnMoves = [];
 	// Generate all white moves
 	for (let i = 0; i < 64; i++) {
 		switch (state.pieceIndex[i]) {
@@ -32,7 +33,7 @@ export const generateMoves = (state) => {
 				whiteMoves.push(...generateRookMoves(i, true, state));
 				break;
 			case 'P':
-				whiteMoves.push(...generatePawnMoves(i, true, state));
+				whitePawnMoves.push(...generatePawnMoves(i, true, state));
 				break;
 		}
 	}
@@ -43,6 +44,7 @@ export const generateMoves = (state) => {
 	});
 
 	let blackMoves = [];
+	let blackPawnMoves = [];
 	// Generate all black moves
 	for (let i = 0; i < 64; i++) {
 		switch (state.pieceIndex[i]) {
@@ -62,7 +64,7 @@ export const generateMoves = (state) => {
 				blackMoves.push(...generateRookMoves(i, false, state));
 				break;
 			case 'p':
-				blackMoves.push(...generatePawnMoves(i, false, state));
+				blackPawnMoves.push(...generatePawnMoves(i, false, state));
 				break;
 		}
 	}
@@ -71,11 +73,18 @@ export const generateMoves = (state) => {
 	blackMoves.forEach((move) => {
 		state.contestedSquaresBlack[move.target] = 1;
 	});
+	// add pawn moves
+	whiteMoves.push(...whitePawnMoves);
+	blackMoves.push(...blackPawnMoves);
 	// Return all moves
 	return { whiteMoves, blackMoves };
 };
 
-export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresBlack, occupiedSquaresWhite }) => {
+export const generatePawnMoves = (
+	originSquare,
+	forWhite,
+	{ occupiedSquaresBlack, occupiedSquaresWhite, contestedSquaresWhite, contestedSquaresBlack }
+) => {
 	let moves = [];
 	let offsets = [];
 
@@ -110,6 +119,16 @@ export const generatePawnMoves = (originSquare, forWhite, { occupiedSquaresBlack
 	) {
 		moves.push(new Move(originSquare, originSquare + offsets[3]));
 	}
+
+	// attacking diagonally
+	const diagonalOffsets = forWhite ? [7, 9] : [-7, -9];
+	diagonalOffsets.forEach(offset => {
+			const targetSquare = originSquare + offset;
+			const isOccupiedByEnemy = forWhite ? occupiedSquaresBlack[targetSquare] : occupiedSquaresWhite[targetSquare];
+			if (isOccupiedByEnemy && !squareOnEdge(originSquare, offset)) {
+					moves.push(new Move(originSquare, targetSquare));
+			}
+	});
 
 	return moves;
 };
