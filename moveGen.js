@@ -6,8 +6,7 @@ import {
 	squareOnEdge,
 	castSlidingRays,
 	DOUBLEPAWNWHITE,
-	DOUBLEPAWNBLACK,
-	occupiedSquaresWhite
+	DOUBLEPAWNBLACK
 } from './brrrr.js';
 import { Move } from './Move.js';
 
