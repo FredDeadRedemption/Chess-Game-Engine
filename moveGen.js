@@ -6,7 +6,12 @@ import {
 	squareOnEdge,
 	castSlidingRays,
 	DOUBLEPAWNWHITE,
-	DOUBLEPAWNBLACK
+	DOUBLEPAWNBLACK,
+	hasEvilOccupance,
+	hasNoOccupance,
+	hasDoublePawnMoveRights,
+	hasFriendlyOccupance,
+	contestedByEnemy
 } from './brrrr.js';
 import { Move } from './Move.js';
 
@@ -43,10 +48,13 @@ export const generateMoves = (state) => {
 	});
 	// Map white contested squares for pawns only
 	for (let i = 0; i < 64; i++) {
+		// loop all squares
 		if (state.bitBoards['P'][i]) {
+			// if square occupied has white pawn occupant
 			[i + 7, i + 9].forEach((target) => {
-				if (!state.occupiedSquaresWhite[target] && !squareOnEdge(i, target - i)) {
-					state.contestedSquaresWhite[target] = 1;
+				// check diagonals for enemies
+				if (state.occupiedSquaresBlack[target] && !squareOnEdge(i, target - i)) {
+					state.contestedSquaresWhite[target] = 1; // add contested squares
 				}
 			});
 		}
@@ -86,113 +94,89 @@ export const generateMoves = (state) => {
 	for (let i = 0; i < 64; i++) {
 		if (state.bitBoards['p'][i]) {
 			[i + -7, i + -9].forEach((target) => {
-				if (!state.occupiedSquaresBlack[target] && !squareOnEdge(i, target - i)) {
+				if (state.occupiedSquaresWhite[target] && !squareOnEdge(i, target - i)) {
 					state.contestedSquaresBlack[target] = 1;
 				}
 			});
 		}
 	}
-	// add pawn moves
+	// add pawn moves to moves
 	whiteMoves.push(...whitePawnMoves);
 	blackMoves.push(...blackPawnMoves);
 	// Return all moves
 	return { whiteMoves, blackMoves };
 };
 
-export const generatePawnMoves = (
-	originSquare,
-	forWhite,
-	{ occupiedSquaresBlack, occupiedSquaresWhite, contestedSquaresWhite, contestedSquaresBlack }
-) => {
+export const generatePawnMoves = (origin, forWhite, { occupiedSquaresBlack, occupiedSquaresWhite }) => {
 	let moves = [];
-	let offsets = forWhite ? [8, 16, 7, 9] : [-8, -16, -7, -9];
+	const offsets = forWhite ? [8, 16, 7, 9] : [-8, -16, -7, -9];
 
 	// advancing once and twice
-	if (
-		!occupiedSquaresWhite[originSquare + offsets[0]] &&
-		!occupiedSquaresBlack[originSquare + offsets[0]] &&
-		!squareOnEdge(originSquare, offsets[0])
-	) {
-		moves.push(new Move(originSquare, originSquare + offsets[0]));
+	if (hasNoOccupance(origin + offsets[0], occupiedSquaresBlack, occupiedSquaresWhite) && !squareOnEdge(origin, offsets[0])) {
+		moves.push(new Move(origin, origin + offsets[0]));
 		if (
-			!occupiedSquaresWhite[originSquare + offsets[1]] &&
-			!occupiedSquaresBlack[originSquare + offsets[1]] &&
-			((forWhite && DOUBLEPAWNWHITE[originSquare]) || (!forWhite && DOUBLEPAWNBLACK[originSquare]))
+			hasNoOccupance(origin + offsets[1], occupiedSquaresBlack, occupiedSquaresWhite) &&
+			hasDoublePawnMoveRights(forWhite, origin) &&
+			!squareOnEdge(origin, offsets[1])
 		) {
-			moves.push(new Move(originSquare, originSquare + offsets[1]));
+			moves.push(new Move(origin, origin + offsets[1]));
 		}
 	}
 	//moving (attacking) left
-	if (
-		((forWhite && occupiedSquaresBlack[originSquare + offsets[2]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[2]])) &&
-		!squareOnEdge(originSquare, offsets[2])
-	) {
-		moves.push(new Move(originSquare, originSquare + offsets[2]));
+	if (hasEvilOccupance(forWhite, origin + offsets[2], occupiedSquaresBlack, occupiedSquaresWhite) && !squareOnEdge(origin, offsets[2])) {
+		moves.push(new Move(origin, origin + offsets[2]));
 	}
 	//moving (attacking) right
-	if (
-		((forWhite && occupiedSquaresBlack[originSquare + offsets[3]]) || (!forWhite && occupiedSquaresWhite[originSquare + offsets[3]])) &&
-		!squareOnEdge(originSquare, offsets[3])
-	) {
-		moves.push(new Move(originSquare, originSquare + offsets[3]));
+	if (hasEvilOccupance(forWhite, origin + offsets[3], occupiedSquaresBlack, occupiedSquaresWhite) && !squareOnEdge(origin, offsets[3])) {
+		moves.push(new Move(origin, origin + offsets[3]));
 	}
-
-	// attacking diagonally
-	const diagonalOffsets = forWhite ? [7, 9] : [-7, -9];
-	diagonalOffsets.forEach((offset) => {
-		const target = originSquare + offset;
-		const isOccupiedByFriend = forWhite ? occupiedSquaresWhite[target] : occupiedSquaresBlack[target];
-		if (forWhite && !isOccupiedByFriend && !squareOnEdge(originSquare, offset)) {
-			console.log('SYGEFIUYEGFIEUYG');
-			contestedSquaresWhite[target] = 1;
-		}
-		if (!forWhite && !isOccupiedByFriend && !squareOnEdge(originSquare, offset)) {
-			contestedSquaresBlack[target] = 1;
-		}
-	});
 
 	return moves;
 };
 
-export const generateBishopMoves = (originSquare, forWhite, state) => {
-	return castSlidingRays(originSquare, OFFSETS_BISHOP, forWhite, state);
+export const generateBishopMoves = (origin, forWhite, state) => {
+	return castSlidingRays(origin, OFFSETS_BISHOP, forWhite, state);
 };
 
-export const generateRookMoves = (originSquare, forWhite, state) => {
-	return castSlidingRays(originSquare, OFFSETS_ROOK, forWhite, state);
+export const generateRookMoves = (origin, forWhite, state) => {
+	return castSlidingRays(origin, OFFSETS_ROOK, forWhite, state);
 };
 
-export const generateQueenMoves = (originSquare, forWhite, state) => {
-	return castSlidingRays(originSquare, OFFSETS_QUEEN, forWhite, state);
+export const generateQueenMoves = (origin, forWhite, state) => {
+	return castSlidingRays(origin, OFFSETS_QUEEN, forWhite, state);
 };
 
-export const generateKingMoves = (originSquare, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
+export const generateKingMoves = (origin, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack, contestedSquaresWhite, contestedSquaresBlack }) => {
 	let moves = [];
 
 	OFFSETS_KING.forEach((offset) => {
-		const target = originSquare + offset;
-		if (!squareOnEdge(originSquare, offset) && ((forWhite && !occupiedSquaresWhite[target]) || (!forWhite && !occupiedSquaresBlack[target]))) {
-			moves.push(new Move(originSquare, target));
+		const target = origin + offset;
+		if (
+			!squareOnEdge(origin, offset) &&
+			!hasFriendlyOccupance(forWhite, target, occupiedSquaresWhite, occupiedSquaresBlack) &&
+			!contestedByEnemy(forWhite, target, contestedSquaresWhite, contestedSquaresBlack)
+		) {
+			moves.push(new Move(origin, target));
 		}
 	});
 
 	/*
   // right
-  if (!RIGHT[originSquare]) {
-    moves.push(originSquare + 9);
-    moves.push(originSquare + 1);
-    moves.push(originSquare - 7);
+  if (!RIGHT[origin]) {
+    moves.push(origin + 9);
+    moves.push(origin + 1);
+    moves.push(origin - 7);
   }
   // left
-  if (!LEFT[originSquare]) {
-    moves.push(originSquare + 7);
-    moves.push(originSquare - 1);
-    moves.push(originSquare - 9);
+  if (!LEFT[origin]) {
+    moves.push(origin + 7);
+    moves.push(origin - 1);
+    moves.push(origin - 9);
   }
   // up
-  if (!TOP[originSquare]) moves.push(originSquare + 8);
+  if (!TOP[origin]) moves.push(origin + 8);
   // down
-  if (!BOTTOM[originSquare]) moves.push(originSquare - 8);
+  if (!BOTTOM[origin]) moves.push(origin - 8);
   */
 	/*
 	// TODO: + check if squares between king and rook are contested
@@ -245,18 +229,18 @@ export const generateKingMoves = (originSquare, forWhite, { occupiedSquaresWhite
 	return moves;
 };
 
-export const generateKnightMoves = (originSquare, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
+export const generateKnightMoves = (origin, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	let moves = [];
 
 	let factor = 1;
-	const file = originSquare % 8;
+	const file = origin % 8;
 
 	for (let i = 0; i < 2; i++) {
-		const targets = [originSquare - 6 * factor, originSquare - 10 * factor, originSquare - 15 * factor, originSquare - 17 * factor];
+		const targets = [origin - 6 * factor, origin - 10 * factor, origin - 15 * factor, origin - 17 * factor];
 
 		targets.forEach((target) => {
-			if ((forWhite && !occupiedSquaresWhite[target]) || (!forWhite && !occupiedSquaresBlack[target])) {
-				moves.push(new Move(originSquare, target));
+			if (!hasFriendlyOccupance(forWhite, target, occupiedSquaresWhite, occupiedSquaresBlack)) {
+				moves.push(new Move(origin, target));
 			}
 		});
 

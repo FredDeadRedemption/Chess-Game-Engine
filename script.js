@@ -72,7 +72,7 @@ const executeMove = (origin, target, piece) => {
 	// generate new moves
 	let { whiteMoves, blackMoves } = generateMoves(state);
 
-	console.log(state.contestedSquaresWhite);
+	console.table(state.pieceIndex);
 	state.moves = [...whiteMoves, ...blackMoves];
 	//console.table('IIWEIUH', state.occupiedSquaresWhite);
 };
@@ -107,7 +107,7 @@ const handleSecondClick = (clickedSquare) => {
 		handleFirstClick(clickedSquare);
 	}
 	// if second click is valid move, execute
-	else if (validateMove(firstClickedSquare, clickedSquare, state.moves)) {
+	else if (validateMove(firstClickedSquare, clickedSquare, state)) {
 		executeMove(firstClickedSquare, clickedSquare, state.pieceIndex[firstClickedSquare]);
 		resetClick();
 		animateContestedSquares(state);

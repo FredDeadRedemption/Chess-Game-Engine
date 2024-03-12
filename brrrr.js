@@ -5,36 +5,44 @@ export const randomColor = () => {
 	return arr[Math.floor(Math.random() * arr.length)];
 };
 
-export const bitBoardToFileWhite = (index, squareSize) => {
-	return (index % 8) * squareSize;
-};
+export const bitBoardToFileWhite = (index, squareSize) => (index % 8) * squareSize;
 
-export const bitBoardToFileBlack = (index, squareSize) => {
-  return (7 - (index % 8)) * squareSize;
-};
+export const bitBoardToFileBlack = (index, squareSize) => (7 - (index % 8)) * squareSize;
 
-export const bitBoardToRankWhite = (index, squareSize) => {
-	return (8 - 1 - Math.floor(index / 8)) * squareSize;
-};
+export const bitBoardToRankWhite = (index, squareSize) => (8 - 1 - Math.floor(index / 8)) * squareSize;
 
-export const bitBoardToRankBlack = (index, squareSize) => {
-  return (Math.floor(index / 8)) * squareSize;
-};
+export const bitBoardToRankBlack = (index, squareSize) => (Math.floor(index / 8)) * squareSize;
 
-export const toBitBoardWhite = (file, rank) => {
-	return (7 - rank) * 8 + file;
-};
+export const toBitBoardWhite = (file, rank) => (7 - rank) * 8 + file;
 
-export const toBitBoardBlack = (file, rank) => {
-	return rank * 8 + (7 - file);
-};
+export const toBitBoardBlack = (file, rank) => rank * 8 + (7 - file);
 
 export const validateTurn = (clickedSquare, { whiteToMove, occupiedSquaresWhite, occupiedSquaresBlack}) => {
   return (whiteToMove && occupiedSquaresWhite[clickedSquare]) || (!whiteToMove && occupiedSquaresBlack[clickedSquare]);
 }
 
-export const validateMove = (clickOrigin, clickTarget, moves) => {
+export const validateMove = (clickOrigin, clickTarget, { moves }) => {
   return moves.find((move) => move.origin === clickOrigin && move.target === clickTarget);
+}
+
+export const hasEvilOccupance = (forWhite, target, occupiedSquaresBlack, occupiedSquaresWhite) =>{
+  return ((forWhite && occupiedSquaresBlack[target]) || (!forWhite && occupiedSquaresWhite[target]));
+}
+
+export const hasFriendlyOccupance = (forWhite, target, occupiedSquaresWhite, occupiedSquaresBlack) => {
+  return (forWhite && occupiedSquaresWhite[target]) || (!forWhite && occupiedSquaresBlack[target]);
+}
+
+export const hasNoOccupance = (target, occupiedSquaresBlack, occupiedSquaresWhite) => {
+  return !occupiedSquaresWhite[target] && !occupiedSquaresBlack[target];
+}
+
+export const hasDoublePawnMoveRights = (forWhite, origin) => {
+  return (forWhite && DOUBLEPAWNWHITE[origin]) || (!forWhite && DOUBLEPAWNBLACK[origin])
+}
+
+export const contestedByEnemy = (forWhite, target, contestedSquaresWhite, contestedSquaresBlack) => {
+  return (forWhite && contestedSquaresBlack[target] || !forWhite && contestedSquaresWhite[target]);
 }
 
 export const TOP = [
@@ -92,32 +100,29 @@ const directionLookup = {
   "-1": [LEFT]      // W
 };
 
-export const squareOnEdge = (square, offset) => {
-	const directions = directionLookup[offset] ?? []; // which edge to detect for based on offset?
-  return directions.some(direction => direction[square]); // is it on the edge?
-};
+export const squareOnEdge = (square, offset) => directionLookup[offset]?.some(direction => direction[square]); // is it on the edge?
 
-export const castSlidingRays = (originSquare, offsets, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
+export const castSlidingRays = (origin, offsets, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	let moves = [];
 
 	offsets.forEach((offset) => {
 		// stop if piece is already on edge based on its offset;
-		if (squareOnEdge(originSquare, offset)) return;
+		if (squareOnEdge(origin, offset)) return;
 
 		// cast sliding ray in offsets direction
 		for (let i = 1; i < 8; i++) {
-			const newTarget = originSquare + offset * i;
+			const target = origin + offset * i;
 
 			// add new move if no friendly occupancy
-			if ((forWhite && !occupiedSquaresWhite[newTarget]) || (!forWhite && !occupiedSquaresBlack[newTarget])) {
-				moves.push(new Move(originSquare, newTarget));
+			if (!hasFriendlyOccupance(forWhite, target, occupiedSquaresWhite, occupiedSquaresBlack)) {
+				moves.push(new Move(origin, target));
 			} else break;
 
 			// stop further ray casting if new move hits edge
-			if (squareOnEdge(newTarget, offset)) break;
+			if (squareOnEdge(target, offset)) break;
 
 			// stop further ray casting if new move hits enemy
-			if ((forWhite && occupiedSquaresBlack[newTarget]) || (!forWhite && occupiedSquaresWhite[newTarget])) {
+			if (hasEvilOccupance(forWhite, target, occupiedSquaresBlack, occupiedSquaresWhite)) {
 				break;
 			}
 		}
