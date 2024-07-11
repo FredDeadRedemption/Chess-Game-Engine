@@ -46,7 +46,7 @@ export const contestedByEnemy = (forWhite, target, contestedSquaresWhite, contes
 }
 
 export const TOP = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -57,7 +57,7 @@ export const TOP = [
 ];
 
 export const BOTTOM = [ 
-	1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -68,7 +68,7 @@ export const BOTTOM = [
 ];
 
 export const LEFT = [
-	1, 0, 0, 0, 0, 0, 0, 0, 
+  1, 0, 0, 0, 0, 0, 0, 0, 
   1, 0, 0, 0, 0, 0, 0, 0, 
   1, 0, 0, 0, 0, 0, 0, 0, 
   1, 0, 0, 0, 0, 0, 0, 0, 
@@ -79,7 +79,7 @@ export const LEFT = [
 ];
 
 export const RIGHT = [
-	0, 0, 0, 0, 0, 0, 0, 1, 
+  0, 0, 0, 0, 0, 0, 0, 1, 
   0, 0, 0, 0, 0, 0, 0, 1, 
   0, 0, 0, 0, 0, 0, 0, 1, 
   0, 0, 0, 0, 0, 0, 0, 1, 
@@ -141,7 +141,7 @@ export const OFFSETS_QUEEN = [7, -7, 9, -9, 8, -8, 1, -1];
 export const OFFSETS_KING = [7, -7, 9, -9, 8, -8, 1, -1];
 
 export const DOUBLEPAWNWHITE = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -152,7 +152,7 @@ export const DOUBLEPAWNWHITE = [
 ];
 
 export const DOUBLEPAWNBLACK = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -163,7 +163,7 @@ export const DOUBLEPAWNBLACK = [
 ];
 
 export let occupiedSquaresWhite = [
-	1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
   1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -174,7 +174,7 @@ export let occupiedSquaresWhite = [
 ];
 
 export let occupiedSquaresBlack = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -185,7 +185,7 @@ export let occupiedSquaresBlack = [
 ];
 
 export let whiteKingBit = [
-	0, 0, 0, 0, 1, 0, 0, 0, 
+  0, 0, 0, 0, 1, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -196,7 +196,7 @@ export let whiteKingBit = [
 ];
 
 export let whiteQueensBit = [
-	0, 0, 0, 1, 0, 0, 0, 0, 
+  0, 0, 0, 1, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -207,7 +207,7 @@ export let whiteQueensBit = [
 ];
 
 export let whiteBishopsBit = [
-	0, 0, 1, 0, 0, 1, 0, 0, 
+  0, 0, 1, 0, 0, 1, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -218,7 +218,7 @@ export let whiteBishopsBit = [
 ];
 
 export let whiteKnightsBit = [
-	0, 1, 0, 0, 0, 0, 1, 0, 
+  0, 1, 0, 0, 0, 0, 1, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -229,7 +229,7 @@ export let whiteKnightsBit = [
 ];
 
 export let whiteRooksBit = [
-	1, 0, 0, 0, 0, 0, 0, 1, 
+  1, 0, 0, 0, 0, 0, 0, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -240,7 +240,7 @@ export let whiteRooksBit = [
 ];
 
 export let whitePawnsBit = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   1, 1, 1, 1, 1, 1, 1, 1, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -251,7 +251,7 @@ export let whitePawnsBit = [
 ];
 
 export let blackKingBit = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -262,7 +262,7 @@ export let blackKingBit = [
 ];
 
 export let blackQueensBit = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -273,7 +273,7 @@ export let blackQueensBit = [
 ];
 
 export let blackBishopsBit = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -284,7 +284,7 @@ export let blackBishopsBit = [
 ];
 
 export let blackKnightsBit = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -295,7 +295,7 @@ export let blackKnightsBit = [
 ];
 
 export let blackRooksBit = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -306,7 +306,7 @@ export let blackRooksBit = [
 ];
 
 export let blackPawnsBit = [
-	0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
