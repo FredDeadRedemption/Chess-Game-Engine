@@ -100,7 +100,7 @@ const directionLookup = {
   "-1": [LEFT]      // W
 };
 
-export const squareOnEdge = (square, offset) => directionLookup[offset]?.some(direction => direction[square]); // is it on the edge?
+export const squareOnEdge = (square, offset) => directionLookup[offset]?.some(edge => edge[square]); // is it on the edge?
 
 export const castSlidingRays = (origin, offsets, forWhite, { occupiedSquaresWhite, occupiedSquaresBlack }) => {
 	let moves = [];
